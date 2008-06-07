@@ -27,7 +27,6 @@ import org.apache.commons.lang.builder.ToStringBuilder;
  * Base class.
  * 
  * @author Claus Nielsen
- * 
  */
 public class BaseClass implements Serializable {
 
