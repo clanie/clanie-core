@@ -3,11 +3,11 @@
 
 	<parent>
 		<groupId>dk.clanie</groupId>
-		<artifactId>cn-consult-parent-pom</artifactId>
+		<artifactId>clanie-parent-pom</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>core</artifactId>
+	<artifactId>clanie-core</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 
 	<name>Core</name>
