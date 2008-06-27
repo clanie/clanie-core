@@ -21,21 +21,19 @@ import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.fail;
 
 import java.util.ListResourceBundle;
-import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
 import junit.framework.AssertionFailedError;
 
 import org.junit.Test;
 
-import dk.clanie.test.AbstractMessageEnumTest;
 
 /**
- * Test that AbstractMessageEnumTest works.
+ * Test that MessageEnumTest works.
  * 
  * @author Claus Nielsen
  */
-public class MessageEnumTestTest extends AbstractMessageEnumTest {
+public class MessageEnumTestTest extends MessageEnumTest {
 
 	private static class MsgBundle extends ListResourceBundle {
 		protected Object[][] getContents() {
@@ -73,23 +71,49 @@ public class MessageEnumTestTest extends AbstractMessageEnumTest {
 		@Override public String text(Object... args) { return bundle.getString(name()); }
 	}
 
+	// A Message Enumeration with both entries not defined in the ResourceBundle
+	// and missing an entry which IS defined in the Resource Bundle.
+	// This should fail the test.
+	private enum MsgEnumWithErrors implements Message {
+		M1, M3, M4;
+		@Override public ResourceBundle getBundle() { return bundle; }
+		@Override public String key() { return name(); }
+		@Override public String text(Object... args) { return bundle.getString(name()); }
+	}
+
 	@Test
 	public void testCorrectMessageEnumeration() {
 		testMessageEnumeration(MsgEnum.class);
 	}
 
-	@Test(expected = MissingResourceException.class)
+	@Test
 	public void testMsgEnumWithExtraEntry() {
-		testMessageEnumeration(MsgEnumWithExtraEntry.class);
+		try {
+			testMessageEnumeration(MsgEnumWithExtraEntry.class);
+			fail("Test doesn't work - should have revealed that key M3 is missing.");
+		} catch (AssertionFailedError afe) {
+			assertEquals("Missing keys: M3", afe.getMessage());
+		}
 	}
 
 	@Test
 	public void testMsgEnumMissingAnEntry() {
 		try {
 			testMessageEnumeration(MsgEnumMissingAnEntry.class);
-			fail("Test doesn't work - should have revealed that key M2 isn't in the Enum.");
+			fail("Test doesn't work - should have revealed that key M2 isn't used.");
 		} catch (AssertionFailedError afe) {
-			assertEquals("Unused message keys: M2", afe.getMessage());
+			assertEquals("Unused keys: M2", afe.getMessage());
+		}
+	}
+
+	@Test
+	public void testMsgEnumWithErrors() {
+		try {
+			testMessageEnumeration(MsgEnumWithErrors.class);
+			fail("Test doesn't work - should have revealed that key M2 isn't used" +
+					" and that M# and M4 are missing.");
+		} catch (AssertionFailedError afe) {
+			assertEquals("Missing keys: M3, M4; Unused keys: M2", afe.getMessage());
 		}
 	}
 

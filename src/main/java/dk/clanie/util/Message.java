@@ -19,7 +19,23 @@ package dk.clanie.util;
 
 import java.util.ResourceBundle;
 
-/**
+/** Message Interface.
+ * 
+ * When using <code>String</code> constants to refer to messages
+ * in ResourceBundles (property files), it's easy to forget to
+ * define a message and to type it's key in wrong when referring
+ * to it.
+ * 
+ * If you declare all your message keys in an <code>enum</code>
+ * which implements this interface, and define them all in one
+ * ResourceBundle (or property file), you can use
+ * {@link MessageEnumTest} to test that you aren't
+ * referring to undefined messages. It will also check if
+ * the ResourceBundle has unused entries in it.
+ * 
+ * For an example of how to do this, refer to the unit-test
+ * <code>MessageEnumTestTest</code>.
+ * 
  * @author Claus Nielsen
  */
 public interface Message {

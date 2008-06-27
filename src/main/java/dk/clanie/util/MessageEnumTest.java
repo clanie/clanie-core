@@ -15,14 +15,16 @@
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-package dk.clanie.test;
+package dk.clanie.util;
 
+import static dk.clanie.util.CollectionFactory.newArrayList;
 import static junit.framework.Assert.fail;
 
+import java.util.EnumSet;
+import java.util.List;
 import java.util.ResourceBundle;
 import java.util.Set;
 
-import dk.clanie.util.Message;
 
 /**
  * Test Enumeration of Messages.
@@ -36,24 +38,37 @@ import dk.clanie.util.Message;
  * 
  * @author Claus Nielsen
  */
-public abstract class AbstractMessageEnumTest {
+public class MessageEnumTest {
 
-	protected <T extends Enum<T> & Message> void testMessageEnumeration(
+	public static <T extends Enum<T> & Message> void testMessageEnumeration(
 			Class<T> messageEnum) {
+		EnumSet.allOf(messageEnum); 
 		T[] enumConstants = messageEnum.getEnumConstants();
 		ResourceBundle bundle = enumConstants[0].getBundle();
-		Set<String> bundleKeys = bundle.keySet();
+		Set<String> unusedKeys = bundle.keySet();
+		List<String> missingKeys = newArrayList();
 		for (T t : enumConstants) {
-			t.text(); // May throw MissingResourceException
-			bundleKeys.remove(t.key());
+			if (unusedKeys.remove(t.key()) || missingKeys.add(t.key()));
 		}
-		// If there are unused keys fail with a message identifying them.
-		if (bundleKeys.size() > 0) {
-			StringBuffer buf = new StringBuffer("Unused message keys: ");
-			for (String key : bundleKeys) {
-				buf.append(key).append(", ");
+		// If there are unused or missing keys fail with a message identifying them.
+		if (unusedKeys.size() > 0 || missingKeys.size() > 0) {
+			StringBuilder builder = new StringBuilder();
+			if (missingKeys.size() > 0) {
+				builder.append("Missing keys: ");
+				for (String key : missingKeys) {
+					builder.append(key).append(", ");
+				}
+				builder.setLength(builder.length() - ", ".length());
 			}
-			fail(buf.substring(0, buf.length() - ", ".length()));
+			if (unusedKeys.size() > 0) {
+				if (builder.length() > 0) builder.append("; ");
+				builder.append("Unused keys: ");
+				for (String key : unusedKeys) {
+					builder.append(key).append(", ");
+				}
+				builder.setLength(builder.length() - ", ".length());
+			}
+			fail(builder.toString());
 		}
 	}
 
