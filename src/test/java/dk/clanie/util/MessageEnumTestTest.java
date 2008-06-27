@@ -36,6 +36,7 @@ import org.junit.Test;
 public class MessageEnumTestTest extends MessageEnumTest {
 
 	private static class MsgBundle extends ListResourceBundle {
+		@Override
 		protected Object[][] getContents() {
 			return new Object[][] {
 					{ "M1", "Message One" },
