@@ -23,6 +23,7 @@ import org.apache.commons.lang.builder.ToStringBuilder;
 /**
  * @author Claus Nielsen
  */
+@SuppressWarnings("serial")
 public abstract class AbstractException extends Exception {
 
 	public AbstractException() {

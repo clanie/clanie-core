@@ -28,6 +28,7 @@ import org.apache.commons.lang.builder.ToStringBuilder;
  * 
  * @author Claus Nielsen
  */
+@SuppressWarnings("serial")
 public class BaseClass implements Serializable {
 
 	@Override

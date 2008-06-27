@@ -26,6 +26,7 @@ import org.junit.Test;
  */
 public class BaseClassTest {
 
+	@SuppressWarnings("serial")
 	class ExtendedClass extends BaseClass {
 		String id;
 

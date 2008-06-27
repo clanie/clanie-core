@@ -3,6 +3,7 @@ package dk.clanie.core.exception;
 import java.io.File;
 
 
+@SuppressWarnings("serial")
 public class FileNotFoundException extends AbstractRuntimeException {
 
 	File file;

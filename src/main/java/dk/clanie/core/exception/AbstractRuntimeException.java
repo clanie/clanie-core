@@ -24,6 +24,7 @@ import org.apache.commons.lang.builder.ToStringBuilder;
  * 
  * @author Claus Nielsen
  */
+@SuppressWarnings("serial")
 public abstract class AbstractRuntimeException extends RuntimeException {
 
 	public AbstractRuntimeException() {
