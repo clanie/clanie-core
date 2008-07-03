@@ -1,5 +1,4 @@
 /**
- * This file is part of the Util library.
  * Copyright (C) 2007, Claus Nielsen, cn@cn-consult.dk
  *
  * This program is free software; you can redistribute it and/or modify
@@ -21,7 +20,6 @@ package dk.clanie.exception;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 
-import dk.clanie.core.exception.AbstractRuntimeException;
 
 /**
  * Wrapped Exception.

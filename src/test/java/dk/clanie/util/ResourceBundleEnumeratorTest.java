@@ -1,5 +1,4 @@
 /**
- * This file is part of the Util library.
  * Copyright (C) 2007, 2008, Claus Nielsen, cn@cn-consult.dk
  *
  * This program is free software; you can redistribute it and/or modify

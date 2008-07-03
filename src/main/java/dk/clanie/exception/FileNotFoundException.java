@@ -1,4 +1,4 @@
-package dk.clanie.core.exception;
+package dk.clanie.exception;
 
 import java.io.File;
 

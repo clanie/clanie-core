@@ -1,5 +1,4 @@
 /**
- * This file is part of the Util library.
  * Copyright (C) 2007, Claus Nielsen, cn@cn-consult.dk
  *
  * This program is free software; you can redistribute it and/or modify
@@ -16,30 +15,29 @@
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-package dk.clanie.core.exception;
+package dk.clanie.exception;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
 
-/** Common functionality for all RuntimeExceptions.
- * 
+/**
  * @author Claus Nielsen
  */
 @SuppressWarnings("serial")
-public abstract class AbstractRuntimeException extends RuntimeException {
+public abstract class AbstractException extends Exception {
 
-	public AbstractRuntimeException() {
+	public AbstractException() {
 		super();
 	}
 
-	public AbstractRuntimeException(String message, Throwable cause) {
+	public AbstractException(String message, Throwable cause) {
 		super(message, cause);
 	}
 
-	public AbstractRuntimeException(String message) {
+	public AbstractException(String message) {
 		super(message);
 	}
 
-	public AbstractRuntimeException(Throwable cause) {
+	public AbstractException(Throwable cause) {
 		super(cause);
 	}
 
