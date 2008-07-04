@@ -119,11 +119,11 @@ public class CollectionFactory {
 		return new ConcurrentSkipListMap<K, V>(comparator);
 	}
 
-	public static <K, V> ConcurrentSkipListMap<K, V> newConcurrentSkipListMap(Map<? extends K,? extends V> map) {
+	public static <K, V> ConcurrentSkipListMap<K, V> newConcurrentSkipListMap(Map<? extends K, ? extends V> map) {
 		return new ConcurrentSkipListMap<K, V>(map);
 	}
 
-	public static <K, V> ConcurrentSkipListMap<K, V> newConcurrentSkipListMap(SortedMap<K,? extends V> sortedMap) {
+	public static <K, V> ConcurrentSkipListMap<K, V> newConcurrentSkipListMap(SortedMap<K, ? extends V> sortedMap) {
 		return new ConcurrentSkipListMap<K, V>(sortedMap);
 	}
 
@@ -175,7 +175,7 @@ public class CollectionFactory {
 		return new HashMap<K, V>(initialCapacity, loadFactor);
 	}
 
-	public static <K, V> HashMap<K, V> newHashMap(Map<? extends K,? extends V> map) {
+	public static <K, V> HashMap<K, V> newHashMap(Map<? extends K, ? extends V> map) {
 		return new HashMap<K, V>(map);
 	}
 
@@ -283,11 +283,11 @@ public class CollectionFactory {
 		return new TreeMap<K, V>(comparator);
 	}
 
-	public static <K, V> TreeMap<K, V> newTreeMap(Map<? extends K,? extends V> map) {
+	public static <K, V> TreeMap<K, V> newTreeMap(Map<? extends K, ? extends V> map) {
 		return new TreeMap<K, V>(map);
 	}
 
-	public static <K, V> TreeMap<K, V> newTreeMap(SortedMap<K,? extends V> sortedMap) {
+	public static <K, V> TreeMap<K, V> newTreeMap(SortedMap<K, ? extends V> sortedMap) {
 		return new TreeMap<K, V>(sortedMap);
 	}
 
@@ -303,7 +303,7 @@ public class CollectionFactory {
 		return new TreeSet<E>(comparator);
 	}
 
-	public static <E> TreeSet<E> newTreeSet(SortedSet<E> sortedSet) {
+	public static <E> TreeSet<E> newTreeSet(SortedSet<? extends E> sortedSet) {
 		return new TreeSet<E>(sortedSet);
 	}
 
