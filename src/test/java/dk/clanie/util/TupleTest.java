@@ -28,6 +28,8 @@ import org.junit.Test;
 
 import dk.clanie.util.Tuple.Pair;
 import dk.clanie.util.Tuple.Quadruple;
+import dk.clanie.util.Tuple.Quintuple;
+import dk.clanie.util.Tuple.Sextuple;
 import dk.clanie.util.Tuple.Singleton;
 import dk.clanie.util.Tuple.Triple;
 
@@ -39,7 +41,7 @@ import dk.clanie.util.Tuple.Triple;
 public class TupleTest {
 
 	@Test
-	public void testAlloc() {
+	public void testInstantiation() {
 		Tuple single = newTuple("one");
 		assertThat(single, instanceOf(Singleton.class));
 		assertThat(single, not(instanceOf(Pair.class)));
@@ -51,6 +53,10 @@ public class TupleTest {
 		assertThat(triple, not(instanceOf(Quadruple.class )));
 		Tuple quadruple = newTuple("one", "two", "three", "four");
 		assertThat(quadruple, is(instanceOf(Quadruple.class )));
+		Tuple quintuple = newTuple(1, 2, 3, 4, 5);
+		assertThat(quintuple, is(instanceOf(Quintuple.class )));
+		Tuple sextuple = newTuple(1, 2, 3, 4, 5, 6);
+		assertThat(sextuple, is(instanceOf(Sextuple.class )));
 	}
 
 	/**
@@ -62,12 +68,12 @@ public class TupleTest {
 	 */
 	@Test
 	public void testEquals() {
-		Tuple t1 = newTuple("one", "two", "three", "four");
-		Tuple t2 = newTuple("one", "two", "three", "four");
+		Tuple t1 = newTuple(1, 2, 3, 4, 5, 6);
+		Tuple t2 = newTuple(1, 2, 3, 4, 5, 6);
 		assertThat("equals() should identify these as being equal:", t1, equalTo(t2));
-		Tuple t3 = newTuple("four", "three", "two", "one");
+		Tuple t3 = newTuple(6,5, 4, 3, 2, 1);
 		assertThat("equals() should identify these as NOT being equal:", t1, not(equalTo(t3)));
-		Tuple triple = newTuple("one", "two", "three");
+		Tuple triple = newTuple(1, 2, 3);
 		assertThat("equals() should identify these as NOT being equal:", t1, not(equalTo(triple)));
 		assertThat("equals() should identify these as NOT being equal:", triple, not(equalTo(t1)));
 	}
@@ -82,8 +88,8 @@ public class TupleTest {
 	 */
 	@Test
 	public void testToString() {
-		Tuple t1 = newTuple("one", "two", "three", 4);
-		assertThat(t1.toString(), equalTo("[[one][two][three][4]]"));
+		Tuple t1 = newTuple("one", "two", "three", 4, 5, 6);
+		assertThat(t1.toString(), equalTo("[[one][two][three][4][5][6]]"));
 	}
 
 	/**
@@ -96,23 +102,22 @@ public class TupleTest {
 	 */
 	@Test
 	public void testComapareTo() {
-		Tuple t1 = newTuple("a", "b", "c", 1);
-		Tuple t2 = newTuple("a", "b", "c", 2);
-		Tuple t2b = newTuple("a", "b", "c", 2);
+		Tuple t1 = newTuple(1, 2, 3, 4, 5, 1);
+		Tuple t2 = newTuple(1, 2, 3, 4, 5, 2);
+		Tuple t2b = newTuple(1, 2, 3, 4, 5, 2);
 		assertThat(t1.compareTo(t2), is(-1));
 		assertThat(t2.compareTo(t1), is(1));
 		assertThat(t2.compareTo(t2b), is(0));
 		assertThat(t2b.compareTo(t2), is(0));
-	}
+		// Test comparing tuples of different size
+		// When common elements are equal the longer tuple is greatest
+		Tuple shorter = newTuple(1, 2, 3, 4, 5);
+		assertThat(t1.compareTo(shorter), is(1));
+		assertThat(shorter.compareTo(t1), is(-1));
 
-	/**
-	 * Test compareTo() on not-comparable items.
-	 */
-	@Test(expected=ClassCastException.class)
-	public void testComapareTo_differentTuple() {
-		Tuple t1 = newTuple(1, 2);
-		Tuple t2 = newTuple(1);
-		t1.compareTo(t2);
+		Tuple shorterButGreater = newTuple(1, 3, 2);
+		assertThat(t1.compareTo(shorterButGreater), is(-1));
+		assertThat(shorterButGreater.compareTo(t1), is(1));
 	}
 
 	/**
