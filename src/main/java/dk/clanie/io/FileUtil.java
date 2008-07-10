@@ -20,7 +20,6 @@ package dk.clanie.io;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.nio.channels.FileChannel;
 import java.nio.channels.spi.AbstractInterruptibleChannel;
 
@@ -55,30 +54,62 @@ public class FileUtil {
 		fileOrDir.delete();
 	}
 
-
 	/**
 	 * Creates a copy of a file.
+	 * 
+	 * Shorthand for <code>copyFile(from, to, false)</code>, <code>false</code>
+	 * meaning don't overwrite existing file.
 	 * 
 	 * @param from
 	 *            - source File
 	 * @param to
 	 *            - destination File
+	 * 
 	 * @throws IOException
 	 */
 	public static void copyFile(File from, File to) throws IOException {
-		if (!to.exists()) to.createNewFile();
+		copyFile(from, to, false);
+	}
 
+
+	/**
+	 * Creates a copy of a file.
+	 * 
+	 * If the destination is a directory the file is copied to that directory
+	 * with the same name as the source file.
+	 * 
+	 * @param from
+	 *            - source File
+	 * @param to
+	 *            - destination File
+	 * @param overwrite
+	 *            - allow overwriting existing file
+	 * 
+	 * @throws IOException
+	 */
+	public static void copyFile(File from, File to, boolean overwrite) throws IOException {
 		FileChannel inputChannel = null;
 		FileChannel outputChannel = null;
 		try {
+			if (!from.exists()) throw new IOException.FileNotFound(from);
+			if (to.isDirectory()) {
+				to = new File(to.getPath() + File.separator + from.getName());
+			}
+			if (to.exists()) {
+				if (!overwrite) throw new IOException.FileAlreadyExists(to);
+			} else if (!to.createNewFile())
+				throw new IOException.FailedToCreate(to);
+
 			inputChannel = new FileInputStream(from).getChannel();
 			outputChannel = new FileOutputStream(to).getChannel();
 			long size = inputChannel.size();
 			long copied = 0L;
 			while (copied < size)
 				copied += outputChannel.transferFrom(inputChannel, copied, size - copied);
+		} catch (java.io.IOException e) {
+			throw new IOException(e.getMessage(), e);
 		} finally {
-			close(inputChannel, outputChannel);
+			closeChannelse(inputChannel, outputChannel);
 		}
 	}
 
@@ -95,7 +126,7 @@ public class FileUtil {
 	 * @param channels
 	 *            - AbstractInterruptibleChannels to close.
 	 */
-	public static void close(AbstractInterruptibleChannel... channels) {
+	public static void closeChannelse(AbstractInterruptibleChannel... channels) {
 		for (AbstractInterruptibleChannel channel : channels) {
 			if (channel == null) continue;
 			try {
