@@ -21,17 +21,17 @@ package dk.clanie.util;
  * Tuple.
  * 
  * Provides static factory methods to instantiate Tuples of different sizes.
- * 
+ * <p>
  * Tuples can be used for ordering - for example as keys in collections. When
  * using Tuples for such purposes instantiate them like this:
- * 
- * <code>Tuple myTuple = newTuple("one", "two", "three");</code>
- * 
+ * </p><p>
+ * <code>Tuple myTuple = newTuple("one", 2, "three");</code>
+ * </p><p>
  * This way you will <b>not</b> have access to individual elements of the Tuple.
  * If you need that you will have to use a more specific subclass like this:
- * 
+ * </p><p>
  * <code>Triple<String, Integer, String> myTuple = newTuple("one", 2, "three");</code>
- * 
+ * </p>
  * @author Claus Nielsen
  */
 public abstract class Tuple implements Comparable<Tuple> {
