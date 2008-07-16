@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2008, Claus Nielsen, cn@cn-consult.dk.dk
+ * Copyright (C) 2008, Claus Nielsen, cn@cn-consult.dk
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,14 +22,13 @@ import static org.junit.Assert.assertEquals;
 
 import java.io.IOException;
 import java.nio.channels.spi.AbstractInterruptibleChannel;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import org.junit.Test;
-import org.slf4j.LoggerFactory;
 
-import ch.qos.logback.classic.Logger;
 import ch.qos.logback.classic.spi.LoggingEvent;
-import ch.qos.logback.core.read.ListAppender;
+import dk.clanie.test.logging.LogCapturingTestTemplate;
 
 public class FileUtil_closeChannelsTest {
 
@@ -65,21 +64,17 @@ public class FileUtil_closeChannelsTest {
 	 */
 	@Test
 	public void testCloseChannels() {
-		// Capture log entries from FileUtil
-		Logger logger = (Logger) LoggerFactory.getLogger(FileUtil.class);
-		logger.setAdditive(false);
-		ListAppender<LoggingEvent> listAppender = new ListAppender<LoggingEvent>();
-		listAppender.start();
-		logger.addAppender(listAppender);
-		// Close a mix of normal, broken and completely missing channels
-		closeChannels(null, new UnclosableChannelStub(), null, new ChannelStub(), new ChannelStub());
-		// Restore normal logging
-		logger.detachAppender(listAppender);
-		logger.setAdditive(true);
+		// Call closeChannels(), capture LoggingEvents
+		List<LoggingEvent> loggingEvents = new LogCapturingTestTemplate(FileUtil.class) {
+			@Override
+			protected void monitorThis() {
+				closeChannels(null, new UnclosableChannelStub(), null, new ChannelStub(), new ChannelStub());
+			}
+		}.execute();
 		// Perform checks
 		assertEquals("Incorrect number of channel closed.", 2, closeCount.intValue());
 		int closeFailedCount = 0;
-		for (LoggingEvent loggingEvent : listAppender.list) {
+		for (LoggingEvent loggingEvent : loggingEvents) {
 			if (FileUtil.FAILED_TO_CLOSE_CHANNEL.equals(loggingEvent.getMessage())) closeFailedCount++;
 		}
 		assertEquals("Exactly 1 failure to close a Channel should have been logged.", 1, closeFailedCount);

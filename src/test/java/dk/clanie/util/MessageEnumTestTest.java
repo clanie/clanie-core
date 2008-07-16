@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2008, Claus Nielsen, cn@cn-consult.dk.dk
+ * Copyright (C) 2008, Claus Nielsen, cn@cn-consult.dk
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -26,6 +26,8 @@ import java.util.ResourceBundle;
 import junit.framework.AssertionFailedError;
 
 import org.junit.Test;
+
+import dk.clanie.test.util.MessageEnumTest;
 
 
 /**
