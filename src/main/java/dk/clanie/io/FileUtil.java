@@ -33,8 +33,9 @@ import org.slf4j.LoggerFactory;
  */
 public class FileUtil {
 
-	private static final Logger logger = LoggerFactory
-			.getLogger(FileUtil.class);
+	private static final Logger logger = LoggerFactory.getLogger(FileUtil.class);
+
+	static final String FAILED_TO_CLOSE_CHANNEL = "Failed to close channel.";
 
 	/**
 	 * Deletes a file or directory.
@@ -109,7 +110,7 @@ public class FileUtil {
 		} catch (java.io.IOException e) {
 			throw new IOException(e.getMessage(), e);
 		} finally {
-			closeChannelse(inputChannel, outputChannel);
+			closeChannels(inputChannel, outputChannel);
 		}
 	}
 
@@ -126,13 +127,13 @@ public class FileUtil {
 	 * @param channels
 	 *            - AbstractInterruptibleChannels to close.
 	 */
-	public static void closeChannelse(AbstractInterruptibleChannel... channels) {
+	public static void closeChannels(AbstractInterruptibleChannel... channels) {
 		for (AbstractInterruptibleChannel channel : channels) {
 			if (channel == null) continue;
 			try {
 				channel.close();
 			} catch (Exception e) {
-				logger.error("Failed to close channel.", e);
+				logger.error(FAILED_TO_CLOSE_CHANNEL, e);
 			}
 		}
 	}

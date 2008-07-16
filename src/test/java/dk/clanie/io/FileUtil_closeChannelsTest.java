@@ -17,7 +17,7 @@
  */
 package dk.clanie.io;
 
-import static dk.clanie.io.FileUtil.closeChannelse;
+import static dk.clanie.io.FileUtil.closeChannels;
 import static org.junit.Assert.assertEquals;
 
 import java.io.IOException;
@@ -28,16 +28,12 @@ import org.junit.Test;
 import org.slf4j.LoggerFactory;
 
 import ch.qos.logback.classic.Logger;
-import ch.qos.logback.classic.LoggerContext;
 import ch.qos.logback.classic.spi.LoggingEvent;
-import ch.qos.logback.core.Appender;
-import ch.qos.logback.core.filter.Filter;
-import ch.qos.logback.core.spi.FilterReply;
+import ch.qos.logback.core.read.ListAppender;
 
 public class FileUtil_closeChannelsTest {
 
 	private AtomicInteger closeCount = new AtomicInteger(0);
-	private AtomicInteger expectedLogEntryCount = new AtomicInteger(0);
 
 	/**
 	 * An Channel stub which cannot be closed.
@@ -47,7 +43,6 @@ public class FileUtil_closeChannelsTest {
 	private class UnclosableChannelStub extends AbstractInterruptibleChannel {
 		@Override
 		protected void implCloseChannel() throws IOException {
-			closeCount.incrementAndGet();
 			throw new RuntimeException("Won't close!");
 		}
 	}
@@ -65,29 +60,29 @@ public class FileUtil_closeChannelsTest {
 	}
 
 	/**
-	 * Tests that all closeChannels() tries to close all the supplied Channels, even if
-	 * supplied with nulls and Channels which fail to close.
+	 * Tests that closeChannels() tries to close all the supplied Channels,
+	 * even if supplied with nulls and Channels which fail to close.
 	 */
 	@Test
 	public void testCloseChannels() {
-		Logger rootLogger = (Logger) LoggerFactory.getLogger(LoggerContext.ROOT_NAME);
-		Appender<LoggingEvent> appender = rootLogger.getAppender("console");
-		appender.addFilter(new Filter() {
-			@Override
-			public FilterReply decide(Object o) {
-				LoggingEvent event = (LoggingEvent) o;
-				if (event.getMessage().equals("Failed to close channel.")) {
-					expectedLogEntryCount.incrementAndGet();
-					return FilterReply.DENY;
-				}
-				return FilterReply.NEUTRAL;
-			}
-			
-		});
-		closeChannelse(null, new UnclosableChannelStub(), null, new ChannelStub(), new ChannelStub());
-		assertEquals("Incorrect number of channel closed.", 3, closeCount.intValue());
-		assertEquals("Exactly 1 failure to close a Channel should have been logged.", 1, expectedLogEntryCount.intValue());
-		appender.clearAllFilters();
+		// Capture log entries from FileUtil
+		Logger logger = (Logger) LoggerFactory.getLogger(FileUtil.class);
+		logger.setAdditive(false);
+		ListAppender<LoggingEvent> listAppender = new ListAppender<LoggingEvent>();
+		listAppender.start();
+		logger.addAppender(listAppender);
+		// Close a mix of normal, broken and completely missing channels
+		closeChannels(null, new UnclosableChannelStub(), null, new ChannelStub(), new ChannelStub());
+		// Restore normal logging
+		logger.detachAppender(listAppender);
+		logger.setAdditive(true);
+		// Perform checks
+		assertEquals("Incorrect number of channel closed.", 2, closeCount.intValue());
+		int closeFailedCount = 0;
+		for (LoggingEvent loggingEvent : listAppender.list) {
+			if (FileUtil.FAILED_TO_CLOSE_CHANNEL.equals(loggingEvent.getMessage())) closeFailedCount++;
+		}
+		assertEquals("Exactly 1 failure to close a Channel should have been logged.", 1, closeFailedCount);
 	}
 
 }
