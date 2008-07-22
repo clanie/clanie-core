@@ -18,7 +18,9 @@
 package dk.clanie.io;
 
 import static dk.clanie.io.FileUtil.closeChannels;
+import static org.hamcrest.Matchers.hasItem;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThat;
 
 import java.io.IOException;
 import java.nio.channels.spi.AbstractInterruptibleChannel;
@@ -29,6 +31,7 @@ import org.junit.Test;
 
 import ch.qos.logback.classic.spi.LoggingEvent;
 import dk.clanie.test.logging.LogCapturingTestTemplate;
+import dk.clanie.test.logging.Logged;
 
 public class FileUtil_closeChannelsTest {
 
@@ -61,6 +64,7 @@ public class FileUtil_closeChannelsTest {
 	/**
 	 * Tests that closeChannels() tries to close all the supplied Channels,
 	 * even if supplied with nulls and Channels which fail to close.
+	 * Also checks that close-attempts which fails are logged.
 	 */
 	@Test
 	public void testCloseChannels() {
@@ -68,16 +72,12 @@ public class FileUtil_closeChannelsTest {
 		List<LoggingEvent> loggingEvents = new LogCapturingTestTemplate(FileUtil.class) {
 			@Override
 			protected void monitorThis() {
-				closeChannels(null, new UnclosableChannelStub(), null, new ChannelStub(), new ChannelStub());
+				closeChannels(null, new ChannelStub(), new UnclosableChannelStub(), null, new ChannelStub());
 			}
 		}.execute();
 		// Perform checks
 		assertEquals("Incorrect number of channel closed.", 2, closeCount.intValue());
-		int closeFailedCount = 0;
-		for (LoggingEvent loggingEvent : loggingEvents) {
-			if (FileUtil.FAILED_TO_CLOSE_CHANNEL.equals(loggingEvent.getMessage())) closeFailedCount++;
-		}
-		assertEquals("Exactly 1 failure to close a Channel should have been logged.", 1, closeFailedCount);
+		assertThat(loggingEvents, hasItem(Logged.message(FileUtil.FAILED_TO_CLOSE_CHANNEL)));
 	}
 
 }
