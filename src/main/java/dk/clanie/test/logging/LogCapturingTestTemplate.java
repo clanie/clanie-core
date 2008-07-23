@@ -17,8 +17,6 @@
  */
 package dk.clanie.test.logging;
 
-import java.util.List;
-
 import org.slf4j.LoggerFactory;
 
 import ch.qos.logback.classic.Logger;
@@ -70,7 +68,7 @@ public abstract class LogCapturingTestTemplate {
 	 * 
 	 * @return List&lt;LoggingEvent&gt;
 	 */
-	public List<LoggingEvent> execute() {
+	public CapturedLoggingEvents execute() {
 		// Configure logging so that LoggingEvents can be captured
 		Logger logger = (Logger) LoggerFactory.getLogger(loggerName);
 		logger.setAdditive(false);
@@ -83,7 +81,7 @@ public abstract class LogCapturingTestTemplate {
 		logger.detachAppender(listAppender);
 		logger.setAdditive(true);
 		// Return captured LoggingEvents
-		return listAppender.list;
+		return new CapturedLoggingEvents(listAppender.list);
 	}
 
 }

@@ -17,25 +17,29 @@
  */
 package dk.clanie.io;
 
+import static dk.clanie.test.CollectionMatchers.*;
 import static dk.clanie.io.FileUtil.closeChannels;
+import static dk.clanie.test.logging.LoggingEventMatchers.level;
+import static dk.clanie.test.logging.LoggingEventMatchers.levelMin;
+import static dk.clanie.test.logging.LoggingEventMatchers.message;
+import static org.hamcrest.Matchers.allOf;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.hasItem;
-import static org.junit.Assert.assertEquals;
+import static org.hamcrest.Matchers.hasProperty;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
 import java.nio.channels.spi.AbstractInterruptibleChannel;
-import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
 
 import org.junit.Test;
 
-import ch.qos.logback.classic.spi.LoggingEvent;
+import ch.qos.logback.classic.Level;
+import dk.clanie.test.logging.CapturedLoggingEvents;
 import dk.clanie.test.logging.LogCapturingTestTemplate;
-import dk.clanie.test.logging.Logged;
 
 public class FileUtil_closeChannelsTest {
-
-	private AtomicInteger closeCount = new AtomicInteger(0);
 
 	/**
 	 * An Channel stub which cannot be closed.
@@ -55,9 +59,13 @@ public class FileUtil_closeChannelsTest {
 	 * Does nothing.
 	 */
 	private class ChannelStub extends AbstractInterruptibleChannel {
+		private boolean closed = false;
 		@Override
 		protected void implCloseChannel() throws IOException {
-			closeCount.incrementAndGet();
+			closed = true;
+		}
+		public boolean isClosed() {
+			return closed;
 		}
 	}
 
@@ -69,15 +77,22 @@ public class FileUtil_closeChannelsTest {
 	@Test
 	public void testCloseChannels() {
 		// Call closeChannels(), capture LoggingEvents
-		List<LoggingEvent> loggingEvents = new LogCapturingTestTemplate(FileUtil.class) {
+		final ChannelStub c1 = new  ChannelStub();
+		final ChannelStub c2 = new  ChannelStub();
+		CapturedLoggingEvents loggingEvents = new LogCapturingTestTemplate(FileUtil.class) {
 			@Override
 			protected void monitorThis() {
-				closeChannels(null, new ChannelStub(), new UnclosableChannelStub(), null, new ChannelStub());
+				closeChannels(null, c1, new UnclosableChannelStub(), null, c2);
 			}
 		}.execute();
 		// Perform checks
-		assertEquals("Incorrect number of channel closed.", 2, closeCount.intValue());
-		assertThat(loggingEvents, hasItem(Logged.message(FileUtil.FAILED_TO_CLOSE_CHANNEL)));
+		assertTrue("Channel c1 wasn't closed..", c1.isClosed());
+		assertTrue("Channel c2 wasn't closed..", c2.isClosed());
+		assertThat(loggingEvents.getMessages(), hasItem(FileUtil.FAILED_TO_CLOSE_CHANNEL));
+		assertThat(loggingEvents.getEvents(), hasItem(message(FileUtil.FAILED_TO_CLOSE_CHANNEL)));
+		assertThat(loggingEvents.getEvents(), hasItem(level(Level.ERROR)));
+		assertThat(loggingEvents.getEvents(), hasItem(allOf(level(Level.ERROR), message(FileUtil.FAILED_TO_CLOSE_CHANNEL))));
+		assertThat(loggingEvents.getEvents(levelMin(Level.WARN)),  sizeEq(1));
 	}
 
 }
