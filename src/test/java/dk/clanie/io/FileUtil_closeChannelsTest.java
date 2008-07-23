@@ -17,16 +17,15 @@
  */
 package dk.clanie.io;
 
-import static dk.clanie.test.CollectionMatchers.*;
+import static ch.qos.logback.classic.Level.ERROR;
+import static ch.qos.logback.classic.Level.WARN;
 import static dk.clanie.io.FileUtil.closeChannels;
+import static dk.clanie.test.CollectionMatchers.sizeEq;
 import static dk.clanie.test.logging.LoggingEventMatchers.level;
 import static dk.clanie.test.logging.LoggingEventMatchers.levelMin;
 import static dk.clanie.test.logging.LoggingEventMatchers.message;
 import static org.hamcrest.Matchers.allOf;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.hasItem;
-import static org.hamcrest.Matchers.hasProperty;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
@@ -35,7 +34,6 @@ import java.nio.channels.spi.AbstractInterruptibleChannel;
 
 import org.junit.Test;
 
-import ch.qos.logback.classic.Level;
 import dk.clanie.test.logging.CapturedLoggingEvents;
 import dk.clanie.test.logging.LogCapturingTestTemplate;
 
@@ -46,7 +44,8 @@ public class FileUtil_closeChannelsTest {
 	 * 
 	 * Throws a RuntimeException when closed.
 	 */
-	private class UnclosableChannelStub extends AbstractInterruptibleChannel {
+	private static class UnclosableChannelStub extends
+			AbstractInterruptibleChannel {
 		@Override
 		protected void implCloseChannel() throws IOException {
 			throw new RuntimeException("Won't close!");
@@ -58,41 +57,44 @@ public class FileUtil_closeChannelsTest {
 	 * 
 	 * Does nothing.
 	 */
-	private class ChannelStub extends AbstractInterruptibleChannel {
+	private static class ChannelStub extends AbstractInterruptibleChannel {
 		private boolean closed = false;
+
 		@Override
 		protected void implCloseChannel() throws IOException {
 			closed = true;
 		}
+
 		public boolean isClosed() {
 			return closed;
 		}
 	}
 
-	/**
-	 * Tests that closeChannels() tries to close all the supplied Channels,
-	 * even if supplied with nulls and Channels which fail to close.
-	 * Also checks that close-attempts which fails are logged.
-	 */
+	private static final ChannelStub c1 = new ChannelStub();
+	private static final ChannelStub c2 = new ChannelStub();
+	private static final CapturedLoggingEvents loggingEvents = new LogCapturingTestTemplate(FileUtil.class) {
+		@Override
+		protected void monitorThis() {
+			closeChannels(null, c1, new UnclosableChannelStub(), null, c2);
+		}
+	}.execute();
+
 	@Test
-	public void testCloseChannels() {
-		// Call closeChannels(), capture LoggingEvents
-		final ChannelStub c1 = new  ChannelStub();
-		final ChannelStub c2 = new  ChannelStub();
-		CapturedLoggingEvents loggingEvents = new LogCapturingTestTemplate(FileUtil.class) {
-			@Override
-			protected void monitorThis() {
-				closeChannels(null, c1, new UnclosableChannelStub(), null, c2);
-			}
-		}.execute();
-		// Perform checks
+	public void testCloseableChannelsClosed() {
 		assertTrue("Channel c1 wasn't closed..", c1.isClosed());
 		assertTrue("Channel c2 wasn't closed..", c2.isClosed());
-		assertThat(loggingEvents.getMessages(), hasItem(FileUtil.FAILED_TO_CLOSE_CHANNEL));
-		assertThat(loggingEvents.getEvents(), hasItem(message(FileUtil.FAILED_TO_CLOSE_CHANNEL)));
-		assertThat(loggingEvents.getEvents(), hasItem(level(Level.ERROR)));
-		assertThat(loggingEvents.getEvents(), hasItem(allOf(level(Level.ERROR), message(FileUtil.FAILED_TO_CLOSE_CHANNEL))));
-		assertThat(loggingEvents.getEvents(levelMin(Level.WARN)),  sizeEq(1));
+	}
+
+	@Test
+	@SuppressWarnings("unchecked")
+	public void testErrorLoggedForUnclosableChannels() {
+		assertThat(loggingEvents.getEvents(),
+				hasItem(allOf(level(ERROR), message(FileUtil.FAILED_TO_CLOSE_CHANNEL))));
+	}
+
+	@Test
+	public void testNoAdditionalWarningsOrErrorsLogged() {
+		assertThat(loggingEvents.getEvents(levelMin(WARN)), sizeEq(1));
 	}
 
 }
