@@ -22,7 +22,7 @@ import static ch.qos.logback.classic.Level.WARN;
 import static dk.clanie.io.FileUtil.closeChannels;
 import static dk.clanie.test.CollectionMatchers.sizeEq;
 import static dk.clanie.test.logging.LoggingEventMatchers.level;
-import static dk.clanie.test.logging.LoggingEventMatchers.levelMin;
+import static dk.clanie.test.logging.LoggingEventMatchers.levelGE;
 import static dk.clanie.test.logging.LoggingEventMatchers.message;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.hasItem;
@@ -94,7 +94,7 @@ public class FileUtil_closeChannelsTest {
 
 	@Test
 	public void testNoAdditionalWarningsOrErrorsLogged() {
-		assertThat(loggingEvents.getEvents(levelMin(WARN)), sizeEq(1));
+		assertThat(loggingEvents.getEvents(levelGE(WARN)), sizeEq(1));
 	}
 
 }

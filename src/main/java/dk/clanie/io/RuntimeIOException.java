@@ -47,6 +47,15 @@ public class RuntimeIOException extends AbstractRuntimeException {
 		super(message, cause);
 	}
 
+	/**
+	 * Constructor
+	 * 
+	 * @param cause
+	 */
+	public RuntimeIOException(Throwable cause) {
+		super(cause);
+	}
+
 	public static class FileNotFound extends RuntimeIOException {
 		public FileNotFound(File file) {
 			super("File not found: " + file.getPath() + ".");

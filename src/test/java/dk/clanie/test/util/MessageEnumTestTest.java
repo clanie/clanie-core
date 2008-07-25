@@ -15,7 +15,7 @@
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-package dk.clanie.util;
+package dk.clanie.test.util;
 
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.fail;
@@ -28,10 +28,11 @@ import junit.framework.AssertionFailedError;
 import org.junit.Test;
 
 import dk.clanie.test.util.MessageEnumTest;
+import dk.clanie.util.MessageDefinition;
 
 
 /**
- * Test that MessageEnumTest works.
+ * Test MessageEnumTest.
  * 
  * @author Claus Nielsen
  */
@@ -47,7 +48,7 @@ public class MessageEnumTestTest extends MessageEnumTest {
 	};
 	private static final ResourceBundle bundle = new MsgBundle();
 
-	// A Message Enumeration which exactly matches the ResourceBundle.
+	// A MessageDefinition Enumeration which exactly matches the ResourceBundle.
 	// This should pass the test.
 	private enum MsgEnum implements MessageDefinition {
 		M1, M2;
@@ -56,7 +57,7 @@ public class MessageEnumTestTest extends MessageEnumTest {
 		@Override public String text(Object... args) { return bundle.getString(name()); }
 	}
 
-	// A Message Enumeration with one less entry than the
+	// A MessageDefinition Enumeration with one less entry than the
 	// ResourceBundle. This should fail the test.
 	private enum MsgEnumMissingAnEntry implements MessageDefinition {
 		M1;
@@ -65,7 +66,7 @@ public class MessageEnumTestTest extends MessageEnumTest {
 		@Override public String text(Object... args) { return bundle.getString(name()); }
 	}
 
-	// A Message Enumeration with an entry which isn't defined in the
+	// A MessageDefinition Enumeration with an entry which isn't defined in the
 	// ResourceBundle. This should fail the test.
 	private enum MsgEnumWithExtraEntry implements MessageDefinition {
 		M1, M2, M3;
@@ -74,7 +75,7 @@ public class MessageEnumTestTest extends MessageEnumTest {
 		@Override public String text(Object... args) { return bundle.getString(name()); }
 	}
 
-	// A Message Enumeration with both entries not defined in the ResourceBundle
+	// A MessageDefinition Enumeration with both entries not defined in the ResourceBundle
 	// and missing an entry which IS defined in the Resource Bundle.
 	// This should fail the test.
 	private enum MsgEnumWithErrors implements MessageDefinition {

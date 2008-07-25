@@ -17,8 +17,13 @@
  */
 package dk.clanie.test.logging;
 
+import static dk.clanie.test.logging.LogLevelMatchers.ge;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.instanceOf;
+
 import org.hamcrest.Description;
 import org.hamcrest.Factory;
+import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
 
 import ch.qos.logback.classic.Level;
@@ -33,11 +38,35 @@ import ch.qos.logback.classic.spi.ThrowableInformation;
 public class LoggingEventMatchers {
 
 	/**
-	 * Does the LoggingEvent contain a Throwable of a particular type?
+	 * Does the LoggingEvent have a matching Level?
 	 */
 	@Factory
-	public static TypeSafeMatcher<LoggingEvent> exception(Class<? extends Throwable> type) {
-		return new ExceptionMatcher(type);
+	public static TypeSafeMatcher<LoggingEvent> level(Matcher<Level> levelMatcher) {
+		return new LevelMatcher(levelMatcher);
+	}
+	
+	/**
+	 * Does the LoggingEvent have a particular Level?
+	 */
+	@Factory
+	public static TypeSafeMatcher<LoggingEvent> level(Level level) {
+		return new LevelMatcher(equalTo(level));
+	}
+	
+	/**
+	 * Does the LoggingEvent have at least a particular Level?
+	 */
+	@Factory
+	public static TypeSafeMatcher<LoggingEvent> levelGE(Level level) {
+		return new LevelMatcher(ge(level));
+	}
+	
+	/**
+	 * Does the LoggingEvent have a matching message?
+	 */
+	@Factory
+	public static TypeSafeMatcher<LoggingEvent> message(Matcher<String> messageMatcher) {
+		return new MessageMatcher(messageMatcher);
 	}
 
 	/**
@@ -45,155 +74,123 @@ public class LoggingEventMatchers {
 	 */
 	@Factory
 	public static TypeSafeMatcher<LoggingEvent> message(String message) {
-		return new MessageMatcher(message);
+		return new MessageMatcher(equalTo(message));
 	}
 
 	/**
-	 * Does the LoggingEvent have a particular Level?
+	 * Does the LoggingEvent contain a matching Throwable?
 	 */
 	@Factory
-	public static TypeSafeMatcher<LoggingEvent> level(Level level) {
-		return new LevelMatcher(level);
+	public static TypeSafeMatcher<LoggingEvent> exception(Matcher<Object> exceptionMatcher) {
+		return new ExceptionMatcher(exceptionMatcher);
 	}
+
 	
 	/**
-	 * Does the LoggingEvent have a Level >= a particular Level?
+	 * Does the LoggingEvent contain a matching Throwable?
 	 */
 	@Factory
-	public static TypeSafeMatcher<LoggingEvent> levelMin(Level level) {
-		return new LevelMinMatcher(level);
+	public static TypeSafeMatcher<LoggingEvent> exception(Class<?> exceptionClass) {
+		return exception(instanceOf(exceptionClass));
 	}
+
 	
+	/**
+	 * Matcher to check if an LoggingEvent has a matching Level.
+	 *
+	 * @author Claus Nielsen
+	 */
+	private static class LevelMatcher extends TypeSafeMatcher<LoggingEvent> {
+
+		private final Matcher<Level> theMatcher;
+
+		/**
+		 * Constructor.
+		 * 
+		 * @param theMatcher
+		 *            The predicate evaluates to true for LoggingEvents
+		 *            with a Level satisfying this Matcher.
+		 */
+		private LevelMatcher(Matcher<Level> theMatcher) {
+			this.theMatcher = theMatcher;
+		}
+
+		@Override
+		public boolean matchesSafely(LoggingEvent event) {
+			return theMatcher.matches(event.getLevel());
+		}
+
+		@Override
+		public void describeTo(Description description) {
+			description.appendText("an LoggingEvent with Level ").appendDescriptionOf(theMatcher);
+		}
+
+	}
+
 
 	/**
-	 * Matcher to check if an LoggingEvent has a particular message.
+	 * Matcher to check if an LoggingEvent has a matching message.
 	 *
 	 * @author Claus Nielsen
 	 */
 	private static class MessageMatcher extends TypeSafeMatcher<LoggingEvent> {
 
-		private final String theMessage;
+		private final Matcher<String> theMatcher;
 
 		/**
 		 * Constructor.
 		 * 
-		 * @param theMessage
+		 * @param theMatcher
 		 *            The predicate evaluates to true for LoggingEvents
-		 *            with this message.
+		 *            with a message satisfying this matcher.
 		 */
-		private MessageMatcher(String theMessage) {
-			this.theMessage = theMessage;
+		private MessageMatcher(Matcher<String> theMatcher) {
+			this.theMatcher = theMatcher;
 		}
 
 		@Override
 		public boolean matchesSafely(LoggingEvent event) {
-			return theMessage.equals(event.getMessage());
+			return theMatcher.matches(event.getMessage());
 		}
 
 		@Override
 		public void describeTo(Description description) {
-			description.appendText("the message ").appendValue(theMessage);
+			description.appendText("an LoggingEvent with a message ").appendValue(theMatcher);
 		}
 
 	}
 
 
 	/**
-	 * Matcher to check if an LoggingEvent contains an exception of a particular type.
+	 * Matcher to check if an LoggingEvent contains an matching type of exception.
 	 *
 	 * @author Claus Nielsen
 	 */
 	private static class ExceptionMatcher extends TypeSafeMatcher<LoggingEvent> {
 
-		private final Class<? extends Throwable> theClass;
+		private final Matcher<Object> theMatcher;
 
 		/**
 		 * Constructor.
 		 * 
-		 * @param theClass
+		 * @param theMatcher
 		 *            The predicate evaluates to true for LoggingEvents
-		 *            containing a Throwable of this class or one of its subclasses.
+		 *            containing a Throwable which satisfies this matcher.
 		 */
-		private ExceptionMatcher(Class<? extends Throwable> theClass) {
-			this.theClass = theClass;
+		private ExceptionMatcher(Matcher<Object> theMatcher) {
+			this.theMatcher = theMatcher;
 		}
 
 		@Override
 		public boolean matchesSafely(LoggingEvent event) {
 			ThrowableInformation throwableInformation = event.getThrowableInformation();
 			if (throwableInformation == null) return false;
-			return theClass.isInstance(throwableInformation.getThrowable());
+			return theMatcher.matches(throwableInformation.getThrowable());
 		}
 
 		@Override
 		public void describeTo(Description description) {
-			description.appendText("an instance of ").appendText(theClass.getName());
-		}
-
-	}
-
-
-	/**
-	 * Matcher to check if an LoggingEvent has a particular Level.
-	 *
-	 * @author Claus Nielsen
-	 */
-	private static class LevelMatcher extends TypeSafeMatcher<LoggingEvent> {
-
-		private final Level theLevel;
-
-		/**
-		 * Constructor.
-		 * 
-		 * @param theLevel
-		 *            The predicate evaluates to true for LoggingEvents
-		 *            with the specified Level.
-		 */
-		private LevelMatcher(Level theLevel) {
-			this.theLevel = theLevel;
-		}
-
-		@Override
-		public boolean matchesSafely(LoggingEvent event) {
-			return event.getLevel() == theLevel;
-		}
-
-		@Override
-		public void describeTo(Description description) {
-			description.appendText("a LoggingEvent with Level ").appendText(theLevel.toString());
-		}
-
-	}
-
-
-	/**
-	 * Matcher to check if an LoggingEvent has at least the specified Level.
-	 *
-	 * @author Claus Nielsen
-	 */
-	private static class LevelMinMatcher extends TypeSafeMatcher<LoggingEvent> {
-
-		private final Level minLevel;
-
-		/**
-		 * Constructor.
-		 * 
-		 * @param minLevel
-		 *            The predicate evaluates to true for LoggingEvents
-		 *            with Level >= this Level.
-		 */
-		private LevelMinMatcher(Level minLevel) {
-			this.minLevel = minLevel;
-		}
-
-		@Override
-		public boolean matchesSafely(LoggingEvent event) {
-			return event.getLevel().isGreaterOrEqual(minLevel);
-		}
-
-		@Override
-		public void describeTo(Description description) {
-			description.appendText("a LoggingEvent with Level >= ").appendText(minLevel.toString());
+			description.appendText("an LoggingEvent with a Throwable ").appendDescriptionOf(theMatcher);
 		}
 
 	}

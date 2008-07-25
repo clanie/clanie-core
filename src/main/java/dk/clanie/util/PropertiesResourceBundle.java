@@ -25,6 +25,8 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.ResourceBundle;
 
+import dk.clanie.io.RuntimeIOException;
+
 /**
  * ResourceBundle which loads its properties from several property files.
  * 
@@ -47,7 +49,7 @@ public abstract class PropertiesResourceBundle extends ResourceBundle {
 			try {
 				props.load(stream);
 			} catch (IOException ioe) {
-				throw new RuntimeException(ioe);
+				throw new RuntimeIOException(ioe);
 			}
 		}
 		lookup = new HashMap(props);

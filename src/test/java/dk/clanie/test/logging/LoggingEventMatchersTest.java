@@ -20,7 +20,7 @@ package dk.clanie.test.logging;
 import static dk.clanie.test.CollectionMatchers.sizeEq;
 import static dk.clanie.test.logging.LoggingEventMatchers.exception;
 import static dk.clanie.test.logging.LoggingEventMatchers.level;
-import static dk.clanie.test.logging.LoggingEventMatchers.levelMin;
+import static dk.clanie.test.logging.LoggingEventMatchers.levelGE;
 import static dk.clanie.test.logging.LoggingEventMatchers.message;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.anyOf;
@@ -76,7 +76,7 @@ public class LoggingEventMatchersTest {
 	@Test
 	public void testFilteringEventsOnLevelMin() {
 		List<LoggingEvent> warningAndErrorEvents =
-			loggingEvents.getEvents(levelMin(WARN));
+			loggingEvents.getEvents(levelGE(WARN));
 		assertThat(warningAndErrorEvents, sizeEq(2));
 	}
 

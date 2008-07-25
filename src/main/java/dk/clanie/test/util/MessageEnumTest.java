@@ -29,7 +29,7 @@ import dk.clanie.util.MessageDefinition;
 
 
 /**
- * Test Enumeration of Messages.
+ * Test Enumeration of MessageDefinitions.
  * <p>
  * Tests an Enumeration of MessageDefinitions against it's ResourceBundle,
  * checking that each Message is defined in the ResourceBundle, and that
