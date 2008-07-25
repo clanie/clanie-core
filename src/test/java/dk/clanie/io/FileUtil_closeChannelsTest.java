@@ -70,6 +70,7 @@ public class FileUtil_closeChannelsTest {
 		}
 	}
 
+	// Capture logging events while closing come Channels.
 	private static final ChannelStub c1 = new ChannelStub();
 	private static final ChannelStub c2 = new ChannelStub();
 	private static final CapturedLoggingEvents loggingEvents = new LogCapturingTestTemplate(FileUtil.class) {
