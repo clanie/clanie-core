@@ -49,7 +49,7 @@ public class MessageEnumTestTest extends MessageEnumTest {
 
 	// A Message Enumeration which exactly matches the ResourceBundle.
 	// This should pass the test.
-	private enum MsgEnum implements Message {
+	private enum MsgEnum implements MessageDefinition {
 		M1, M2;
 		@Override public ResourceBundle getBundle() { return bundle; }
 		@Override public String key() { return name(); }
@@ -58,7 +58,7 @@ public class MessageEnumTestTest extends MessageEnumTest {
 
 	// A Message Enumeration with one less entry than the
 	// ResourceBundle. This should fail the test.
-	private enum MsgEnumMissingAnEntry implements Message {
+	private enum MsgEnumMissingAnEntry implements MessageDefinition {
 		M1;
 		@Override public ResourceBundle getBundle() { return bundle; }
 		@Override public String key() { return name(); }
@@ -67,7 +67,7 @@ public class MessageEnumTestTest extends MessageEnumTest {
 
 	// A Message Enumeration with an entry which isn't defined in the
 	// ResourceBundle. This should fail the test.
-	private enum MsgEnumWithExtraEntry implements Message {
+	private enum MsgEnumWithExtraEntry implements MessageDefinition {
 		M1, M2, M3;
 		@Override public ResourceBundle getBundle() { return bundle; }
 		@Override public String key() { return name(); }
@@ -77,7 +77,7 @@ public class MessageEnumTestTest extends MessageEnumTest {
 	// A Message Enumeration with both entries not defined in the ResourceBundle
 	// and missing an entry which IS defined in the Resource Bundle.
 	// This should fail the test.
-	private enum MsgEnumWithErrors implements Message {
+	private enum MsgEnumWithErrors implements MessageDefinition {
 		M1, M3, M4;
 		@Override public ResourceBundle getBundle() { return bundle; }
 		@Override public String key() { return name(); }

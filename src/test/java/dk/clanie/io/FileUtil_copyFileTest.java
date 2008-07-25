@@ -38,26 +38,26 @@ public class FileUtil_copyFileTest {
 		TEST_DIR.mkdirs();
 	}
 
-	@Test(expected=IOException.FileNotFound.class)
-	public void testMissingSourceFile() throws IOException {
+	@Test(expected=RuntimeIOException.FileNotFound.class)
+	public void testMissingSourceFile() throws RuntimeIOException {
 		copyFile(new File("noSuchFile"), TEST_DIR);
 	}
 
 	@Test
-	public void testCopyToDirectory() throws IOException {
+	public void testCopyToDirectory() throws RuntimeIOException {
 		copyFile(SRC_FILE, TEST_DIR);
 		assertTrue(new File(TEST_DIR.getPath() + separator + "aFile.txt").exists());
 	}
 
-	@Test(expected=IOException.FileAlreadyExists.class)
-	public void testOverwritePrevented() throws IOException {
+	@Test(expected=RuntimeIOException.FileAlreadyExists.class)
+	public void testOverwritePrevented() throws RuntimeIOException {
 		final File destFile = new File(TEST_DIR.getPath() + separator + "overwritePrevented.txt");
 		copyFile(SRC_FILE, destFile);
 		copyFile(SRC_FILE, destFile);
 	}
 
 	@Test
-	public void testOverwriteAccepted() throws IOException {
+	public void testOverwriteAccepted() throws RuntimeIOException {
 		final File destFile = new File(TEST_DIR.getPath() + separator + "overwriteAccepted.txt");
 		copyFile(SRC_FILE, destFile);
 		copyFile(SRC_FILE, destFile, true);

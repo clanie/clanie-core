@@ -21,19 +21,19 @@ import java.io.File;
 
 import dk.clanie.exception.AbstractRuntimeException;
 
-/** IOException.
+/** Runtime IOException.
  * 
  * @author Claus Nielsen
  */
 @SuppressWarnings("serial")
-public class IOException extends AbstractRuntimeException {
+public class RuntimeIOException extends AbstractRuntimeException {
 
 	/**
 	 * Constructor.
 	 * 
 	 * @param message
 	 */
-	public IOException(String message) {
+	public RuntimeIOException(String message) {
 		super(message);
 	}
 
@@ -43,23 +43,23 @@ public class IOException extends AbstractRuntimeException {
 	 * @param message
 	 * @param cause
 	 */
-	public IOException(String message, Throwable cause) {
+	public RuntimeIOException(String message, Throwable cause) {
 		super(message, cause);
 	}
 
-	public static class FileNotFound extends IOException {
+	public static class FileNotFound extends RuntimeIOException {
 		public FileNotFound(File file) {
 			super("File not found: " + file.getPath() + ".");
 		}
 	}
 
-	public static class FileAlreadyExists extends IOException {
+	public static class FileAlreadyExists extends RuntimeIOException {
 		public FileAlreadyExists(File file) {
 			super("File already exists: " + file.getPath() + ".");
 		}
 	}
 
-	public static class FailedToCreate extends IOException {
+	public static class FailedToCreate extends RuntimeIOException {
 		public FailedToCreate(File file) {
 			super("Failed to create file " + file.getPath() + ".");
 		}

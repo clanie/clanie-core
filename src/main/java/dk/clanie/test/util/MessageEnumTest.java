@@ -25,24 +25,24 @@ import java.util.List;
 import java.util.ResourceBundle;
 import java.util.Set;
 
-import dk.clanie.util.Message;
+import dk.clanie.util.MessageDefinition;
 
 
 /**
  * Test Enumeration of Messages.
- * 
- * Tests an Enumeration of Messages against it's ResourceBundle, checking that
- * each Message is defined in the ResourceBundle, and that there are no unused
- * entries in the ResourceBundle.
- * 
- * Assumes that all Messages in the Enumeration are defined in the same
- * ResourceBundle.
- * 
+ * <p>
+ * Tests an Enumeration of MessageDefinitions against it's ResourceBundle,
+ * checking that each Message is defined in the ResourceBundle, and that
+ * there are no unused entries in the ResourceBundle.
+ * </p><p>
+ * Assumes that all MessageDefinitions in the Enumeration are defined in
+ * the same ResourceBundle.
+ * </p>
  * @author Claus Nielsen
  */
 public class MessageEnumTest {
 
-	public static <T extends Enum<T> & Message> void testMessageEnumeration(
+	public static <T extends Enum<T> & MessageDefinition> void testMessageEnumeration(
 			Class<T> messageEnum) {
 		EnumSet.allOf(messageEnum); 
 		T[] enumConstants = messageEnum.getEnumConstants();

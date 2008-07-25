@@ -32,15 +32,15 @@ import dk.clanie.test.util.MessageEnumTest;
  * which implements this interface, and define them all in one
  * ResourceBundle (or property file), you can use
  * {@link MessageEnumTest} to test that you aren't
- * referring to undefined messages. It will also check if
- * the ResourceBundle has unused entries in it.
+ * referring to non-existing message definitions. It will also
+ * check if the ResourceBundle has unused entries in it.
  * 
  * For an example of how to do this, refer to the unit-test
  * <code>MessageEnumTestTest</code>.
  * 
  * @author Claus Nielsen
  */
-public interface Message {
+public interface MessageDefinition {
 
 	String key();
 	String text(Object... args);

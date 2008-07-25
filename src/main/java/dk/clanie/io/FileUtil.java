@@ -66,9 +66,9 @@ public class FileUtil {
 	 * @param to
 	 *            - destination File
 	 * 
-	 * @throws IOException
+	 * @throws RuntimeIOException
 	 */
-	public static void copyFile(File from, File to) throws IOException {
+	public static void copyFile(File from, File to) throws RuntimeIOException {
 		copyFile(from, to, false);
 	}
 
@@ -86,20 +86,20 @@ public class FileUtil {
 	 * @param overwrite
 	 *            - allow overwriting existing file
 	 * 
-	 * @throws IOException
+	 * @throws RuntimeIOException
 	 */
-	public static void copyFile(File from, File to, boolean overwrite) throws IOException {
+	public static void copyFile(File from, File to, boolean overwrite) throws RuntimeIOException {
 		FileChannel inputChannel = null;
 		FileChannel outputChannel = null;
 		try {
-			if (!from.exists()) throw new IOException.FileNotFound(from);
+			if (!from.exists()) throw new RuntimeIOException.FileNotFound(from);
 			if (to.isDirectory()) {
 				to = new File(to.getPath() + File.separator + from.getName());
 			}
 			if (to.exists()) {
-				if (!overwrite) throw new IOException.FileAlreadyExists(to);
+				if (!overwrite) throw new RuntimeIOException.FileAlreadyExists(to);
 			} else if (!to.createNewFile())
-				throw new IOException.FailedToCreate(to);
+				throw new RuntimeIOException.FailedToCreate(to);
 
 			inputChannel = new FileInputStream(from).getChannel();
 			outputChannel = new FileOutputStream(to).getChannel();
@@ -108,7 +108,7 @@ public class FileUtil {
 			while (copied < size)
 				copied += outputChannel.transferFrom(inputChannel, copied, size - copied);
 		} catch (java.io.IOException e) {
-			throw new IOException(e.getMessage(), e);
+			throw new RuntimeIOException(e.getMessage(), e);
 		} finally {
 			closeChannels(inputChannel, outputChannel);
 		}
