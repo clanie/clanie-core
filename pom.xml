@@ -12,11 +12,14 @@
 	<packaging>jar</packaging>
 	<description>Core Classes</description>
 	<inceptionYear>2008</inceptionYear>
+
 	<url>http://mvn.cn-consult.dk/release-site/${project.artifactId}</url>
+	
 	<scm>
-		<connection>scm:svn:http://svn.cn-consult.dk:7000/svn/core/trunk</connection>
-		<developerConnection>scm:svn:http://svn.cn-consult.dk:7000/svn/core/trunk</developerConnection>
+		<connection>scm:git:ssh://git/var/cache/git/libs/clanie-core</connection>
+		<url>http://git.cn-consult.dk/?p=libs/clanie-core/.git</url>
 	</scm>
+
 	<distributionManagement>
 		<site>
 			<id>repository.local.release-site</id>
