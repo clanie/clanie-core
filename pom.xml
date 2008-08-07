@@ -1,12 +1,17 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
+
 	<parent>
 		<groupId>dk.clanie</groupId>
 		<artifactId>clanie-parent-pom</artifactId>
 		<version>0.0.1</version>
 	</parent>
+
 	<artifactId>clanie-core</artifactId>
 	<version>0.0.2-SNAPSHOT</version>
+
 	<name>Core</name>
 	<packaging>jar</packaging>
 	<description>Core Classes</description>
@@ -15,8 +20,8 @@
 	<url>http://mvn.cn-consult.dk/release-site/${project.artifactId}</url>
 	
 	<scm>
-		<connection>scm:git:ssh://git/var/cache/git/libs/clanie-core</connection>
-		<url>http://git.cn-consult.dk/?p=libs/clanie-core/.git</url>
+		<connection>scm:git:ssh://git/var/cache/git/libs/clanie-core.git</connection>
+		<url>http://git.cn-consult.dk/?p=libs/clanie-core.git</url>
 	</scm>
 
 	<distributionManagement>
