@@ -26,7 +26,7 @@ import org.hamcrest.Matcher;
 
 import ch.qos.logback.classic.Level;
 import ch.qos.logback.classic.spi.LoggingEvent;
-import ch.qos.logback.classic.spi.ThrowableInformation;
+import ch.qos.logback.classic.spi.ThrowableProxy;
 
 /**
  * Immutable collection of LoggingEvents captured by {@link LogCapturingTestTemplate}.
@@ -110,9 +110,9 @@ public class CapturedLoggingEvents {
 	public List<Throwable> getThrowables() {
 		List<Throwable> throwables = newArrayList();
 		for (LoggingEvent event : events) {
-			ThrowableInformation throwableInformation = event.getThrowableInformation();
-			if (throwableInformation != null)
-				throwables.add(throwableInformation.getThrowable());
+			ThrowableProxy throwableProxy = event.getThrowableProxy();
+			if (throwableProxy != null)
+				throwables.add(throwableProxy.getThrowable());
 		}
 		return throwables;
 	}

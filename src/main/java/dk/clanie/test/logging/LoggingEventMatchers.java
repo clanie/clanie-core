@@ -28,7 +28,7 @@ import org.hamcrest.TypeSafeMatcher;
 
 import ch.qos.logback.classic.Level;
 import ch.qos.logback.classic.spi.LoggingEvent;
-import ch.qos.logback.classic.spi.ThrowableInformation;
+import ch.qos.logback.classic.spi.ThrowableProxy;
 
 /**
  * Matchers to check LoggingEvents.
@@ -183,9 +183,9 @@ public class LoggingEventMatchers {
 
 		@Override
 		public boolean matchesSafely(LoggingEvent event) {
-			ThrowableInformation throwableInformation = event.getThrowableInformation();
-			if (throwableInformation == null) return false;
-			return theMatcher.matches(throwableInformation.getThrowable());
+			ThrowableProxy throwableProxy = event.getThrowableProxy();
+			if (throwableProxy == null) return false;
+			return theMatcher.matches(throwableProxy.getThrowable());
 		}
 
 		@Override
