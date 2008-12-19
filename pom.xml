@@ -1,5 +1,4 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
@@ -18,7 +17,7 @@
 	<inceptionYear>2008</inceptionYear>
 
 	<url>http://mvn.cn-consult.dk/release-site/${project.artifactId}</url>
-	
+
 	<scm>
 		<connection>scm:git:ssh://git/var/cache/git/libs/clanie-core.git</connection>
 		<url>http://git.cn-consult.dk/?p=libs/clanie-core.git</url>
@@ -50,6 +49,11 @@
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring</artifactId>
+		</dependency>
+		<dependency> <!-- Required by Spring for class-proxying -->
+			<groupId>cglib</groupId>
+			<artifactId>cglib</artifactId>
+			<version>2.2</version>
 		</dependency>
 		<dependency>
 			<groupId>aspectj</groupId>
