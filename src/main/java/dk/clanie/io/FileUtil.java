@@ -153,7 +153,7 @@ public class FileUtil {
 	 *            the directory to scan.
 	 * @return List of all Files in the directory and it's sub-directories.
 	 */
-	public List<File> listFilesRecursively(File dir) {
+	public static List<File> listFilesRecursively(File dir) {
 		List<File> fileList = newArrayList();
 		addFilesRecursively(dir, fileList);
 		return fileList;
@@ -168,7 +168,7 @@ public class FileUtil {
 	 * @param fileList
 	 *            all files in the specified directory and it's sub-directories.
 	 */
-	public void addFilesRecursively(File dir, List<File> fileList) {
+	public static void addFilesRecursively(File dir, List<File> fileList) {
 		File[] files = dir.listFiles();
 		for (File file : files) {
 			if (file.isDirectory())
