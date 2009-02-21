@@ -19,13 +19,19 @@ package dk.clanie.io;
 
 import static dk.clanie.util.CollectionFactory.newArrayList;
 
+import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.nio.channels.FileChannel;
 import java.nio.channels.spi.AbstractInterruptibleChannel;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.List;
 
+import org.apache.commons.codec.binary.Hex;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -57,6 +63,7 @@ public class FileUtil {
 	public static void copyFile(File from, File to) throws RuntimeIOException {
 		copyFile(from, to, false);
 	}
+
 
 	/**
 	 * Creates a copy of a file.
@@ -103,6 +110,7 @@ public class FileUtil {
 		}
 	}
 
+
 	/**
 	 * Closes nio Channels.
 	 * <p>
@@ -128,6 +136,7 @@ public class FileUtil {
 		}
 	}
 
+
 	/**
 	 * Deletes a file or directory.
 	 * 
@@ -146,6 +155,7 @@ public class FileUtil {
 		fileOrDir.delete();
 	}
 
+
 	/**
 	 * Creates a List of all the files in a directory and it's subdirectories.
 	 * 
@@ -159,6 +169,7 @@ public class FileUtil {
 		return fileList;
 	}
 
+	
 	/**
 	 * Adds all files in a directory and it's subdirectories to the supplied
 	 * List.
@@ -179,5 +190,34 @@ public class FileUtil {
 			}
 		}
 	}
+
+
+	public static String sha1(File file) {
+		BufferedInputStream inputStream;
+		try {
+			inputStream = new BufferedInputStream(new FileInputStream(file));
+		} catch (FileNotFoundException fnfe) {
+			throw new RuntimeIOException.FileNotFound(file);
+		}
+		byte[] buf = new byte[1024*1024*5];
+		int bytesRead = 0;
+		MessageDigest md;
+		try {
+			md = MessageDigest.getInstance("SHA1");
+		} catch (NoSuchAlgorithmException nsae) {
+			throw new RuntimeIOException(nsae.getMessage(), nsae);
+		}
+		try {
+			while ((bytesRead = inputStream.read(buf)) > 0) {
+				md.update(buf, 0, bytesRead);
+			}
+		} catch (IOException ioe) {
+			throw new RuntimeIOException(ioe.getMessage(), ioe);
+		}
+		byte[] digest = md.digest();
+		String hexDigest = new String(Hex.encodeHex(digest));
+		return hexDigest;
+	}
+
 
 }
