@@ -36,7 +36,7 @@ import org.slf4j.LoggerFactory;
  */
 public class FileUtil {
 
-	private static final Logger logger = LoggerFactory
+	private static final Logger log = LoggerFactory
 			.getLogger(FileUtil.class);
 
 	static final String FAILED_TO_CLOSE_CHANNEL = "Failed to close channel.";
@@ -123,7 +123,7 @@ public class FileUtil {
 			try {
 				channel.close();
 			} catch (Exception e) {
-				logger.error(FAILED_TO_CLOSE_CHANNEL, e);
+				log.error(FAILED_TO_CLOSE_CHANNEL, e);
 			}
 		}
 	}
@@ -169,6 +169,7 @@ public class FileUtil {
 	 *            all files in the specified directory and it's subdirectories.
 	 */
 	public static void addFilesRecursively(File dir, List<File> fileList) {
+		log.debug("Adding files from {}", dir.getPath());
 		File[] files = dir.listFiles();
 		for (File file : files) {
 			if (file.isDirectory())
