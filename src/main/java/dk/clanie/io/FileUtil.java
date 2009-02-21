@@ -147,11 +147,11 @@ public class FileUtil {
 	}
 
 	/**
-	 * Creates a List of all the files in a directory and it's sub-directories.
+	 * Creates a List of all the files in a directory and it's subdirectories.
 	 * 
 	 * @param dir
 	 *            the directory to scan.
-	 * @return List of all Files in the directory and it's sub-directories.
+	 * @return List of all Files in the directory and it's subdirectories.
 	 */
 	public static List<File> listFilesRecursively(File dir) {
 		List<File> fileList = newArrayList();
@@ -160,13 +160,13 @@ public class FileUtil {
 	}
 
 	/**
-	 * Adds all files in a directory and it's sub-directories to the supplied
+	 * Adds all files in a directory and it's subdirectories to the supplied
 	 * List.
 	 * 
 	 * @param dir
 	 *            the directory to scan.
 	 * @param fileList
-	 *            all files in the specified directory and it's sub-directories.
+	 *            all files in the specified directory and it's subdirectories.
 	 */
 	public static void addFilesRecursively(File dir, List<File> fileList) {
 		File[] files = dir.listFiles();
