@@ -17,11 +17,7 @@
  */
 package dk.clanie.util;
 
-import static dk.clanie.test.CollectionMatchers.sizeEq;
-import static dk.clanie.util.Util.list;
-import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.hasItems;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 
@@ -41,13 +37,6 @@ public class UtilTest {
 		assertThat("it", is(equalTo(Util.firstNotNull(null, "it", null, "boo"))));
 		assertThat(null, is(equalTo(Util.firstNotNull())));
 		assertThat(null, is(equalTo(Util.firstNotNull((String)null))));
-	}
-
-	@SuppressWarnings("unchecked")
-	@Test
-	public void testList() {
-		assertThat(list("a", "b", "c"), allOf(hasItems("a", "b", "c"), sizeEq(3)));
-		assertThat(list(4, 5, 6), allOf(hasItems(4, 5, 6), sizeEq(3)));
 	}
 
 }

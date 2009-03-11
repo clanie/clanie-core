@@ -17,8 +17,7 @@
  */
 package dk.clanie.util;
 
-import java.util.Arrays;
-import java.util.List;
+
 
 /**
  * Miscellaneous static utility methods.
@@ -40,17 +39,6 @@ public class Util {
 				return arg;
 		}
 		return null;
-	}
-
-	/**
-	 * Creates a List of the supplied objects.
-	 *
-	 * @param <T>
-	 * @param args
-	 * @return a List containing all the supplied objects
-	 */
-	public static <T> List<T> list(T... args) {
-		return Arrays.asList(args);
 	}
 
 }
