@@ -17,7 +17,7 @@
  */
 package dk.clanie.io;
 
-import static dk.clanie.util.CollectionFactory.newArrayList;
+import static dk.clanie.collections.CollectionFactory.newArrayList;
 
 import java.io.BufferedInputStream;
 import java.io.File;

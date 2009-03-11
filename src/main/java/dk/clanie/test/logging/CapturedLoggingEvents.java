@@ -17,7 +17,7 @@
  */
 package dk.clanie.test.logging;
 
-import static dk.clanie.util.CollectionFactory.newArrayList;
+import static dk.clanie.collections.CollectionFactory.newArrayList;
 
 import java.util.Collections;
 import java.util.List;

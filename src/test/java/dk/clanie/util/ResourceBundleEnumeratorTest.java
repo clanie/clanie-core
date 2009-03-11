@@ -17,7 +17,7 @@
  */
 package dk.clanie.util;
 
-import static dk.clanie.util.CollectionFactory.newHashSet;
+import static dk.clanie.collections.CollectionFactory.newHashSet;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
