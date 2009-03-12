@@ -27,36 +27,201 @@ import java.util.HashMap;
  * An <code>HashMap</code> which stores <code>Numbers</code> and lets you add to (and
  * subtract from) the <code>Numbers</code> stored in it without retrieving them first.
  * </p><p>
- * This means that you can replace code like this:</p><pre>if (sums.containsKey(key)) {
- *     Integer sum = sums.get(key);
+ * This means that you can replace code like this:</p><pre>if (map.containsKey(key)) {
+ *     Integer sum = map.get(key);
  *     sum = sum.add(value);
- *     sums.put(key, sum);
+ *     map.put(key, sum);
  *} else {
- *     sums.put(value);
- *}</pre><p>with:</p><pre>sums.add(key, value);</pre>
+ *     map.put(value);
+ *}</pre><p>with:</p><pre>map.add(key, value);</pre>
  *
  * @author Claus Nielsen
  */
 @SuppressWarnings("serial")
-public class NumberMap<K, E extends Number> extends HashMap<K, E> {
+public abstract class NumberMap<K, E extends Number> extends HashMap<K, E> {
+
 
 	/**
-	 * Factory method for creating new SumMap instances.
+	 * Creates a NumberMap for instances of a concrete subclass of Number.
+	 * 
+	 * @param <K> key type
+	 * @param <E> element type
+	 * @param elementType
+	 * @return NumberMap&lt;K, E&gt;
+	 */
+	@SuppressWarnings("unchecked")
+	public static <K, E extends Number> NumberMap<K, E> newNumberMap(Class<E> elementType) {
+		if (elementType == BigDecimal.class) return (NumberMap<K, E>) newBigDecimalMap();
+		if (elementType == BigInteger.class) return (NumberMap<K, E>) newBigIntegerMap();
+		if (elementType == Byte.class) return (NumberMap<K, E>) newByteMap();
+		if (elementType == Long.class) return (NumberMap<K, E>) newLongMap();
+		if (elementType == Double.class) return (NumberMap<K, E>) newDoubleMap();
+		if (elementType == Float.class) return (NumberMap<K, E>) newFloatMap();
+		if (elementType == Integer.class) return (NumberMap<K, E>) newIntegerMap();
+		if (elementType == Short.class) return (NumberMap<K, E>) newShortMap();
+		else throw new UnsupportedOperationException();
+	}
+
+
+	/**
+	 * Creates a NumberMap for BigDecimals.
 	 * 
 	 * @param <K>
-	 * @param <E>
-	 * @return SumMap<K, E>
+	 * @return NumberMap&lt;K, BigDecimal&gt;
 	 */
-	public static <K, E extends Number> NumberMap<K, E> newSumMap() {
-		return new NumberMap<K, E>();
+	public static <K> NumberMap<K, BigDecimal> newBigDecimalMap() {
+		return new NumberMap<K, BigDecimal>() {
+			@Override
+			public void add(K key, BigDecimal addend) {
+				put(key, containsKey(key) ? get(key).add(addend) : addend);
+			}
+			@Override
+			public void sub(K key, BigDecimal subtrahend) {
+				put(key, (containsKey(key) ? get(key) : BigDecimal.ZERO).subtract(subtrahend));
+			}
+		};
 	}
 
+
 	/**
-	 *  Default constructor.
+	 * Creates a NumberMap for BigIntegers.
+	 * 
+	 * @param <K>
+	 * @return NumberMap&lt;K, BigInteger&gt;
 	 */
-	public NumberMap() {
-		super();
+	public static <K> NumberMap<K, BigInteger> newBigIntegerMap() {
+		return new NumberMap<K, BigInteger>() {
+			@Override
+			public void add(K key, BigInteger addend) {
+				put(key, containsKey(key) ? get(key).add(addend) : addend);
+			}
+			@Override
+			public void sub(K key, BigInteger subtrahend) {
+				put(key, (containsKey(key) ? get(key) : BigInteger.ZERO).subtract(subtrahend));
+			}
+		};
 	}
+
+
+	/**
+	 * Creates a NumberMap for Bytes.
+	 * 
+	 * @param <K>
+	 * @return NumberMap&lt;K, Byte&gt;
+	 */
+	public static <K> NumberMap<K, Byte> newByteMap() {
+		return new NumberMap<K, Byte>() {
+			@Override
+			public void add(K key, Byte addend) {
+				put(key, (byte)(containsKey(key) ? get(key) + addend : addend));
+			}
+			@Override
+			public void sub(K key, Byte subtrahend) {
+				put(key, (byte)((containsKey(key) ? get(key) : 0) - subtrahend));
+			}
+		};
+	}
+
+
+	/**
+	 * Creates a NumberMap for Doubles.
+	 * 
+	 * @param <K>
+	 * @return NumberMap&lt;K, Double&gt;
+	 */
+	public static <K> NumberMap<K, Double> newDoubleMap() {
+		return new NumberMap<K, Double>() {
+			@Override
+			public void add(K key, Double addend) {
+				put(key, containsKey(key) ? (get(key) + addend) : addend);
+			}
+			@Override
+			public void sub(K key, Double subtrahend) {
+				put(key, (containsKey(key) ? get(key) : 0d) - subtrahend);
+			}
+		};
+	}
+
+
+	/**
+	 * Creates a NumberMap for Floats.
+	 * 
+	 * @param <K>
+	 * @return NumberMap&lt;K, Float&gt;
+	 */
+	public static <K> NumberMap<K, Float> newFloatMap() {
+		return new NumberMap<K, Float>() {
+			@Override
+			public void add(K key, Float addend) {
+				put(key, containsKey(key) ? (get(key) + addend) : addend);
+			}
+			@Override
+			public void sub(K key, Float subtrahend) {
+				put(key, (containsKey(key) ? get(key) : 0f) - subtrahend);
+			}
+		};
+	}
+
+
+	/**
+	 * Creates a NumberMap for Integers.
+	 * 
+	 * @param <K>
+	 * @return NumberMap&lt;K, Integer&gt;
+	 */
+	public static <K> NumberMap<K, Integer> newIntegerMap() {
+		return new NumberMap<K, Integer>() {
+			@Override
+			public void add(K key, Integer addend) {
+				put(key, containsKey(key) ? (get(key) + addend) : addend);
+			}
+			@Override
+			public void sub(K key, Integer subtrahend) {
+				put(key, (containsKey(key) ? get(key) : 0) - subtrahend);
+			}
+		};
+	}
+
+
+	/**
+	 * Creates a NumberMap for Longs.
+	 * 
+	 * @param <K>
+	 * @return NumberMap<K>
+	 */
+	public static <K> NumberMap<K, Long> newLongMap() {
+		return new NumberMap<K, Long>() {
+			@Override
+			public void add(K key, Long addend) {
+				put(key, containsKey(key) ? (get(key) + addend) : addend);
+			}
+			@Override
+			public void sub(K key, Long subtrahend) {
+				put(key, (containsKey(key) ? get(key) : 0l) - subtrahend);
+			}
+		};
+	}
+
+
+	/**
+	 * Creates a NumberMap for Shorts.
+	 * 
+	 * @param <K>
+	 * @return NumberMap<K>
+	 */
+	public static <K> NumberMap<K, Short> newShortMap() {
+		return new NumberMap<K, Short>() {
+			@Override
+			public void add(K key, Short addend) {
+				put(key, containsKey(key) ? (short) (get(key) + addend) : addend);
+			}
+			@Override
+			public void sub(K key, Short subtrahend) {
+				put(key, (short)((containsKey(key) ? get(key) : 0) - subtrahend));
+			}
+		};
+	}
+
 
 	/**
 	 * Add to the Number specified.
@@ -66,21 +231,8 @@ public class NumberMap<K, E extends Number> extends HashMap<K, E> {
 	 * @param key
 	 * @param addend
 	 */
-	public void add(K key, E addend) {
-		if (!containsKey(key)) {
-			put(key, addend);
-		} else {
-			if (addend instanceof BigDecimal) addBigDecimal(key, (BigDecimal)addend);
-			else if (addend instanceof BigInteger) addBigInteger(key, (BigInteger)addend);
-			else if (addend instanceof Byte) addByte(key, (Byte)addend);
-			else if (addend instanceof Double) addDouble(key, (Double)addend);
-			else if (addend instanceof Float) addFloat(key, (Float)addend);
-			else if (addend instanceof Integer) addInteger(key, (Integer)addend);
-			else if (addend instanceof Long) addLong(key, (Long)addend);
-			else if (addend instanceof Short) addShort(key, (Short)addend);
-			else throw new UnsupportedOperationException();
-		}
-	}
+	public abstract void add(K key, E addend);
+
 
 	/**
 	 * Subtract to the Number specified.
@@ -90,102 +242,7 @@ public class NumberMap<K, E extends Number> extends HashMap<K, E> {
 	 * @param key
 	 * @param addend
 	 */
-	public void sub(K key, E addend) {
-		if (addend instanceof BigDecimal) subBigDecimal(key, (BigDecimal)addend);
-		else if (addend instanceof BigInteger) subBigInteger(key, (BigInteger)addend);
-		else if (addend instanceof Byte) subByte(key, (Byte)addend);
-		else if (addend instanceof Double) subDouble(key, (Double)addend);
-		else if (addend instanceof Float) subFloat(key, (Float)addend);
-		else if (addend instanceof Integer) subInteger(key, (Integer)addend);
-		else if (addend instanceof Long) subLong(key, (Long)addend);
-		else if (addend instanceof Short) subShort(key, (Short)addend);
-		else throw new UnsupportedOperationException();
-	}
+	public abstract void sub(K key, E addend);
 
-	
-	// Add-methods --------------------------------------------------------------
-
-	@SuppressWarnings("unchecked")
-	private void addBigDecimal(K key, BigDecimal addend) {
-		put(key, (E) addend.add((BigDecimal) get(key)));
-	}
-
-	@SuppressWarnings("unchecked")
-	private void addBigInteger(K key, BigInteger addend) {
-		put(key, (E) addend.add((BigInteger) get(key)));
-	}
-
-	@SuppressWarnings("unchecked")
-	private void addByte(K key, byte addend) {
-		put(key, (E) new Byte((byte) (addend + get(key).byteValue())));
-	}
-
-	@SuppressWarnings("unchecked")
-	private void addDouble(K key, double addend) {
-		put(key, (E) new Double(addend + get(key).doubleValue()));
-	}
-
-	@SuppressWarnings("unchecked")
-	private void addFloat(K key, float addend) {
-		put(key, (E) new Float(addend + get(key).floatValue()));
-	}
-
-	@SuppressWarnings("unchecked")
-	private void addInteger(K key, int addend) {
-		put(key, (E) new Integer(addend + get(key).intValue()));
-	}
-
-	@SuppressWarnings("unchecked")
-	private void addLong(K key, long addend) {
-		put(key, (E) new Long(addend + get(key).longValue()));
-	}
-
-	@SuppressWarnings("unchecked")
-	private void addShort(K key, short addend) {
-		put(key, (E) new Short((short) (addend + get(key).shortValue())));
-	}
-
-	
-	// Substract-methods --------------------------------------------------------
-
-	@SuppressWarnings("unchecked")
-	private void subBigDecimal(K key, BigDecimal subtrahend) {
-		put(key, (E) ((BigDecimal) (containsKey(key) ? get(key) : BigDecimal.ZERO)).subtract(subtrahend));
-	}
-
-	@SuppressWarnings("unchecked")
-	private void subBigInteger(K key, BigInteger subtrahend) {
-		put(key, (E) ((BigInteger) (containsKey(key) ? get(key) : BigInteger.ZERO)).subtract(subtrahend));
-	}
-
-	@SuppressWarnings("unchecked")
-	private void subByte(K key, byte subtrahend) {
-		put(key, (E) new Byte((byte) ((containsKey(key) ? get(key).byteValue() : (byte)0) - subtrahend)));
-	}
-
-	@SuppressWarnings("unchecked")
-	private void subDouble(K key, double subtrahend) {
-		put(key, (E) new Double((containsKey(key) ? get(key).doubleValue() : 0d) - subtrahend));
-	}
-
-	@SuppressWarnings("unchecked")
-	private void subFloat(K key, float subtrahend) {
-		put(key, (E) new Float((containsKey(key) ? get(key).floatValue() : 0f) - subtrahend));
-	}
-
-	@SuppressWarnings("unchecked")
-	private void subInteger(K key, int subtrahend) {
-		put(key, (E) new Integer((containsKey(key) ? get(key).intValue() : 0) - subtrahend));
-	}
-
-	@SuppressWarnings("unchecked")
-	private void subLong(K key, long subtrahend) {
-		put(key, (E) new Long((containsKey(key) ? get(key).longValue() : 0l) - subtrahend));
-	}
-
-	@SuppressWarnings("unchecked")
-	private void subShort(K key, short subtrahend) {
-		put(key, (E) new Short((short) ((containsKey(key) ? get(key).shortValue() : (short)0) - subtrahend)));
-	}
 
 }
