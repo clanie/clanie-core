@@ -19,9 +19,7 @@ package dk.clanie.test;
 
 import static dk.clanie.collections.CollectionFilters.removeMatcing;
 import static dk.clanie.test.CollectionMatchers.sizeEq;
-import static java.util.Arrays.asList;
 import static org.hamcrest.Matchers.allOf;
-import static org.hamcrest.Matchers.anyOf;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasItem;
 import static org.junit.Assert.assertThat;
