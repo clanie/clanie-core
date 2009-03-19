@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2008, Claus Nielsen, cn@cn-consult.dk
+ * Copyright (C) 2008, 2009 Claus Nielsen, cn@cn-consult.dk
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -31,6 +31,7 @@ import java.util.SortedSet;
 import java.util.TreeMap;
 import java.util.TreeSet;
 import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.ConcurrentSkipListMap;
 import java.util.concurrent.ConcurrentSkipListSet;
@@ -101,6 +102,22 @@ public class CollectionFactory {
 
 	public static <E> ArrayList<E> newArrayList(int initialCapacity) {
 		return new ArrayList<E>(initialCapacity);
+	}
+
+	public static <K, V> ConcurrentHashMap<K, V> newConcurrentHashMap() {
+		return new ConcurrentHashMap<K, V>();
+	}
+
+	public static <K, V> ConcurrentHashMap<K, V> newConcurrentHashMap(int initialCapacity) {
+		return new ConcurrentHashMap<K, V>(initialCapacity);
+	}
+
+	public static <K, V> ConcurrentHashMap<K, V> newConcurrentHashMap(int initialCapacity, float loadFactor) {
+		return new ConcurrentHashMap<K, V>(initialCapacity, loadFactor);
+	}
+
+	public static <K, V> ConcurrentHashMap<K, V> newConcurrentHashMap(Map<? extends K, ? extends V> map) {
+		return new ConcurrentHashMap<K, V>(map);
 	}
 
 	public static <E> ConcurrentLinkedQueue<E> newConcurrentLinkedQueue() {
