@@ -19,7 +19,7 @@ package dk.clanie.io;
 
 import static ch.qos.logback.classic.Level.ERROR;
 import static ch.qos.logback.classic.Level.WARN;
-import static dk.clanie.io.FileUtil.closeChannels;
+import static dk.clanie.io.IOUtil.closeChannels;
 import static dk.clanie.test.CollectionMatchers.sizeEq;
 import static dk.clanie.test.logging.LoggingEventMatchers.level;
 import static dk.clanie.test.logging.LoggingEventMatchers.levelGE;
@@ -37,7 +37,7 @@ import org.junit.Test;
 import dk.clanie.test.logging.CapturedLoggingEvents;
 import dk.clanie.test.logging.LogCapturingTestTemplate;
 
-public class FileUtil_closeChannelsTest {
+public class IOUtil_closeChannelsTest {
 
 	/**
 	 * An Channel stub which cannot be closed.
@@ -73,7 +73,7 @@ public class FileUtil_closeChannelsTest {
 	// Capture logging events while closing come Channels.
 	private static final ChannelStub c1 = new ChannelStub();
 	private static final ChannelStub c2 = new ChannelStub();
-	private static final CapturedLoggingEvents loggingEvents = new LogCapturingTestTemplate(FileUtil.class) {
+	private static final CapturedLoggingEvents loggingEvents = new LogCapturingTestTemplate(IOUtil.class) {
 		@Override
 		protected void monitorThis() {
 			closeChannels(null, c1, new UnclosableChannelStub(), null, c2);
@@ -90,7 +90,7 @@ public class FileUtil_closeChannelsTest {
 	@SuppressWarnings("unchecked")
 	public void testErrorLoggedForUnclosableChannels() {
 		assertThat(loggingEvents.getEvents(),
-				hasItem(allOf(level(ERROR), message(FileUtil.FAILED_TO_CLOSE_CHANNEL))));
+				hasItem(allOf(level(ERROR), message(IOUtil.FAILED_TO_CLOSE_CHANNEL))));
 	}
 
 	@Test

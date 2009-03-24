@@ -17,8 +17,8 @@
  */
 package dk.clanie.io;
 
-import static dk.clanie.io.FileUtil.copyFile;
-import static dk.clanie.io.FileUtil.emptyAndDelete;
+import static dk.clanie.io.IOUtil.copyFile;
+import static dk.clanie.io.IOUtil.emptyAndDelete;
 import static java.io.File.separator;
 import static org.junit.Assert.assertTrue;
 
@@ -27,7 +27,7 @@ import java.io.File;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-public class FileUtil_copyFileTest {
+public class IOUtil_copyFileTest {
 	
 	private static final File TEST_DIR = new File("target/test/dk_clanie_io");
 	private static final File SRC_FILE = new File("src/test/resources/dk/clanie/io/aFile.txt");

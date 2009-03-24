@@ -19,12 +19,13 @@ package dk.clanie.io;
 
 import static dk.clanie.collections.CollectionFactory.newArrayList;
 
-import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
 import java.nio.channels.FileChannel;
 import java.nio.channels.spi.AbstractInterruptibleChannel;
 import java.security.MessageDigest;
@@ -40,10 +41,10 @@ import org.slf4j.LoggerFactory;
  * 
  * @author Claus Nielsen
  */
-public class FileUtil {
+public class IOUtil {
 
 	private static final Logger log = LoggerFactory
-			.getLogger(FileUtil.class);
+			.getLogger(IOUtil.class);
 
 	static final String FAILED_TO_CLOSE_CHANNEL = "Failed to close channel.";
 
@@ -192,13 +193,73 @@ public class FileUtil {
 	}
 
 
+	/**
+	 * Calculates SHA1 for the contents of the supplied InputStream.
+	 * 
+	 * @param file File
+	 * @return String with SHA1 calculated from the contents of <code>file</code>.
+	 * 
+	 * @throws RuntimeIOException
+	 */
 	public static String sha1(File file) {
-		BufferedInputStream inputStream;
+		InputStream is = null;
 		try {
-			inputStream = new BufferedInputStream(new FileInputStream(file));
+			is = new FileInputStream(file);
+			return sha1(is);
 		} catch (FileNotFoundException fnfe) {
 			throw new RuntimeIOException.FileNotFound(file);
+		} finally {
+			// This must be in a catch block because sha1(InputStream) may throw RuntimeIOException.
+			if (is != null) {
+				try {
+					is.close();
+				} catch (IOException ioe) {
+					log.warn("Failed to close stream for File: " + file, ioe);
+					throw new RuntimeIOException(ioe);
+				}
+			}
 		}
+	}
+
+
+	/**
+	 * Calculates SHA1 for the contents referred to by the supplied URL.
+	 * 
+	 * @param url URL
+	 * @return String with SHA1 calculated from the contents referred to by <code>url</code>.
+	 * 
+	 * @throws RuntimeIOException
+	 */
+	public static String sha1(URL url) {
+		InputStream is = null;
+		try {
+			is = url.openStream();
+			return sha1(is);
+		} catch (IOException ioe) {
+			log.warn("Error occourred while reading from URL: " + url, ioe);
+			throw new RuntimeIOException(ioe);
+		} finally {
+			if (is != null) {
+				try {
+					is.close();
+				} catch (IOException ioe) {
+					log.warn("Failed to close stream for URL: " + url, ioe);
+					throw new RuntimeIOException(ioe);
+				}
+			}
+		}
+	}
+
+
+	/**
+	 * Calculates SHA1 for the contents of the supplied InputStream.
+	 * 
+	 * @param is InputStream
+	 * @return String with SHA1 calculated from the contents of <code>is</code>.
+	 * 
+	 * @throws RuntimeIOException
+	 */
+	public static String sha1(InputStream is) {
 		byte[] buf = new byte[1024*1024*5];
 		int bytesRead = 0;
 		MessageDigest md;
@@ -208,7 +269,7 @@ public class FileUtil {
 			throw new RuntimeIOException(nsae.getMessage(), nsae);
 		}
 		try {
-			while ((bytesRead = inputStream.read(buf)) > 0) {
+			while ((bytesRead = is.read(buf)) > 0) {
 				md.update(buf, 0, bytesRead);
 			}
 		} catch (IOException ioe) {
