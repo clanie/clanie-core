@@ -30,6 +30,7 @@ import java.nio.channels.FileChannel;
 import java.nio.channels.spi.AbstractInterruptibleChannel;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.Collection;
 import java.util.List;
 
 import org.apache.commons.codec.binary.Hex;
@@ -172,22 +173,21 @@ public class IOUtil {
 
 	
 	/**
-	 * Adds all files in a directory and it's subdirectories to the supplied
-	 * List.
+	 * Adds all files in a directory and it's subdirectories to the supplied Collection.
 	 * 
 	 * @param dir
 	 *            the directory to scan.
-	 * @param fileList
-	 *            all files in the specified directory and it's subdirectories.
+	 * @param fileCollection
+	 *            the Collection to update.
 	 */
-	public static void addFilesRecursively(File dir, List<File> fileList) {
+	public static void addFilesRecursively(File dir, Collection<File> fileCollection) {
 		log.debug("Adding files from {}", dir.getPath());
 		File[] files = dir.listFiles();
 		for (File file : files) {
 			if (file.isDirectory())
-				addFilesRecursively(file, fileList);
+				addFilesRecursively(file, fileCollection);
 			else {
-				fileList.add(file);
+				fileCollection.add(file);
 			}
 		}
 	}
