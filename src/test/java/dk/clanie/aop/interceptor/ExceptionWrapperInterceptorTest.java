@@ -20,65 +20,81 @@ package dk.clanie.aop.interceptor;
 import java.util.LinkedList;
 import java.util.concurrent.CancellationException;
 
-import org.springframework.test.AbstractDependencyInjectionSpringContextTests;
+import javax.annotation.Resource;
+
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.test.annotation.ExpectedException;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import dk.clanie.exception.WrappedException;
 
-public class ExceptionWrapperInterceptorTest extends
-		AbstractDependencyInjectionSpringContextTests {
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration("/dk/clanie/aop/interceptor/ExceptionWrapperInterceptorTestContext.xml")
+public class ExceptionWrapperInterceptorTest  {
 
-	/* Injected properties. */
+	@Resource
 	protected ExceptionWrapperInterceptor advice;
+
+	@Resource
 	protected ExceptionWrapperInterceptorTestTargetInterface target;
 
-	/**
-	 * Constructor.
-	 */
-	public ExceptionWrapperInterceptorTest() {
-		super();
-		setPopulateProtectedVariables(true);
-	}
+//	/**
+//	 * Constructor.
+//	 */
+//	public ExceptionWrapperInterceptorTest() {
+//		super();
+//		setPopulateProtectedVariables(true);
+//	}
 
-	@Override
-	protected String[] getConfigLocations() {
-		String contextLocation = getClass().getName().replace('.', '/')
-				+ "Context.xml";
-		return new String[] { contextLocation };
-	}
+//	@Override
+//	protected String[] getConfigLocations() {
+//		String contextLocation = getClass().getName().replace('.', '/')
+//				+ "Context.xml";
+//		return new String[] { contextLocation };
+//	}
 
-	@Override
-	protected void prepareTestInstance() throws Exception {
-		super.prepareTestInstance();
+	@Before
+	public void prepareTestInstance() throws Exception {
+//		super.prepareTestInstance();
 		LinkedList<Class<? extends Throwable>> accepted = new LinkedList<Class<? extends Throwable>>();
 		accepted.add(IllegalStateException.class);
 		advice.setAccepted(accepted);
 	}
 
+	@Test
+	@ExpectedException(IllegalStateException.class)
 	public void testPassedThroughException() {
-		try {
+//		try {
 			target.expectedError();
-			fail("Expected IllegalStateException");
-		} catch (IllegalStateException ise) {
-			// OK
-		}
+//			fail("Expected IllegalStateException");
+//		} catch (IllegalStateException ise) {
+//			// OK
+//		}
 	}
 
+	@Test
+	@ExpectedException(CancellationException.class)
 	public void testPassedThroughExceptionSubclass() {
-		try {
+//		try {
 			target.expectedErrorSubclass();
-			fail("Expected CancellationException");
-		} catch (CancellationException ce) {
-			// OK
-		}
+//			fail("Expected CancellationException");
+//		} catch (CancellationException ce) {
+//			// OK
+//		}
 	}
 
+	@Test
+	@ExpectedException(WrappedException.class)
 	public void testWrappedException() {
-		try {
+//		try {
 			target.unexpectedError();
-			fail("Expected WrappedException");
-		} catch (WrappedException we) {
-			// OK
-		}
+//			fail("Expected WrappedException");
+//		} catch (WrappedException we) {
+//			// OK
+//		}
 	}
 
 }
