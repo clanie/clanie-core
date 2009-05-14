@@ -21,6 +21,7 @@ import java.util.Collection;
 
 import org.aopalliance.intercept.MethodInterceptor;
 import org.aopalliance.intercept.MethodInvocation;
+import org.springframework.beans.factory.annotation.Required;
 
 import dk.clanie.exception.WrappedException;
 
@@ -41,6 +42,7 @@ public class ExceptionWrapperInterceptor implements MethodInterceptor {
      * 
      * @param accepted
      */
+    @Required
     public void setAccepted(Collection<Class<? extends Throwable>> accepted) {
         this.accepted = accepted;
     }

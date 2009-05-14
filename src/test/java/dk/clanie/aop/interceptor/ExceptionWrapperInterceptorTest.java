@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2007, Claus Nielsen, cn@cn-consult.dk
+ * Copyright (C) 2007-2009, Claus Nielsen, cn@cn-consult.dk
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,12 +17,10 @@
  */
 package dk.clanie.aop.interceptor;
 
-import java.util.LinkedList;
 import java.util.concurrent.CancellationException;
 
 import javax.annotation.Resource;
 
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.test.annotation.ExpectedException;
@@ -41,60 +39,22 @@ public class ExceptionWrapperInterceptorTest  {
 	@Resource
 	protected ExceptionWrapperInterceptorTestTargetInterface target;
 
-//	/**
-//	 * Constructor.
-//	 */
-//	public ExceptionWrapperInterceptorTest() {
-//		super();
-//		setPopulateProtectedVariables(true);
-//	}
-
-//	@Override
-//	protected String[] getConfigLocations() {
-//		String contextLocation = getClass().getName().replace('.', '/')
-//				+ "Context.xml";
-//		return new String[] { contextLocation };
-//	}
-
-	@Before
-	public void prepareTestInstance() throws Exception {
-//		super.prepareTestInstance();
-		LinkedList<Class<? extends Throwable>> accepted = new LinkedList<Class<? extends Throwable>>();
-		accepted.add(IllegalStateException.class);
-		advice.setAccepted(accepted);
-	}
-
 	@Test
 	@ExpectedException(IllegalStateException.class)
 	public void testPassedThroughException() {
-//		try {
-			target.expectedError();
-//			fail("Expected IllegalStateException");
-//		} catch (IllegalStateException ise) {
-//			// OK
-//		}
+		target.expectedError();
 	}
 
 	@Test
 	@ExpectedException(CancellationException.class)
 	public void testPassedThroughExceptionSubclass() {
-//		try {
-			target.expectedErrorSubclass();
-//			fail("Expected CancellationException");
-//		} catch (CancellationException ce) {
-//			// OK
-//		}
+		target.expectedErrorSubclass();
 	}
 
 	@Test
 	@ExpectedException(WrappedException.class)
 	public void testWrappedException() {
-//		try {
-			target.unexpectedError();
-//			fail("Expected WrappedException");
-//		} catch (WrappedException we) {
-//			// OK
-//		}
+		target.unexpectedError();
 	}
 
 }
