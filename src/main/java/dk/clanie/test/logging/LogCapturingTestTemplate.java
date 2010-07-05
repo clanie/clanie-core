@@ -53,7 +53,7 @@ public abstract class LogCapturingTestTemplate {
 	 *
 	 * @param logger - Class whose name identifies the logger to capture LoggingEvents from.
 	 */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({ "rawtypes" })
 	public LogCapturingTestTemplate(Class logger) {
 		this(logger.getName());
 	}

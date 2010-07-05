@@ -40,7 +40,7 @@ public abstract class PropertiesResourceBundle extends ResourceBundle {
 	private Properties props;
 	private Map<String, Object> lookup;
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public PropertiesResourceBundle(String[] propertyFiles) {
 		props = new Properties();
 		for (int i = 0; i < propertyFiles.length; i++) {

@@ -48,7 +48,7 @@ public abstract class Tuple implements Comparable<Tuple> {
 			return element;
 		}
 
-		@SuppressWarnings("unchecked")
+		@SuppressWarnings("rawtypes")
 		@Override
 		public boolean equals(Object o) {
 			if (o == null) return false;
@@ -66,7 +66,7 @@ public abstract class Tuple implements Comparable<Tuple> {
 			return builder.append("[").append(element).append("]");
 		}
 
-		@SuppressWarnings("unchecked")
+		@SuppressWarnings({ "unchecked", "rawtypes" })
 		@Override
 		protected int compareItems(Tuple other) {
 			if (!(other instanceof Singleton)) return 1; // Other is shorter
@@ -87,7 +87,7 @@ public abstract class Tuple implements Comparable<Tuple> {
 			return e2;
 		}
 
-		@SuppressWarnings("unchecked")
+		@SuppressWarnings("rawtypes")
 		@Override
 		public boolean equals(Object o) {
 			return super.equals(o) && elementsEquals(e2, ((Pair) o).e2);
@@ -103,7 +103,7 @@ public abstract class Tuple implements Comparable<Tuple> {
 			return super.appendItems(builder).append("[").append(e2).append("]");
 		}
 
-		@SuppressWarnings("unchecked")
+		@SuppressWarnings({ "unchecked", "rawtypes" })
 		@Override
 		protected int compareItems(Tuple other) {
 			int result = super.compareItems(other);
@@ -126,7 +126,7 @@ public abstract class Tuple implements Comparable<Tuple> {
 			return e3;
 		}
 
-		@SuppressWarnings("unchecked")
+		@SuppressWarnings("rawtypes")
 		@Override
 		public boolean equals(Object o) {
 			return super.equals(o) && elementsEquals(e3, ((Triple) o).e3);
@@ -142,7 +142,7 @@ public abstract class Tuple implements Comparable<Tuple> {
 			return super.appendItems(builder).append("[").append(e3).append("]");
 		}
 
-		@SuppressWarnings("unchecked")
+		@SuppressWarnings({ "unchecked", "rawtypes" })
 		@Override
 		protected int compareItems(Tuple other) {
 			int result = super.compareItems(other);
@@ -165,7 +165,7 @@ public abstract class Tuple implements Comparable<Tuple> {
 			return e4;
 		}
 
-		@SuppressWarnings("unchecked")
+		@SuppressWarnings("rawtypes")
 		@Override
 		public boolean equals(Object o) {
 			return super.equals(o) && elementsEquals(e4, ((Quadruple) o).e4);
@@ -181,7 +181,7 @@ public abstract class Tuple implements Comparable<Tuple> {
 			return super.appendItems(builder).append("[").append(e4).append("]");
 		}
 
-		@SuppressWarnings("unchecked")
+		@SuppressWarnings({ "unchecked", "rawtypes" })
 		@Override
 		protected int compareItems(Tuple other) {
 			int result = super.compareItems(other);
@@ -205,7 +205,7 @@ public abstract class Tuple implements Comparable<Tuple> {
 			return e5;
 		}
 
-		@SuppressWarnings("unchecked")
+		@SuppressWarnings("rawtypes")
 		@Override
 		public boolean equals(Object o) {
 			return super.equals(o) && elementsEquals(e5, ((Quintuple) o).e5);
@@ -221,7 +221,7 @@ public abstract class Tuple implements Comparable<Tuple> {
 			return super.appendItems(builder).append("[").append(e5).append("]");
 		}
 
-		@SuppressWarnings("unchecked")
+		@SuppressWarnings({ "unchecked", "rawtypes" })
 		@Override
 		protected int compareItems(Tuple other) {
 			int result = super.compareItems(other);
@@ -245,7 +245,7 @@ public abstract class Tuple implements Comparable<Tuple> {
 			return e6;
 		}
 
-		@SuppressWarnings("unchecked")
+		@SuppressWarnings("rawtypes")
 		@Override
 		public boolean equals(Object o) {
 			return super.equals(o) && elementsEquals(e6, ((Sextuple) o).e6);
@@ -261,7 +261,7 @@ public abstract class Tuple implements Comparable<Tuple> {
 			return super.appendItems(builder).append("[").append(e6).append("]");
 		}
 
-		@SuppressWarnings("unchecked")
+		@SuppressWarnings({ "unchecked", "rawtypes" })
 		@Override
 		protected int compareItems(Tuple other) {
 			int result = super.compareItems(other);
