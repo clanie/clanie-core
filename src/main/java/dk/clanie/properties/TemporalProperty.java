@@ -23,7 +23,7 @@ import java.util.Collections;
 import java.util.Map.Entry;
 import java.util.NavigableMap;
 import java.util.Set;
-import java.util.concurrent.ConcurrentSkipListMap;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.joda.time.Instant;
 
@@ -41,7 +41,7 @@ import org.joda.time.Instant;
 public class TemporalProperty<T> implements ObservableProperty<T> {
 
 	NavigableMap<Instant, T> values = newConcurrentSkipListMap();
-	Set<PropertyChangeListener<T>> listeners = Collections.newSetFromMap(new ConcurrentSkipListMap<PropertyChangeListener<T>, Boolean>());
+	Set<PropertyChangeListener<T>> listeners = Collections.newSetFromMap(new ConcurrentHashMap<PropertyChangeListener<T>, Boolean>());
 
 	/* (non-Javadoc)
 	 * @see dk.clanie.properties.Property#set(java.lang.Object)

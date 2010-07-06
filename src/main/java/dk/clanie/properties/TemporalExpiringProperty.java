@@ -23,7 +23,7 @@ import java.util.Collections;
 import java.util.Map.Entry;
 import java.util.NavigableMap;
 import java.util.Set;
-import java.util.concurrent.ConcurrentSkipListMap;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.joda.time.Instant;
 
@@ -50,11 +50,11 @@ public class TemporalExpiringProperty<T> implements ObservableProperty<T> {
 		}
 	}
 
-	private static final Instant EXPIRES_NEVER = new Instant(Long.MAX_VALUE);
+	public static final Instant EXPIRES_NEVER = new Instant(Long.MAX_VALUE);
 
 	NavigableMap<Instant, ValueListEntry<T>> values = newConcurrentSkipListMap();
 
-	Set<PropertyChangeListener<T>> listeners = Collections.newSetFromMap(new ConcurrentSkipListMap<PropertyChangeListener<T>, Boolean>());
+	Set<PropertyChangeListener<T>> listeners = Collections.newSetFromMap(new ConcurrentHashMap<PropertyChangeListener<T>, Boolean>());
 
 
 	/* (non-Javadoc)
@@ -75,7 +75,7 @@ public class TemporalExpiringProperty<T> implements ObservableProperty<T> {
 	 * @param expires
 	 * @param value
 	 */
-	private void set(Instant expires, T value) {
+	public void set(Instant expires, T value) {
 		set(new Instant(), expires, value);
 	}
 
@@ -89,7 +89,7 @@ public class TemporalExpiringProperty<T> implements ObservableProperty<T> {
 	 * @param effectiveFrom
 	 * @param value
 	 */
-	private void set(Instant effectiveFrom, Instant expires, T value) {
+	void set(Instant effectiveFrom, Instant expires, T value) {
 		T oldValue = get();
 		values.put(effectiveFrom, new ValueListEntry<T>(expires, value));
 		notifyListeners(oldValue, value);
@@ -145,6 +145,14 @@ public class TemporalExpiringProperty<T> implements ObservableProperty<T> {
 	}
 
 
+	/**
+	 * Adds a new listener to notify when the property's value is changed.
+	 * <p>
+	 * Note, that the listener wil currently NOT be notified when a value expires.<br/>
+	 * That may change in a future version.
+	 * 
+	 * @see dk.clanie.properties.ObservableProperty#addChangeListener(dk.clanie.properties.PropertyChangeListener)
+	 */
 	@Override
 	public void addChangeListener(PropertyChangeListener<T> listener) {
 		listeners.add(listener);
