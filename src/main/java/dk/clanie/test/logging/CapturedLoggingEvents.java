@@ -25,7 +25,7 @@ import java.util.List;
 import org.hamcrest.Matcher;
 
 import ch.qos.logback.classic.Level;
-import ch.qos.logback.classic.spi.LoggingEvent;
+import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.classic.spi.ThrowableProxy;
 
 /**
@@ -35,9 +35,9 @@ import ch.qos.logback.classic.spi.ThrowableProxy;
  */
 public class CapturedLoggingEvents {
 
-	final List<LoggingEvent> events;
+	final List<ILoggingEvent> events;
 	
-	CapturedLoggingEvents(List<LoggingEvent> events) {
+	CapturedLoggingEvents(List<ILoggingEvent> events) {
 		this.events = Collections.unmodifiableList(events);
 	}
 
@@ -48,9 +48,9 @@ public class CapturedLoggingEvents {
 	 * @param matcher
 	 * @return CapturedLoggingEvents
 	 */
-	public CapturedLoggingEvents filter(Matcher<LoggingEvent> matcher) {
-		List<LoggingEvent> matchingEvents = newArrayList();
-		for (LoggingEvent event : events) {
+	public CapturedLoggingEvents filter(Matcher<ILoggingEvent> matcher) {
+		List<ILoggingEvent> matchingEvents = newArrayList();
+		for (ILoggingEvent event : events) {
 			if (matcher.matches(event))
 				matchingEvents.add(event);
 		}
@@ -62,7 +62,7 @@ public class CapturedLoggingEvents {
 	 * 
 	 * @return List&lt;LoggingEvent&gt;
 	 */
-	public List<LoggingEvent> getEvents() {
+	public List<ILoggingEvent> getEvents() {
 		return events;
 	}
 
@@ -72,7 +72,7 @@ public class CapturedLoggingEvents {
 	 * @param matcher
 	 * @return List&lt;LoggingEvent&gt;
 	 */
-	public List<LoggingEvent> getEvents(Matcher<LoggingEvent> matcher) {
+	public List<ILoggingEvent> getEvents(Matcher<ILoggingEvent> matcher) {
 		return filter(matcher).getEvents();
 	}
 
@@ -83,7 +83,7 @@ public class CapturedLoggingEvents {
 	 */
 	public List<String> getMessages() {
 		List<String> messages = newArrayList();
-		for (LoggingEvent event : events) {
+		for (ILoggingEvent event : events) {
 			messages.add(event.getMessage());
 		}
 		return messages;
@@ -95,7 +95,7 @@ public class CapturedLoggingEvents {
 	 * @param matcher
 	 * @return List&lt;String&gt;
 	 */
-	public List<String> getMessages(Matcher<LoggingEvent> matcher) {
+	public List<String> getMessages(Matcher<ILoggingEvent> matcher) {
 		return filter(matcher).getMessages();
 	}
 
@@ -109,8 +109,8 @@ public class CapturedLoggingEvents {
 	 */
 	public List<Throwable> getThrowables() {
 		List<Throwable> throwables = newArrayList();
-		for (LoggingEvent event : events) {
-			ThrowableProxy throwableProxy = event.getThrowableProxy();
+		for (ILoggingEvent event : events) {
+			ThrowableProxy throwableProxy = (ThrowableProxy) event.getThrowableProxy();
 			if (throwableProxy != null)
 				throwables.add(throwableProxy.getThrowable());
 		}
@@ -123,7 +123,7 @@ public class CapturedLoggingEvents {
 	 * @param matcher
 	 * @return List&lt;Throwable&gt;
 	 */
-	public List<Throwable> getThrowables(Matcher<LoggingEvent> matcher) {
+	public List<Throwable> getThrowables(Matcher<ILoggingEvent> matcher) {
 		return filter(matcher).getThrowables();
 	}
 
@@ -134,7 +134,7 @@ public class CapturedLoggingEvents {
 	 */
 	public List<Level> getLevels() {
 		List<Level> levels = newArrayList();
-		for (LoggingEvent event : events) {
+		for (ILoggingEvent event : events) {
 			levels.add(event.getLevel());
 		}
 		return levels;
@@ -146,7 +146,7 @@ public class CapturedLoggingEvents {
 	 * @param matcher
 	 * @return List&lt;Level&gt;
 	 */
-	public List<Level> getLevels(Matcher<LoggingEvent> matcher) {
+	public List<Level> getLevels(Matcher<ILoggingEvent> matcher) {
 		return filter(matcher).getLevels();
 	}
 

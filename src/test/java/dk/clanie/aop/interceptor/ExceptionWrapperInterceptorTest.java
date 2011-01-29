@@ -19,10 +19,9 @@ package dk.clanie.aop.interceptor;
 
 import java.util.concurrent.CancellationException;
 
-import javax.annotation.Resource;
-
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.annotation.ExpectedException;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -33,10 +32,10 @@ import dk.clanie.exception.WrappedException;
 @ContextConfiguration("/dk/clanie/aop/interceptor/ExceptionWrapperInterceptorTestContext.xml")
 public class ExceptionWrapperInterceptorTest  {
 
-	@Resource
+	@Autowired
 	protected ExceptionWrapperInterceptor advice;
 
-	@Resource
+	@Autowired
 	protected ExceptionWrapperInterceptorTestTargetInterface target;
 
 	@Test

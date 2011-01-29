@@ -17,6 +17,11 @@
  */
 package dk.clanie.test.logging;
 
+import static ch.qos.logback.classic.Level.DEBUG;
+import static ch.qos.logback.classic.Level.ERROR;
+import static ch.qos.logback.classic.Level.INFO;
+import static ch.qos.logback.classic.Level.TRACE;
+import static ch.qos.logback.classic.Level.WARN;
 import static dk.clanie.test.CollectionMatchers.sizeEq;
 import static dk.clanie.test.logging.LoggingEventMatchers.exception;
 import static dk.clanie.test.logging.LoggingEventMatchers.level;
@@ -34,9 +39,7 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import ch.qos.logback.classic.spi.LoggingEvent;
-
-import static ch.qos.logback.classic.Level.*;
+import ch.qos.logback.classic.spi.ILoggingEvent;
 
 /**
  * Tests LoggingEventMatchers.
@@ -62,7 +65,7 @@ public class LoggingEventMatchersTest {
 	@Test
 	@SuppressWarnings("unchecked")
 	public void testFilteringEventsOnLevel() {
-		List<LoggingEvent> infoAndErrorEvents =
+		List<ILoggingEvent> infoAndErrorEvents =
 			loggingEvents.getEvents(anyOf(level(ERROR), level(INFO)));
 		assertThat(infoAndErrorEvents,
 			allOf(
@@ -75,7 +78,7 @@ public class LoggingEventMatchersTest {
 
 	@Test
 	public void testFilteringEventsOnLevelMin() {
-		List<LoggingEvent> warningAndErrorEvents =
+		List<ILoggingEvent> warningAndErrorEvents =
 			loggingEvents.getEvents(levelGE(WARN));
 		assertThat(warningAndErrorEvents, sizeEq(2));
 	}
@@ -83,14 +86,14 @@ public class LoggingEventMatchersTest {
 	@Test
 	@SuppressWarnings("unchecked")
 	public void testFilteringEventsOnMessageText() {
-		List<LoggingEvent> events =
+		List<ILoggingEvent> events =
 			loggingEvents.getEvents(message("Another informational message"));
 		assertThat(events, allOf(sizeEq(1), hasItem(level(INFO))));
 	}
 
 	@Test
 	public void testFilteringEventsOnException() {
-		List<LoggingEvent> events;
+		List<ILoggingEvent> events;
 		events = loggingEvents.getEvents(exception(Throwable.class));
 		assertThat(events, sizeEq(2));
 		events = loggingEvents.getEvents(exception(AssertionError.class));

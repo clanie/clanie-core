@@ -27,7 +27,7 @@ import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
 
 import ch.qos.logback.classic.Level;
-import ch.qos.logback.classic.spi.LoggingEvent;
+import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.classic.spi.ThrowableProxy;
 
 /**
@@ -41,7 +41,7 @@ public class LoggingEventMatchers {
 	 * Does the LoggingEvent have a matching Level?
 	 */
 	@Factory
-	public static TypeSafeMatcher<LoggingEvent> level(Matcher<Level> levelMatcher) {
+	public static TypeSafeMatcher<ILoggingEvent> level(Matcher<Level> levelMatcher) {
 		return new LevelMatcher(levelMatcher);
 	}
 	
@@ -49,7 +49,7 @@ public class LoggingEventMatchers {
 	 * Does the LoggingEvent have a particular Level?
 	 */
 	@Factory
-	public static TypeSafeMatcher<LoggingEvent> level(Level level) {
+	public static TypeSafeMatcher<ILoggingEvent> level(Level level) {
 		return new LevelMatcher(equalTo(level));
 	}
 	
@@ -57,7 +57,7 @@ public class LoggingEventMatchers {
 	 * Does the LoggingEvent have at least a particular Level?
 	 */
 	@Factory
-	public static TypeSafeMatcher<LoggingEvent> levelGE(Level level) {
+	public static TypeSafeMatcher<ILoggingEvent> levelGE(Level level) {
 		return new LevelMatcher(ge(level));
 	}
 	
@@ -65,7 +65,7 @@ public class LoggingEventMatchers {
 	 * Does the LoggingEvent have a matching message?
 	 */
 	@Factory
-	public static TypeSafeMatcher<LoggingEvent> message(Matcher<String> messageMatcher) {
+	public static TypeSafeMatcher<ILoggingEvent> message(Matcher<String> messageMatcher) {
 		return new MessageMatcher(messageMatcher);
 	}
 
@@ -73,7 +73,7 @@ public class LoggingEventMatchers {
 	 * Does the LoggingEvent have a particular message?
 	 */
 	@Factory
-	public static TypeSafeMatcher<LoggingEvent> message(String message) {
+	public static TypeSafeMatcher<ILoggingEvent> message(String message) {
 		return new MessageMatcher(equalTo(message));
 	}
 
@@ -81,7 +81,7 @@ public class LoggingEventMatchers {
 	 * Does the LoggingEvent contain a matching Throwable?
 	 */
 	@Factory
-	public static TypeSafeMatcher<LoggingEvent> exception(Matcher<Object> exceptionMatcher) {
+	public static TypeSafeMatcher<ILoggingEvent> exception(Matcher<Object> exceptionMatcher) {
 		return new ExceptionMatcher(exceptionMatcher);
 	}
 
@@ -90,7 +90,7 @@ public class LoggingEventMatchers {
 	 * Does the LoggingEvent contain a matching Throwable?
 	 */
 	@Factory
-	public static TypeSafeMatcher<LoggingEvent> exception(Class<?> exceptionClass) {
+	public static TypeSafeMatcher<ILoggingEvent> exception(Class<?> exceptionClass) {
 		return exception(instanceOf(exceptionClass));
 	}
 
@@ -100,7 +100,7 @@ public class LoggingEventMatchers {
 	 *
 	 * @author Claus Nielsen
 	 */
-	private static class LevelMatcher extends TypeSafeMatcher<LoggingEvent> {
+	private static class LevelMatcher extends TypeSafeMatcher<ILoggingEvent> {
 
 		private final Matcher<Level> theMatcher;
 
@@ -116,7 +116,7 @@ public class LoggingEventMatchers {
 		}
 
 		@Override
-		public boolean matchesSafely(LoggingEvent event) {
+		public boolean matchesSafely(ILoggingEvent event) {
 			return theMatcher.matches(event.getLevel());
 		}
 
@@ -133,7 +133,7 @@ public class LoggingEventMatchers {
 	 *
 	 * @author Claus Nielsen
 	 */
-	private static class MessageMatcher extends TypeSafeMatcher<LoggingEvent> {
+	private static class MessageMatcher extends TypeSafeMatcher<ILoggingEvent> {
 
 		private final Matcher<String> theMatcher;
 
@@ -141,7 +141,7 @@ public class LoggingEventMatchers {
 		 * Constructor.
 		 * 
 		 * @param theMatcher
-		 *            The predicate evaluates to true for LoggingEvents
+		 *            The predicate evaluates to true for ILoggingEvents
 		 *            with a message satisfying this matcher.
 		 */
 		private MessageMatcher(Matcher<String> theMatcher) {
@@ -149,24 +149,24 @@ public class LoggingEventMatchers {
 		}
 
 		@Override
-		public boolean matchesSafely(LoggingEvent event) {
+		public boolean matchesSafely(ILoggingEvent event) {
 			return theMatcher.matches(event.getMessage());
 		}
 
 		@Override
 		public void describeTo(Description description) {
-			description.appendText("an LoggingEvent with a message ").appendValue(theMatcher);
+			description.appendText("an ILoggingEvent with a message ").appendValue(theMatcher);
 		}
 
 	}
 
 
 	/**
-	 * Matcher to check if an LoggingEvent contains an matching type of exception.
+	 * Matcher to check if an ILoggingEvent contains an matching type of exception.
 	 *
 	 * @author Claus Nielsen
 	 */
-	private static class ExceptionMatcher extends TypeSafeMatcher<LoggingEvent> {
+	private static class ExceptionMatcher extends TypeSafeMatcher<ILoggingEvent> {
 
 		private final Matcher<Object> theMatcher;
 
@@ -174,7 +174,7 @@ public class LoggingEventMatchers {
 		 * Constructor.
 		 * 
 		 * @param theMatcher
-		 *            The predicate evaluates to true for LoggingEvents
+		 *            The predicate evaluates to true for ILoggingEvents
 		 *            containing a Throwable which satisfies this matcher.
 		 */
 		private ExceptionMatcher(Matcher<Object> theMatcher) {
@@ -182,15 +182,15 @@ public class LoggingEventMatchers {
 		}
 
 		@Override
-		public boolean matchesSafely(LoggingEvent event) {
-			ThrowableProxy throwableProxy = event.getThrowableProxy();
+		public boolean matchesSafely(ILoggingEvent event) {
+			ThrowableProxy throwableProxy = (ThrowableProxy) event.getThrowableProxy();
 			if (throwableProxy == null) return false;
 			return theMatcher.matches(throwableProxy.getThrowable());
 		}
 
 		@Override
 		public void describeTo(Description description) {
-			description.appendText("an LoggingEvent with a Throwable ").appendDescriptionOf(theMatcher);
+			description.appendText("an ILoggingEvent with a Throwable ").appendDescriptionOf(theMatcher);
 		}
 
 	}

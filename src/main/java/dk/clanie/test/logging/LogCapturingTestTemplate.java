@@ -20,7 +20,7 @@ package dk.clanie.test.logging;
 import org.slf4j.LoggerFactory;
 
 import ch.qos.logback.classic.Logger;
-import ch.qos.logback.classic.spi.LoggingEvent;
+import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.core.read.ListAppender;
 
 /**
@@ -72,7 +72,7 @@ public abstract class LogCapturingTestTemplate {
 		// Configure logging so that LoggingEvents can be captured
 		Logger logger = (Logger) LoggerFactory.getLogger(loggerName);
 		logger.setAdditive(false);
-		ListAppender<LoggingEvent> listAppender = new ListAppender<LoggingEvent>();
+		ListAppender<ILoggingEvent> listAppender = new ListAppender<ILoggingEvent>();
 		listAppender.start();
 		logger.addAppender(listAppender);
 		// Perform monitored action
