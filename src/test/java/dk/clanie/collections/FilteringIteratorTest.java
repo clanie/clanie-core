@@ -17,7 +17,7 @@
  */
 package dk.clanie.collections;
 
-import static dk.clanie.test.CollectionMatchers.sizeEq;
+import static dk.clanie.hamcrest.CollectionMatchers.sizeEq;
 import static java.util.Arrays.asList;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.hasItem;

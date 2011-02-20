@@ -27,7 +27,6 @@ import java.util.Set;
 
 import dk.clanie.util.MessageDefinition;
 
-
 /**
  * Test Enumeration of MessageDefinitions.
  * <p>

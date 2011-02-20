@@ -19,7 +19,7 @@ package dk.clanie.properties;
 
 import static dk.clanie.properties.TemporalExpiringProperty.*;
 import static dk.clanie.collections.CollectionFactory.newArrayList;
-import static dk.clanie.util.Tuple.newTuple;
+import static dk.clanie.collections.Tuple.newTuple;
 import static org.hamcrest.Matchers.hasItems;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
@@ -32,7 +32,7 @@ import org.joda.time.Instant;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import dk.clanie.util.Tuple.Pair;
+import dk.clanie.collections.Tuple.Pair;
 
 
 public class TemporalExpiringPropertyTest {

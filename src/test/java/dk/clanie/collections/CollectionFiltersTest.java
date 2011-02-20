@@ -15,10 +15,10 @@
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-package dk.clanie.test;
+package dk.clanie.collections;
 
 import static dk.clanie.collections.CollectionFilters.removeMatcing;
-import static dk.clanie.test.CollectionMatchers.sizeEq;
+import static dk.clanie.hamcrest.CollectionMatchers.sizeEq;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasItem;

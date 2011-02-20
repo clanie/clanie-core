@@ -15,11 +15,11 @@
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-package dk.clanie.test;
+package dk.clanie.hamcrest;
 
-import static dk.clanie.test.CollectionMatchers.sizeEq;
-import static dk.clanie.test.CollectionMatchers.sizeMax;
-import static dk.clanie.test.CollectionMatchers.sizeMin;
+import static dk.clanie.hamcrest.CollectionMatchers.sizeEq;
+import static dk.clanie.hamcrest.CollectionMatchers.sizeMax;
+import static dk.clanie.hamcrest.CollectionMatchers.sizeMin;
 import static org.hamcrest.Matchers.not;
 import static org.junit.Assert.assertThat;
 

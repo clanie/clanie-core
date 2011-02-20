@@ -17,8 +17,6 @@
  */
 package dk.clanie.util;
 
-
-
 /**
  * Miscellaneous static utility methods.
  * 

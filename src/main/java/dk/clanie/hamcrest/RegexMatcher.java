@@ -40,7 +40,7 @@ public class RegexMatcher {
 
 
 	/**
-	 * Matcher to check the size of a Collection.
+	 * Matcher to check if a String matces an regular expression.
 	 *
 	 * @author Claus Nielsen
 	 */

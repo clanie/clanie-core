@@ -19,8 +19,8 @@ package dk.clanie.io;
 
 import static ch.qos.logback.classic.Level.ERROR;
 import static ch.qos.logback.classic.Level.WARN;
+import static dk.clanie.hamcrest.CollectionMatchers.sizeEq;
 import static dk.clanie.io.IOUtil.closeChannels;
-import static dk.clanie.test.CollectionMatchers.sizeEq;
 import static dk.clanie.test.logging.LoggingEventMatchers.level;
 import static dk.clanie.test.logging.LoggingEventMatchers.levelGE;
 import static dk.clanie.test.logging.LoggingEventMatchers.message;

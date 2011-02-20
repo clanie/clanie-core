@@ -15,9 +15,9 @@
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-package dk.clanie.util;
+package dk.clanie.collections;
 
-import static dk.clanie.util.Tuple.newTuple;
+import static dk.clanie.collections.Tuple.newTuple;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsEqual.equalTo;
 import static org.hamcrest.core.IsInstanceOf.instanceOf;
@@ -26,12 +26,13 @@ import static org.junit.Assert.assertThat;
 
 import org.junit.Test;
 
-import dk.clanie.util.Tuple.Pair;
-import dk.clanie.util.Tuple.Quadruple;
-import dk.clanie.util.Tuple.Quintuple;
-import dk.clanie.util.Tuple.Sextuple;
-import dk.clanie.util.Tuple.Singleton;
-import dk.clanie.util.Tuple.Triple;
+import dk.clanie.collections.Tuple;
+import dk.clanie.collections.Tuple.Pair;
+import dk.clanie.collections.Tuple.Quadruple;
+import dk.clanie.collections.Tuple.Quintuple;
+import dk.clanie.collections.Tuple.Sextuple;
+import dk.clanie.collections.Tuple.Singleton;
+import dk.clanie.collections.Tuple.Triple;
 
 /**
  * Test Tuple.
