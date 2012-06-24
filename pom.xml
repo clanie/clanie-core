@@ -10,19 +10,20 @@
 
 	<artifactId>clanie-core</artifactId>
 	<version>0.0.2-SNAPSHOT</version>
+	<packaging>jar</packaging>
 
 	<name>Core</name>
-	<packaging>jar</packaging>
 	<description>Core Classes</description>
 	<inceptionYear>2008</inceptionYear>
 
-	<url>http://mvn.cn-consult.dk/release-site/${project.artifactId}</url>
-
+	<url>https://github.com/clanie/clanie-core</url>
+		
 	<scm>
-		<connection>scm:git:ssh://git/var/cache/git/libs/clanie-core.git</connection>
-		<url>http://git.cn-consult.dk/?p=libs/clanie-core.git</url>
+		<connection>scm:git:ssh:git@github.com:clanie/clanie-core.git</connection>
+		<url>https://github.com/clanie/clanie-core</url>
 	</scm>
 
+<!--
 	<distributionManagement>
 		<site>
 			<id>repository.local.release-site</id>
@@ -32,6 +33,7 @@
 			</url>
 		</site>
 	</distributionManagement>
+-->
 
 	<dependencies>
 		<dependency>

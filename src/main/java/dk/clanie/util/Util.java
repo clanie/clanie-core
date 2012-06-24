@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2009, Claus Nielsen, cn@cn-consult.dk
+ * Copyright (C) 2009-2012, Claus Nielsen, cn@cn-consult.dk
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -31,7 +31,7 @@ public class Util {
 	 * @param args
 	 * @return the first argument which is not null or null if all arguments are null.
 	 */
-	public static <T> T firstNotNull(T... args) {
+	public static <T> T firstNotNull(@SuppressWarnings("unchecked") T... args) {
 		for (T arg : args) {
 			if (arg != null)
 				return arg;
