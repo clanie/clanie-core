@@ -31,7 +31,7 @@ public class Util {
 	 * @param args
 	 * @return the first argument which is not null or null if all arguments are null.
 	 */
-	public static <T> T firstNotNull(@SuppressWarnings("unchecked") T... args) {
+	public static <T> T firstNotNull(T... args) {
 		for (T arg : args) {
 			if (arg != null)
 				return arg;

@@ -82,6 +82,7 @@ public class IOUtil {
 	 * 
 	 * @throws RuntimeIOException
 	 */
+	@SuppressWarnings("resource")
 	public static void copyFile(File from, File to, boolean overwrite)
 			throws RuntimeIOException {
 		FileChannel inputChannel = null;
