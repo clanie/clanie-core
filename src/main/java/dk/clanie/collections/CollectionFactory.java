@@ -21,6 +21,7 @@ import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Comparator;
+import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -178,6 +179,14 @@ public class CollectionFactory {
 
 	public static <E> CopyOnWriteArraySet<E> newCopyOnWriteArraySet(Collection<? extends E> collection) {
 		return new CopyOnWriteArraySet<E>(collection);
+	}
+
+	public static <E extends Enum<E>> EnumSet<E> newEnumSet(Class<E> elementType) {
+		return EnumSet.noneOf(elementType);
+	}
+
+	public static <E extends Enum<E>> EnumSet<E> newEnumSet(Collection<E> collection) {
+		return EnumSet.copyOf(collection);
 	}
 
 	public static <K, V> HashMap<K, V> newHashMap() {
