@@ -31,6 +31,7 @@ public class Util {
 	 * @param args
 	 * @return the first argument which is not null or null if all arguments are null.
 	 */
+	@SafeVarargs
 	public static <T> T firstNotNull(T... args) {
 		for (T arg : args) {
 			if (arg != null)
