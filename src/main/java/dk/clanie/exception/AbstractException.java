@@ -20,6 +20,8 @@ package dk.clanie.exception;
 import org.apache.commons.lang.builder.ToStringBuilder;
 
 /**
+ * Common superclass for all exceptions.
+ * 
  * @author Claus Nielsen
  */
 @SuppressWarnings("serial")
