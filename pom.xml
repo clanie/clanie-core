@@ -8,7 +8,7 @@
 	</parent>
 
 	<artifactId>clanie-core</artifactId>
-	<version>0.0.2</version>
+	<version>0.0.3-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
 	<name>Core</name>
@@ -20,7 +20,7 @@
 	<scm>
 		<connection>scm:git:ssh://git@github.com/clanie/clanie-core.git</connection>
 		<url>https://github.com/clanie/clanie-core</url>
-	  <tag>clanie-core-0.0.2</tag>
+	  <tag>HEAD</tag>
   </scm>
 
 	<properties>
