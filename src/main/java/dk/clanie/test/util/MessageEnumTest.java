@@ -18,7 +18,7 @@
 package dk.clanie.test.util;
 
 import static dk.clanie.collections.CollectionFactory.newArrayList;
-import static junit.framework.Assert.fail;
+import static org.junit.Assert.fail;
 
 import java.util.EnumSet;
 import java.util.List;

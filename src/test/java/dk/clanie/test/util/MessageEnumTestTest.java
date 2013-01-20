@@ -17,17 +17,15 @@
  */
 package dk.clanie.test.util;
 
-import static junit.framework.Assert.assertEquals;
-import static junit.framework.Assert.fail;
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.junit.Assert.assertThat;
+import static org.junit.Assert.fail;
 
 import java.util.ListResourceBundle;
 import java.util.ResourceBundle;
 
-import junit.framework.AssertionFailedError;
-
 import org.junit.Test;
 
-import dk.clanie.test.util.MessageEnumTest;
 import dk.clanie.util.MessageDefinition;
 
 
@@ -95,8 +93,8 @@ public class MessageEnumTestTest extends MessageEnumTest {
 		try {
 			testMessageEnumeration(MsgEnumWithExtraEntry.class);
 			fail("Test doesn't work - should have revealed that key M3 is missing.");
-		} catch (AssertionFailedError afe) {
-			assertEquals("Missing keys: M3", afe.getMessage());
+		} catch (AssertionError afe) {
+			assertThat(afe.getMessage(), equalTo("Missing keys: M3"));
 		}
 	}
 
@@ -105,8 +103,8 @@ public class MessageEnumTestTest extends MessageEnumTest {
 		try {
 			testMessageEnumeration(MsgEnumMissingAnEntry.class);
 			fail("Test doesn't work - should have revealed that key M2 isn't used.");
-		} catch (AssertionFailedError afe) {
-			assertEquals("Unused keys: M2", afe.getMessage());
+		} catch (AssertionError afe) {
+			assertThat(afe.getMessage(), equalTo("Unused keys: M2"));
 		}
 	}
 
@@ -116,8 +114,8 @@ public class MessageEnumTestTest extends MessageEnumTest {
 			testMessageEnumeration(MsgEnumWithErrors.class);
 			fail("Test doesn't work - should have revealed that key M2 isn't used" +
 					" and that M# and M4 are missing.");
-		} catch (AssertionFailedError afe) {
-			assertEquals("Missing keys: M3, M4; Unused keys: M2", afe.getMessage());
+		} catch (AssertionError afe) {
+			assertThat(afe.getMessage(), equalTo("Missing keys: M3, M4; Unused keys: M2"));
 		}
 	}
 
