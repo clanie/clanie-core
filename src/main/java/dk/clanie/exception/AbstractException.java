@@ -43,6 +43,11 @@ public abstract class AbstractException extends Exception {
 		super(cause);
 	}
 
+	public AbstractException(String message, Throwable cause,
+			boolean enableSuppression, boolean writableStackTrace) {
+		super(message, cause, enableSuppression, writableStackTrace);
+	}
+
 	@Override
 	public String toString() {
 		return ToStringBuilder.reflectionToString(this);

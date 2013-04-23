@@ -43,6 +43,11 @@ public abstract class AbstractRuntimeException extends RuntimeException {
 		super(cause);
 	}
 
+	public AbstractRuntimeException(String message, Throwable cause,
+			boolean enableSuppression, boolean writableStackTrace) {
+		super(message, cause, enableSuppression, writableStackTrace);
+	}
+
 	@Override
 	public String toString() {
 		return ToStringBuilder.reflectionToString(this);
