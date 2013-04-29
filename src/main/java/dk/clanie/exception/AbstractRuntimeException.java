@@ -17,7 +17,7 @@
  */
 package dk.clanie.exception;
 
-import org.apache.commons.lang.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
 
 /**
  * Common functionality for all RuntimeExceptions.
