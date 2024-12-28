@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2007, Claus Nielsen, cn@cn-consult.dk
+ * Copyright (C) 2007-2024, Claus Nielsen, clausn999@gmail.com
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,9 +17,9 @@
  */
 package dk.clanie.generator;
 
-import org.junit.Test;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import static org.junit.Assert.*;
+import org.junit.jupiter.api.Test;
 
 public class SimpleLongSequenceTest {
 

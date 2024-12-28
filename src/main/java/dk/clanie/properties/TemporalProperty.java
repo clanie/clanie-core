@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2010, Claus Nielsen, cn@cn-consult.dk
+ * Copyright (C) 2010-2024, Claus Nielsen, clausn999@gmail.com
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,15 +17,13 @@
  */
 package dk.clanie.properties;
 
-import static dk.clanie.collections.CollectionFactory.newConcurrentSkipListMap;
-
+import java.time.Instant;
 import java.util.Collections;
 import java.util.Map.Entry;
 import java.util.NavigableMap;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
-
-import org.joda.time.Instant;
+import java.util.concurrent.ConcurrentSkipListMap;
 
 /**
  * Temporal Property.
@@ -40,16 +38,18 @@ import org.joda.time.Instant;
  */
 public class TemporalProperty<T> implements ObservableProperty<T> {
 
-	NavigableMap<Instant, T> values = newConcurrentSkipListMap();
+	NavigableMap<Instant, T> values = new ConcurrentSkipListMap<>();
 	Set<PropertyChangeListener<T>> listeners = Collections.newSetFromMap(new ConcurrentHashMap<PropertyChangeListener<T>, Boolean>());
+
 
 	/* (non-Javadoc)
 	 * @see dk.clanie.properties.Property#set(java.lang.Object)
 	 */
 	@Override
 	public void set(T value) {
-		set(new Instant(), value);
+		set(Instant.now(), value);
 	}
+
 
 	/**
 	 * Sets the value of the property at the specified time.
@@ -66,6 +66,7 @@ public class TemporalProperty<T> implements ObservableProperty<T> {
 		notifyListeners(oldValue, value);
 	}
 
+
 	/**
 	 * Gets the value effective at the specified instant in time.
 	 *
@@ -80,13 +81,15 @@ public class TemporalProperty<T> implements ObservableProperty<T> {
 		return entry.getValue();
 	}
 
+
 	/* (non-Javadoc)
 	 * @see dk.clanie.properties.Property#get()
 	 */
 	@Override
 	public T get() {
-		return get(new Instant());
+		return get(Instant.now());
 	}
+
 
 	/**
 	 * Removes values no longer in effect at the specified point in time.
@@ -103,20 +106,24 @@ public class TemporalProperty<T> implements ObservableProperty<T> {
 		}
 	}
 
+
 	private void notifyListeners(T oldValue, T newValue) {
 		for (PropertyChangeListener<T> pcl : listeners) {
 			pcl.propertyChanged(oldValue, newValue);
 		}
 	}
 
+
 	@Override
 	public void addChangeListener(PropertyChangeListener<T> listener) {
 		listeners.add(listener);
 	}
 
+
 	@Override
 	public void removeChangeListener(PropertyChangeListener<T> listener) {
 		listeners.remove(listener);		
 	}
+
 
 }

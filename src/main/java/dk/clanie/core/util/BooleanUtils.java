@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2010, Claus Nielsen, clausn999@gmail.com
+ * Copyright (C) 2024, Claus Nielsen, clausn999@gmail.com
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -15,10 +15,21 @@
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-package dk.clanie.properties;
+package dk.clanie.core.util;
 
-public interface PropertyChangeListener<T> {
+import java.util.Objects;
 
-	void propertyChanged(T oldValue, T newValue);
+public class BooleanUtils {
+
+
+	public static boolean eq(Object o1, Object o2) {
+		return Objects.equals(o1, o2);
+	}
+
+
+	public static boolean ne(Object o1, Object o2) {
+		return !Objects.equals(o1, o2);
+	}
+
 
 }

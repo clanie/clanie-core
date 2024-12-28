@@ -15,42 +15,37 @@
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-package dk.clanie.exception;
+package dk.clanie.core.util;
 
-import org.apache.commons.lang3.builder.ToStringBuilder;
+import java.util.Enumeration;
+import java.util.Iterator;
+import java.util.NoSuchElementException;
+import java.util.Set;
 
-/**
- * Common superclass for all exceptions.
- * 
- * @author Claus Nielsen
- */
-@SuppressWarnings("serial")
-public abstract class AbstractException extends Exception {
+public class ResourceBundleEnumeration implements Enumeration<String> {
 
-	public AbstractException() {
-		super();
-	}
+	private Enumeration<String> enumeration;
+	private Iterator<String> iterator;
 
-	public AbstractException(String message, Throwable cause) {
-		super(message, cause);
-	}
-
-	public AbstractException(String message) {
-		super(message);
-	}
-
-	public AbstractException(Throwable cause) {
-		super(cause);
-	}
-
-	public AbstractException(String message, Throwable cause,
-			boolean enableSuppression, boolean writableStackTrace) {
-		super(message, cause, enableSuppression, writableStackTrace);
+	public ResourceBundleEnumeration(Set<String> keySet,
+			Enumeration<String> enumeration) {
+		iterator = keySet.iterator();
+		this.enumeration = enumeration;
 	}
 
 	@Override
-	public String toString() {
-		return ToStringBuilder.reflectionToString(this);
+	public boolean hasMoreElements() {
+		return iterator.hasNext()
+				|| (enumeration != null && enumeration.hasMoreElements());
+	}
+
+	@Override
+	public String nextElement() {
+		if (iterator.hasNext())
+			return iterator.next();
+		if (enumeration != null && enumeration.hasMoreElements())
+			return enumeration.nextElement();
+		throw new NoSuchElementException();
 	}
 
 }

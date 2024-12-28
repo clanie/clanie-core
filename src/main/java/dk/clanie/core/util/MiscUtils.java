@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2010, Claus Nielsen, clausn999@gmail.com
+ * Copyright (C) 2009-2012, Claus Nielsen, clausn999@gmail.com
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -15,10 +15,31 @@
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-package dk.clanie.properties;
+package dk.clanie.core.util;
 
-public interface PropertyChangeListener<T> {
+/**
+ * Miscellaneous static utility methods.
+ * 
+ * @author Claus Nielsen
+ */
+public class MiscUtils {
 
-	void propertyChanged(T oldValue, T newValue);
+
+	/**
+	 * Selects first non-null argument.
+	 *
+	 * @param <T>
+	 * @param args
+	 * @return the first argument which is not null or null if all arguments are null.
+	 */
+	@SafeVarargs
+	public static <T> T firstNonNull(T... args) {
+		for (T arg : args) {
+			if (arg != null)
+				return arg;
+		}
+		return null;
+	}
+
 
 }

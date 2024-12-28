@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2010, Claus Nielsen, cn@cn-consult.dk
+ * Copyright (C) 2010-2024, Claus Nielsen, clausn999@gmail.com
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,15 +17,14 @@
  */
 package dk.clanie.properties;
 
-import static dk.clanie.collections.CollectionFactory.newConcurrentSkipListMap;
-
+import java.time.Instant;
 import java.util.Collections;
 import java.util.Map.Entry;
 import java.util.NavigableMap;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentSkipListMap;
 
-import org.joda.time.Instant;
 
 /**
  * Temporal Property.
@@ -50,9 +49,9 @@ public class TemporalExpiringProperty<T> implements ObservableProperty<T> {
 		}
 	}
 
-	public static final Instant EXPIRES_NEVER = new Instant(Long.MAX_VALUE);
+	public static final Instant EXPIRES_NEVER = Instant.MAX;
 
-	NavigableMap<Instant, ValueListEntry<T>> values = newConcurrentSkipListMap();
+	NavigableMap<Instant, ValueListEntry<T>> values = new ConcurrentSkipListMap<>();
 
 	Set<PropertyChangeListener<T>> listeners = Collections.newSetFromMap(new ConcurrentHashMap<PropertyChangeListener<T>, Boolean>());
 
@@ -76,7 +75,7 @@ public class TemporalExpiringProperty<T> implements ObservableProperty<T> {
 	 * @param value
 	 */
 	public void set(Instant expires, T value) {
-		set(new Instant(), expires, value);
+		set(Instant.now(), expires, value);
 	}
 
 
@@ -101,7 +100,7 @@ public class TemporalExpiringProperty<T> implements ObservableProperty<T> {
 	 */
 	@Override
 	public T get() {
-		return get(new Instant());
+		return get(Instant.now());
 	}
 
 

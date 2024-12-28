@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2010, Claus Nielsen, clausn999@gmail.com
+ * Copyright (C) 2008-2024, Claus Nielsen, clausn999@gmail.com
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -15,10 +15,24 @@
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-package dk.clanie.properties;
+package dk.clanie.core.util;
 
-public interface PropertyChangeListener<T> {
+import static org.assertj.core.api.Assertions.assertThat;
 
-	void propertyChanged(T oldValue, T newValue);
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
+
+import org.junit.jupiter.api.Test;
+
+import dk.clanie.exception.RuntimeIOException;
+
+public class HashUtils_sha1Test {
+	
+	@Test
+	public void testSha1Calculation() throws RuntimeIOException {
+		InputStream is = new ByteArrayInputStream("test string for sha1 calculation".getBytes());
+		String sha1 = HashUtils.sha1(is);
+		assertThat(sha1).isEqualTo("9d0ba0332821e2eb467d2d36f353b62158200a93");
+	}
 
 }

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2007, Claus Nielsen, cn@cn-consult.dk
+ * Copyright (C) 2007-2024, Claus Nielsen, clausn999@gmail.com
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -27,7 +27,7 @@ import java.io.PrintStream;
  * An exception which wraps another exception. It dosn't include the wrapped
  * exception, but just information about it.
  * <p>
- * The idea is to wrap unexpected runtime exceptions, before pasing them on to
+ * The idea is to wrap unexpected runtime exceptions, before passing them on to
  * the next tier, which may not have the exception class available.
  * 
  * @author Claus Nielsen
