@@ -17,6 +17,13 @@
  */
 package dk.clanie.core.util;
 
+import static java.util.Arrays.stream;
+
+import java.util.Objects;
+import java.util.Optional;
+
+import org.springframework.lang.NonNull;
+
 /**
  * Miscellaneous static utility methods.
  * 
@@ -34,11 +41,25 @@ public class MiscUtils {
 	 */
 	@SafeVarargs
 	public static <T> T firstNonNull(T... args) {
-		for (T arg : args) {
-			if (arg != null)
-				return arg;
-		}
-		return null;
+		return stream(args)
+				.filter(Objects::nonNull)
+				.findFirst().orElse(null);
+	}
+
+
+	/**
+	 * Returns an {@code Optional} describing the given value, if
+	 * non-{@code null}, otherwise returns an empty {@code Optional}.
+	 * 
+	 * Short for {@link Optional#ofNullable(Object)}.
+	 *
+	 * @param value the possibly-{@code null} value to describe
+	 * @param <T> the type of the value
+	 * @return an {@code Optional} with a present value if the specified value
+	 *         is non-{@code null}, otherwise an empty {@code Optional}
+	 */
+	public static @NonNull <T> Optional<T> opt(T value) {
+		return Optional.ofNullable(value);
 	}
 
 
