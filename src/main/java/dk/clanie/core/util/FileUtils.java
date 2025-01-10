@@ -17,14 +17,21 @@
  */
 package dk.clanie.core.util;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.nio.channels.FileChannel;
 import java.nio.channels.spi.AbstractInterruptibleChannel;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+
+import org.springframework.core.io.ClassPathResource;
 
 import dk.clanie.exception.RuntimeIOException;
 import lombok.extern.slf4j.Slf4j;
@@ -39,16 +46,15 @@ public class FileUtils {
 
 	static final String FAILED_TO_CLOSE_CHANNEL = "Failed to close channel.";
 
+
 	/**
 	 * Creates a copy of a file.
 	 * 
 	 * Shorthand for <code>copyFile(from, to, false)</code>, <code>false</code>
 	 * meaning don't overwrite existing file.
 	 * 
-	 * @param from
-	 *            - source File
-	 * @param to
-	 *            - destination File
+	 * @param from source File
+	 * @param to destination File
 	 * 
 	 * @throws RuntimeIOException
 	 */
@@ -63,12 +69,9 @@ public class FileUtils {
 	 * If the destination is a directory the file is copied to that directory
 	 * with the same name as the source file.
 	 * 
-	 * @param from
-	 *            - source File
-	 * @param to
-	 *            - destination File
-	 * @param overwrite
-	 *            - allow overwriting existing file
+	 * @param from source File
+	 * @param to destination File
+	 * @param overwrite allow overwriting existing file
 	 * 
 	 * @throws RuntimeIOException
 	 */
@@ -181,6 +184,34 @@ public class FileUtils {
 				fileCollection.add(file);
 			}
 		}
+	}
+
+
+	/**
+	 * Reads a utf-8 text file on the class path into a list of lines.
+	 */
+	public static List<String> readTextResource(String resource) {
+		return readTextResource(resource, Charset.forName("UTF-8"));
+	}
+
+
+	/**
+	 * Reads a text file on the class path into a list of lines.
+	 */
+	public static List<String> readTextResource(String resource, Charset charset) {
+		List<String> lines = new ArrayList<>();
+		try (InputStream is = new ClassPathResource(resource).getInputStream();
+				InputStreamReader isr = new InputStreamReader(is, charset);
+				BufferedReader br = new BufferedReader(isr)
+				) {
+			String line;
+			while ((line = br.readLine()) != null) {
+				lines.add(line);
+			}
+		} catch (IOException ioe) {
+			throw new RuntimeException(ioe);
+		}
+		return lines;
 	}
 
 

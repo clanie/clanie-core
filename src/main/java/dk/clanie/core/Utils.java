@@ -19,22 +19,30 @@ package dk.clanie.core;
 
 import java.io.File;
 import java.nio.channels.spi.AbstractInterruptibleChannel;
+import java.nio.charset.Charset;
+import java.time.Instant;
+import java.time.ZoneId;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
+import java.util.UUID;
+import java.util.concurrent.Callable;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
+import org.slf4j.Logger;
 import org.springframework.lang.NonNull;
 import org.springframework.lang.Nullable;
 
 import dk.clanie.core.util.BooleanUtils;
 import dk.clanie.core.util.CollectionUtils;
+import dk.clanie.core.util.DateTimeUtils;
 import dk.clanie.core.util.FileUtils;
 import dk.clanie.core.util.MiscUtils;
+import dk.clanie.core.util.StringUtils;
 import dk.clanie.exception.RuntimeIOException;
 
 /**
@@ -154,6 +162,22 @@ public final class Utils {
 
 
 	/**
+	 * Copies and transforms all elements from given {@code iterable} to a new List using given {@code mapper}. 
+	 */
+	public static <T, R> List<R> mapList(@Nullable Iterable<T> iterable, Function<? super T, ? extends R> mapper) {
+		return CollectionUtils.mapList(iterable, mapper);
+	}
+
+
+	/**
+	 * Copies and transforms all elements from given {@code iterable} to a new Set using given {@code mapper}. 
+	 */
+	public static <T, R> Set<R> mapSet(@Nullable Iterable<T> iterable, Function<? super T, ? extends R> mapper) {
+		return CollectionUtils.mapSet(iterable, mapper);
+	}
+
+
+	/**
 	 * Returns a sequential {@link Stream} of the contents of {@code iterable}, delegating to
 	 * {@link Collection#stream} if possible.
 	 * 
@@ -192,6 +216,49 @@ public final class Utils {
 	 */
 	public static @NonNull <T> Stream<T> reverseStream(@Nullable List<T> list) {
 		return CollectionUtils.reverseStream(list);
+	}
+
+
+
+	// ***** DateTimeUtils methods *****
+
+
+
+	/**
+	 * Checks if given {code instant} is before the start of current day in the default time-zone.
+	 */
+	public static boolean beforeToday(Instant instant) {
+		return DateTimeUtils.beforeToday(instant);
+	}
+
+
+	/**
+	 * Checks if given {code instant} is before the start of current day in the given given time-zone.
+	 * 
+	 * Null is considered less than any non-null Instant.
+	 */
+	public static boolean beforeToday(ZoneId zoneId, @Nullable Instant instant) {
+		return DateTimeUtils.beforeToday(zoneId, instant);
+	}
+
+
+	/**
+	 * Returns the earlier of the two given instants.
+	 * 
+	 * Null is considered less than any non-null Instant.
+	 */
+	public static @Nullable Instant min(@Nullable Instant a, @Nullable Instant b) {
+		return DateTimeUtils.min(a, b);
+	}
+
+
+	/**
+	 * Returns the later of the two given instants.
+	 * 
+	 * Null is considered less than any non-null Instant.
+	 */
+	public static @Nullable Instant max(@Nullable Instant a, @Nullable Instant b) {
+		return DateTimeUtils.max(a, b);
 	}
 
 
@@ -288,7 +355,33 @@ public final class Utils {
 	}
 
 
+	/**
+	 * Reads a utf-8 text file on the class path into a list of lines.
+	 */
+	public static List<String> readTextResource(String resource) {
+		return FileUtils.readTextResource(resource);
+	}
+
+
+	/**
+	 * Reads a text file on the class path into a list of lines.
+	 */
+	public static List<String> readTextResource(String resource, Charset charset) {
+		return FileUtils.readTextResource(resource);
+	}
+
+
+
 	// ***** MiscUtils methods *****
+
+
+	/**
+	 * Copies all matching properties from source to target object and returns the updated target object.
+	 */
+	public static <T> T copy(Object source, T target) {
+		return MiscUtils.copy(source, target);
+	}
+
 
 	/**
 	 * Selects first non-null argument.
@@ -316,6 +409,52 @@ public final class Utils {
 	 */
 	public static @NonNull <T> Optional<T> opt(T value) {
 		return MiscUtils.opt(value);
+	}
+
+
+	/**
+	 * Executes given Runnable and logs the execution time in ms along with given {@code message}.
+	 */
+	public static <T> T logExecutionTime(String message, Logger log, Callable<T> callable) {
+		return MiscUtils.logExecutionTime(message, log, callable);
+	}
+
+
+	/**
+	 * Gets the stack trace of the given exception as a String.
+	 */
+	public static String stackTraceOf(Exception e) {
+		return MiscUtils.stackTraceOf(e);
+	}
+
+
+
+	// ***** StringUtils methods *****
+
+
+	/**
+	 * Null-safe toString.
+	 */
+	public static String asString(@Nullable Object object) {
+		return StringUtils.asString(object);
+	}
+
+
+	/**
+	 * Null-safe String to UUID conversion.
+	 */
+	public static UUID asUuid(String s) {
+		return StringUtils.asUuid(s);
+	}
+
+
+	/**
+	 * Generates a comma separated list of given values converted to strings.
+	 * 
+	 * No escaping is performed.
+	 */
+	public static @NonNull String csv(@Nullable Iterable<?> iterable) {
+		return StringUtils.csv(iterable);
 	}
 
 

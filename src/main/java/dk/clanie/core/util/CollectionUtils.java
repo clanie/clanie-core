@@ -33,7 +33,7 @@ public class CollectionUtils {
 		return stream(iterable).filter(predicate).findAny().orElse(null);
 	}
 
-	
+
 	/**
 	 * Null-safe conversion to List.
 	 * 
@@ -81,6 +81,22 @@ public class CollectionUtils {
 	 */
 	public static @NonNull <V, K, MV> Map<K, MV> asMap(@Nullable Iterable<V> iterable, Function<? super V, ? extends K> keyMapper, Function<? super V, ? extends MV> valueMapper) {
 		return stream(iterable).collect(toMap(keyMapper, valueMapper));
+	}
+
+
+	/**
+	 * Copies and transforms all elements from given {@code iterable} to a new List using given {@code mapper}. 
+	 */
+	public static <T, R> List<R> mapList(@Nullable Iterable<T> iterable, Function<? super T, ? extends R> mapper) {
+		return stream(iterable).map(mapper).collect(toList());
+	}
+
+
+	/**
+	 * Copies and transforms all elements from given {@code iterable} to a new Set using given {@code mapper}. 
+	 */
+	public static <T, R> Set<R> mapSet(@Nullable Iterable<T> iterable, Function<? super T, ? extends R> mapper) {
+		return stream(iterable).map(mapper).collect(toSet());
 	}
 
 

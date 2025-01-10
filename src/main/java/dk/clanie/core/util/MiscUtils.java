@@ -19,9 +19,14 @@ package dk.clanie.core.util;
 
 import static java.util.Arrays.stream;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.concurrent.Callable;
 
+import org.slf4j.Logger;
+import org.springframework.beans.BeanUtils;
 import org.springframework.lang.NonNull;
 
 /**
@@ -30,6 +35,15 @@ import org.springframework.lang.NonNull;
  * @author Claus Nielsen
  */
 public class MiscUtils {
+
+
+	/**
+	 * Copies all matching properties from source to target object and returns the updated target object.
+	 */
+	public static <T> T copy(Object source, T target) {
+		BeanUtils.copyProperties(source, target);
+		return target;
+	}
 
 
 	/**
@@ -60,6 +74,32 @@ public class MiscUtils {
 	 */
 	public static @NonNull <T> Optional<T> opt(T value) {
 		return Optional.ofNullable(value);
+	}
+
+
+	/**
+	 * Executes given Runnable and logs the execution time in ms along with given {@code message}.
+	 */
+	public static <T> T logExecutionTime(String message, Logger log, Callable<T> callable) {
+		long start = System.currentTimeMillis();
+		try {
+			return callable.call();
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		} finally {
+			log.debug(message + " Execution time: {}ms.", System.currentTimeMillis() - start);
+		}
+	}
+
+
+	/**
+	 * Gets the stack trace of the given exception as a String.
+	 */
+	public static String stackTraceOf(Exception e) {
+		StringWriter stringWriter = new StringWriter();
+		PrintWriter printWriter = new PrintWriter(stringWriter);
+		e.printStackTrace(printWriter);
+		return stringWriter.toString();
 	}
 
 
