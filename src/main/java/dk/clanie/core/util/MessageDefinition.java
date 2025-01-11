@@ -35,7 +35,7 @@ import java.util.ResourceBundle;
  * check if the ResourceBundle has unused entries in it.
  * 
  * For an example of how to do this, refer to the unit-test
- * <code>MessageEnumTestTest</code>.
+ * {@link MessageEnumTestTest}.
  * 
  * @author Claus Nielsen
  */

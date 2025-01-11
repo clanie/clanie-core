@@ -33,7 +33,7 @@ import dk.clanie.exception.RuntimeIOException;
 public class FileUtils_copyFileTest {
 	
 	private static final File TEST_DIR = new File("target/test/dk_clanie_core_util");
-	private static final File SRC_FILE = new File("src/test/resources/dk/clanie/core/util/aFile.txt");
+	private static final File SRC_FILE = new File("src/test/resources/dk/clanie/core/util/FileUtils_copyFileTest/aFile.txt");
 
 	@BeforeAll
 	public static void init() {
