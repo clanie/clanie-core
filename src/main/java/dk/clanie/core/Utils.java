@@ -122,6 +122,14 @@ public final class Utils {
 
 
 	/**
+	 * Checks if given {@code iterable} contains given {@code item}. 
+	 */
+	public static <T> boolean contains(@Nullable Iterable<T> iterable, T item) {
+		return CollectionUtils.contains(iterable, item);
+	}
+
+
+	/**
 	 * Null-safe conversion to List.
 	 * 
 	 * If given Collection is already a List it is just returned (not copied).

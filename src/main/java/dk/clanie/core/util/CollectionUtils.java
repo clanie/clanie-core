@@ -17,6 +17,7 @@
  */
 package dk.clanie.core.util;
 
+import static dk.clanie.core.Utils.eq;
 import static java.util.Collections.emptyList;
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toMap;
@@ -48,6 +49,14 @@ public class CollectionUtils {
 	 */
 	public static @Nullable <T> T anyMatching(@Nullable Iterable<T> iterable, Predicate<T> predicate) {
 		return stream(iterable).filter(predicate).findAny().orElse(null);
+	}
+
+
+	/**
+	 * Checks if given {@code iterable} contains given {@code item}. 
+	 */
+	public static <T> boolean contains(@Nullable Iterable<T> iterable, T item) {
+		return stream(iterable).anyMatch(x -> eq(x, item));
 	}
 
 
