@@ -47,7 +47,7 @@ public class JsonServiceTest {
 
 		@Bean
 		JsonService json() {
-			return new JsonService();
+			return new JsonService(objectMapper());
 		}
 
 	}

@@ -29,6 +29,11 @@ import org.springframework.lang.Nullable;
 public class StringUtils {
 
 
+	private StringUtils() {
+		// Not meant to be instantiated
+	}
+
+
 	/**
 	 * Null-safe toString.
 	 */

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2007, Claus Nielsen, clausn999@gmail.com
+ * Copyright (C) 2007 - 2025, Claus Nielsen, clausn999@gmail.com
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,38 +19,28 @@ package dk.clanie.exception;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
+import lombok.experimental.StandardException;
+
 /**
  * Common functionality for all RuntimeExceptions.
  * 
  * @author Claus Nielsen
  */
+@StandardException
 @SuppressWarnings("serial")
 public abstract class AbstractRuntimeException extends RuntimeException {
 
-	public AbstractRuntimeException() {
-		super();
-	}
-
-	public AbstractRuntimeException(String message, Throwable cause) {
-		super(message, cause);
-	}
-
-	public AbstractRuntimeException(String message) {
-		super(message);
-	}
-
-	public AbstractRuntimeException(Throwable cause) {
-		super(cause);
-	}
 
 	public AbstractRuntimeException(String message, Throwable cause,
 			boolean enableSuppression, boolean writableStackTrace) {
 		super(message, cause, enableSuppression, writableStackTrace);
 	}
 
+
 	@Override
 	public String toString() {
 		return ToStringBuilder.reflectionToString(this);
 	}
+
 
 }

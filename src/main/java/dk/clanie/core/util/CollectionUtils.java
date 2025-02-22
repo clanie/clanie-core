@@ -43,6 +43,11 @@ import org.springframework.lang.Nullable;
 public class CollectionUtils {
 
 
+	private CollectionUtils() {
+		// Not meant to be instantiated
+	}
+
+
 	/**
 	 * Gets an element from given {@code iterable} matching given {@code predicate},
 	 * or {@code null} if no matching element is found. 

@@ -20,6 +20,12 @@ package dk.clanie.exception;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+import lombok.EqualsAndHashCode;
+import lombok.Value;
+
 
 /**
  * Wrapped Exception.
@@ -32,26 +38,29 @@ import java.io.PrintStream;
  * 
  * @author Claus Nielsen
  */
+@Value
+@EqualsAndHashCode(callSuper = false)
 @SuppressWarnings("serial")
 public class WrappedException extends AbstractRuntimeException {
 
-    private String wrappedMessage;
-    private String wrappedExceptionClassName;
-    private String wrappedStackTrace;
+    private final String wrappedMessage;
+    private final String wrappedExceptionClassName;
+    private final String wrappedStackTrace;
 
-    /** Constructor. */
+
+    @JsonCreator
+    public WrappedException(
+    		@JsonProperty("wrappedMessage") String wrappedMessage,
+    		@JsonProperty("wrappedExceptionClassName") String wrappedExceptionClassName,
+    		@JsonProperty("wrappedStackTrace") String wrappedStackTrace) {
+		this.wrappedMessage = wrappedMessage;
+		this.wrappedExceptionClassName = wrappedExceptionClassName;
+		this.wrappedStackTrace = wrappedStackTrace;
+    }
+
+
     public WrappedException(String message, Throwable cause) {
         super(message);
-        init(cause);
-    }
-
-    /** Constructor. */
-    public WrappedException(Throwable cause) {
-        super(cause.getClass().getName() + ": " + cause.getMessage());
-        init(cause);
-    }
-
-    private void init(Throwable cause) {
         wrappedExceptionClassName = cause.getClass().getName();
         wrappedMessage = cause.getMessage();
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
@@ -59,15 +68,10 @@ public class WrappedException extends AbstractRuntimeException {
         wrappedStackTrace = bos.toString(); 
     }
 
-    public String getWrappedMessage() {
-        return wrappedMessage;
+
+    public WrappedException(Throwable cause) {
+        this(cause.getClass().getName() + ": " + cause.getMessage(), cause);
     }
 
-    public String getWrappedExceptionClassName() {
-        return wrappedExceptionClassName;
-    }
 
-    public String getWrappedStacktrace() {
-        return wrappedStackTrace;
-    }
 }

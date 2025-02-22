@@ -37,6 +37,11 @@ import org.springframework.lang.NonNull;
 public class MiscUtils {
 
 
+	private MiscUtils() {
+		// Not meant to be instantiated
+	}
+
+
 	/**
 	 * Copies all matching properties from source to target object and returns the updated target object.
 	 */

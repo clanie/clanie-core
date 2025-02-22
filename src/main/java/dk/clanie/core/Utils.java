@@ -58,6 +58,11 @@ import dk.clanie.exception.RuntimeIOException;
 public final class Utils {
 
 
+	private Utils() {
+		// Not meant to be instantiated.
+	}
+
+
 	// ***** BooleanUtils methods *****
 
 	/**

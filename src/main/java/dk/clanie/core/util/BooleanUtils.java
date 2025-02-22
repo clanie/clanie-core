@@ -22,6 +22,11 @@ import java.util.Objects;
 public class BooleanUtils {
 
 
+	public BooleanUtils() {
+		// Not meant to be instantiated
+	}
+
+
 	/**
 	 * Statically importable alias for Objects.equals.
 	 */

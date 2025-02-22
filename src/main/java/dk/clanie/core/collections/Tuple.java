@@ -299,7 +299,7 @@ public abstract class Tuple implements Comparable<Tuple> {
 	 * toString helper.
 	 * 
 	 * Each subclass should override this to call <code>super.appendItems</code>,
-	 * and the append "their own" item in square brackets.
+	 * and then append "their own" item in square brackets.
 	 * 
 	 * @param builder
 	 * @return StringBuilder

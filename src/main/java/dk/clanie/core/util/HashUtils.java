@@ -40,6 +40,11 @@ import lombok.extern.slf4j.Slf4j;
 public class HashUtils {
 
 
+	private HashUtils() {
+		// Not meant to be instantiated
+	}
+
+
 	/**
 	 * Calculates SHA1 for the contents of the supplied File.
 	 * 

@@ -23,7 +23,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 
 import org.apache.commons.lang3.exception.ExceptionUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
@@ -36,13 +35,15 @@ import com.github.fge.jsonpatch.JsonPatch;
 import com.github.fge.jsonpatch.JsonPatchException;
 import com.github.fge.jsonpatch.diff.JsonDiff;
 
+import lombok.RequiredArgsConstructor;
+
 @Service
 @Lazy
+@RequiredArgsConstructor
 public class JsonService {
 
 
-	@Autowired
-	private ObjectMapper objectMapper;
+	private final ObjectMapper objectMapper;
 
 
 	/**

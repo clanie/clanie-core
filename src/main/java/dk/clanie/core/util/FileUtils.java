@@ -47,6 +47,11 @@ public class FileUtils {
 	static final String FAILED_TO_CLOSE_CHANNEL = "Failed to close channel.";
 
 
+	private FileUtils() {
+		// Not meant to be instantiated
+	}
+
+
 	/**
 	 * Creates a copy of a file.
 	 * 

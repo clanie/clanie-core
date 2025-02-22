@@ -19,7 +19,8 @@ package dk.clanie.generator;
 
 import java.util.concurrent.atomic.AtomicLong;
 
-/** SimpleLongSequence.
+/**
+ * SimpleLongSequence.
  * 
  * Simple implementation of the {@link LongSequence} interface.
  * This implementation is threadsafe.
@@ -28,7 +29,7 @@ import java.util.concurrent.atomic.AtomicLong;
  */
 public class SimpleLongSequence implements LongSequence {
 
-	private AtomicLong nextNumber;
+	private final AtomicLong nextNumber;
 
 	/**
 	 * Constructor.

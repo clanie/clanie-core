@@ -23,17 +23,39 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 public class WrappedExceptionTest {
 
-    @Test
-    public void testWrappedException() {
-        WrappedException ex = new WrappedException(new RuntimeException("TEST."));
-        assertEquals("java.lang.RuntimeException: TEST.", ex.getMessage());
-        assertEquals("java.lang.RuntimeException", ex.getWrappedExceptionClassName());
-        assertEquals("TEST.", ex.getWrappedMessage());
-        String trace = ex.getWrappedStacktrace();
-        assertTrue(trace.contains("java.lang.RuntimeException: TEST."));
-        assertTrue(trace.contains(getClass().getName() + ".testWrappedException"));
-    }
+	@Test
+	public void testWrappedException() {
+		WrappedException ex = new WrappedException(new RuntimeException("TEST."));
+		assertEquals("java.lang.RuntimeException: TEST.", ex.getMessage());
+		assertEquals("java.lang.RuntimeException", ex.getWrappedExceptionClassName());
+		assertEquals("TEST.", ex.getWrappedMessage());
+		String trace = ex.getWrappedStackTrace();
+		assertTrue(trace.contains("java.lang.RuntimeException: TEST."));
+		assertTrue(trace.contains(getClass().getName() + ".testWrappedException"));
+	}
+
+
+	@Test
+	public void testJsonDeserializartion() throws JsonProcessingException {
+	    String json = """
+	        {
+	            "wrappedExceptionClassName": "java.lang.RuntimeException",
+	            "wrappedMessage": "TEST.",
+	            "wrappedStackTrace": "java.lang.RuntimeException: TEST.\\n\\tat dk.clanie.exception.WrappedExceptionTest.testJsonDeserializartion(WrappedExceptionTest.java:70)\\n"
+	        }
+	        """;
+	    ObjectMapper objectMapper = new ObjectMapper();
+	    WrappedException ex = objectMapper.readValue(json, WrappedException.class);
+	    assertEquals("java.lang.RuntimeException", ex.getWrappedExceptionClassName());
+	    assertEquals("TEST.", ex.getWrappedMessage());
+	    assertTrue(ex.getWrappedStackTrace().contains("java.lang.RuntimeException: TEST."));
+	    assertTrue(ex.getWrappedStackTrace().contains("dk.clanie.exception.WrappedExceptionTest.testJsonDeserializartion"));
+	}
+
 
 }

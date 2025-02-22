@@ -27,17 +27,20 @@ public class ResourceBundleEnumeration implements Enumeration<String> {
 	private Enumeration<String> enumeration;
 	private Iterator<String> iterator;
 
+
 	public ResourceBundleEnumeration(Set<String> keySet,
 			Enumeration<String> enumeration) {
 		iterator = keySet.iterator();
 		this.enumeration = enumeration;
 	}
 
+
 	@Override
 	public boolean hasMoreElements() {
 		return iterator.hasNext()
 				|| (enumeration != null && enumeration.hasMoreElements());
 	}
+
 
 	@Override
 	public String nextElement() {
@@ -47,5 +50,6 @@ public class ResourceBundleEnumeration implements Enumeration<String> {
 			return enumeration.nextElement();
 		throw new NoSuchElementException();
 	}
+
 
 }

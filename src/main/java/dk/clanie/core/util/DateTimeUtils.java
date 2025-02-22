@@ -28,6 +28,11 @@ import org.springframework.lang.Nullable;
 public class DateTimeUtils {
 
 
+	private DateTimeUtils() {
+		// Not meant to be instantiated
+	}
+
+
 	/**
 	 * Checks if given {code instant} is before the start of current day in the default time-zone.
 	 */
