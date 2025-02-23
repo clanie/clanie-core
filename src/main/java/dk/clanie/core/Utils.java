@@ -471,4 +471,14 @@ public final class Utils {
 	}
 
 
+	/**
+	 * Generates a comma separated list of given values first mapped using given mapper and then converted to strings.
+	 * 
+	 * No escaping is performed.
+	 */
+	public static @NonNull <T> String csv(@Nullable Iterable<T> iterable, Function<? super T, ?> mapper) {
+		return StringUtils.csv(iterable, mapper);
+	}
+
+
 }

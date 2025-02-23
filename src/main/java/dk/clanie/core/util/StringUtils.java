@@ -22,6 +22,7 @@ import static dk.clanie.core.Utils.stream;
 import static java.util.stream.Collectors.joining;
 
 import java.util.UUID;
+import java.util.function.Function;
 
 import org.springframework.lang.NonNull;
 import org.springframework.lang.Nullable;
@@ -57,6 +58,19 @@ public class StringUtils {
 	 */
 	public static @NonNull String csv(@Nullable Iterable<?> iterable) {
 		return stream(iterable)
+				.map(StringUtils::asString)
+				.collect(joining(","));
+	}
+
+
+	/**
+	 * Generates a comma separated list of given values first mapped using given mapper and then converted to strings.
+	 * 
+	 * No escaping is performed.
+	 */
+	public static @NonNull <T> String csv(@Nullable Iterable<T> iterable, Function<? super T, ?> mapper) {
+		return stream(iterable)
+				.map(mapper)
 				.map(StringUtils::asString)
 				.collect(joining(","));
 	}
