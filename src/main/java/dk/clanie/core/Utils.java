@@ -397,6 +397,14 @@ public final class Utils {
 
 
 	/**
+	 * Copies all matching properties from source to target object and returns the updated target object.
+	 */
+	public static <T> T copy(Object source, T target, String... ignoreProperties) {
+		return MiscUtils.copy(source, target, ignoreProperties);
+	}
+
+
+	/**
 	 * Selects first non-null argument.
 	 *
 	 * @param <T>

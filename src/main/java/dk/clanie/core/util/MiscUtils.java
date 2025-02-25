@@ -52,6 +52,15 @@ public class MiscUtils {
 
 
 	/**
+	 * Copies all matching properties from source to target object and returns the updated target object.
+	 */
+	public static <T> T copy(Object source, T target, String... ignoreProperties) {
+		BeanUtils.copyProperties(source, target, ignoreProperties);
+		return target;
+	}
+
+
+	/**
 	 * Selects first non-null argument.
 	 *
 	 * @param <T>
