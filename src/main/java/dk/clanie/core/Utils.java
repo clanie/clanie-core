@@ -42,6 +42,7 @@ import dk.clanie.core.util.CollectionUtils;
 import dk.clanie.core.util.DateTimeUtils;
 import dk.clanie.core.util.FileUtils;
 import dk.clanie.core.util.MiscUtils;
+import dk.clanie.core.util.SortDirection;
 import dk.clanie.core.util.StringUtils;
 import dk.clanie.exception.RuntimeIOException;
 
@@ -131,6 +132,14 @@ public final class Utils {
 	 */
 	public static <T> boolean contains(@Nullable Iterable<T> iterable, T item) {
 		return CollectionUtils.contains(iterable, item);
+	}
+
+
+	/**
+	 * Checks if given List is sorted in given order.
+	 */
+	public static <T, E extends Comparable<? super E>> boolean isSorted(@Nullable List<T> list, Function<T, E> extractor, SortDirection direction) {
+		return CollectionUtils.isSorted(list, extractor, direction);
 	}
 
 

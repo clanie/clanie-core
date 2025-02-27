@@ -18,13 +18,17 @@
 package dk.clanie.core.util;
 
 import static dk.clanie.core.Utils.eq;
+import static dk.clanie.core.util.SortDirection.ASC;
 import static java.util.Collections.emptyList;
+import static java.util.Comparator.naturalOrder;
+import static java.util.Comparator.reverseOrder;
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toMap;
 import static java.util.stream.Collectors.toSet;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
@@ -62,6 +66,23 @@ public class CollectionUtils {
 	 */
 	public static <T> boolean contains(@Nullable Iterable<T> iterable, T item) {
 		return stream(iterable).anyMatch(x -> eq(x, item));
+	}
+
+
+	/**
+	 * Checks if given List is sorted in given order.
+	 */
+	public static <T, E extends Comparable<? super E>> boolean isSorted(@Nullable List<T> list, Function<T, E> extractor, SortDirection direction) {
+		if (list == null || list.size() < 2) return true;
+        Comparator<E> comparator = (direction == ASC) ? naturalOrder() : reverseOrder();
+        E previous = extractor.apply(list.get(0));
+        for (int i = 1; i < list.size(); i++) {
+            E current = extractor.apply(list.get(i));
+            // Use the comparator directly in the loop.
+            if (comparator.compare(previous, current) > 0) return false;
+            previous = current;
+        }
+        return true;
 	}
 
 

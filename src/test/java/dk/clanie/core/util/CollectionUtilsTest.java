@@ -17,12 +17,17 @@
  */
 package dk.clanie.core.util;
 
+import static dk.clanie.core.Utils.isSorted;
 import static dk.clanie.core.Utils.stream;
+import static dk.clanie.core.util.SortDirection.ASC;
+import static dk.clanie.core.util.SortDirection.DESC;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
+
+import dk.clanie.core.collections.Tuple.Pair;
 
 class CollectionUtilsTest {
 
@@ -38,6 +43,28 @@ class CollectionUtilsTest {
 	void testStreamArray() {
 		Integer[] ints = {1, 2, 3};
 		assertThat(stream(ints).mapToInt(Integer::intValue).sum()).isEqualTo(6);
+	}
+
+
+	@Test
+	void testIsSorted_sortedList() {
+		List<Pair<String, Integer>> sortedList = List.of(
+				Pair.of("a", 1),
+				Pair.of("c", 2),
+				Pair.of("x", 3));
+		assertThat(isSorted(sortedList, Pair::get1st, ASC)).isTrue();
+		assertThat(isSorted(sortedList, Pair::get1st, DESC)).isFalse();
+	}
+
+
+	@Test
+	void testIsSorted_unsortedList() {
+		List<Pair<String, Integer>> unsortedList = List.of(
+				Pair.of("a", 1),
+				Pair.of("x", 3),
+				Pair.of("c", 2));
+		assertThat(isSorted(unsortedList, Pair::get1st, ASC)).isFalse();
+		assertThat(isSorted(unsortedList, Pair::get1st, DESC)).isFalse();
 	}
 
 
