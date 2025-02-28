@@ -120,9 +120,9 @@ public final class Utils {
 
 	/**
 	 * Gets an element from given {@code iterable} matching given {@code predicate},
-	 * or {@code null} if no matching element is found. 
+	 * or an empty Optional if no matching element is found. 
 	 */
-	public static @Nullable <T> T anyMatching(@Nullable Iterable<T> iterable, Predicate<T> predicate) {
+	public static <T> Optional<T> anyMatching(@Nullable Iterable<T> iterable, Predicate<T> predicate) {
 		return CollectionUtils.anyMatching(iterable, predicate);
 	}
 

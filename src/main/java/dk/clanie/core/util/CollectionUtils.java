@@ -33,6 +33,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.Spliterator;
 import java.util.Spliterators;
@@ -54,10 +55,10 @@ public class CollectionUtils {
 
 	/**
 	 * Gets an element from given {@code iterable} matching given {@code predicate},
-	 * or {@code null} if no matching element is found. 
+	 * or an empty Optional if no matching element is found. 
 	 */
-	public static @Nullable <T> T anyMatching(@Nullable Iterable<T> iterable, Predicate<T> predicate) {
-		return stream(iterable).filter(predicate).findAny().orElse(null);
+	public static <T> Optional<T> anyMatching(@Nullable Iterable<T> iterable, Predicate<T> predicate) {
+		return stream(iterable).filter(predicate).findAny();
 	}
 
 
