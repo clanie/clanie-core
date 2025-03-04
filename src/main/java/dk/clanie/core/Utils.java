@@ -184,6 +184,22 @@ public final class Utils {
 
 
 	/**
+	 * Filters elements from given {@code iterable} and collects the result to a List. 
+	 */
+	public static <T> List<T> filterList(@Nullable Iterable<T> iterable, Predicate<? super T> predicate) {
+		return CollectionUtils.filterList(iterable, predicate);
+	}
+
+
+	/**
+	 * Filters elements from given {@code iterable} and collects the result to a Set. 
+	 */
+	public static <T> Set<T> filterSet(@Nullable Iterable<T> iterable, Predicate<? super T> predicate) {
+		return CollectionUtils.filterSet(iterable, predicate);
+	}
+
+
+	/**
 	 * Copies and transforms all elements from given {@code iterable} to a new List using given {@code mapper}. 
 	 */
 	public static <T, R> List<R> mapList(@Nullable Iterable<T> iterable, Function<? super T, ? extends R> mapper) {

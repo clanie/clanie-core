@@ -75,15 +75,15 @@ public class CollectionUtils {
 	 */
 	public static <T, E extends Comparable<? super E>> boolean isSorted(@Nullable List<T> list, Function<T, E> extractor, SortDirection direction) {
 		if (list == null || list.size() < 2) return true;
-        Comparator<E> comparator = (direction == ASC) ? naturalOrder() : reverseOrder();
-        E previous = extractor.apply(list.get(0));
-        for (int i = 1; i < list.size(); i++) {
-            E current = extractor.apply(list.get(i));
-            // Use the comparator directly in the loop.
-            if (comparator.compare(previous, current) > 0) return false;
-            previous = current;
-        }
-        return true;
+		Comparator<E> comparator = (direction == ASC) ? naturalOrder() : reverseOrder();
+		E previous = extractor.apply(list.get(0));
+		for (int i = 1; i < list.size(); i++) {
+			E current = extractor.apply(list.get(i));
+			// Use the comparator directly in the loop.
+			if (comparator.compare(previous, current) > 0) return false;
+			previous = current;
+		}
+		return true;
 	}
 
 
@@ -134,6 +134,22 @@ public class CollectionUtils {
 	 */
 	public static @NonNull <V, K, MV> Map<K, MV> asMap(@Nullable Iterable<V> iterable, Function<? super V, ? extends K> keyMapper, Function<? super V, ? extends MV> valueMapper) {
 		return stream(iterable).collect(toMap(keyMapper, valueMapper));
+	}
+
+
+	/**
+	 * Filters elements from given {@code iterable} and collects the result to a List. 
+	 */
+	public static <T> List<T> filterList(@Nullable Iterable<T> iterable, Predicate<? super T> predicate) {
+		return stream(iterable).filter(predicate).collect(toList());
+	}
+
+
+	/**
+	 * Filters elements from given {@code iterable} and collects the result to a Set. 
+	 */
+	public static <T> Set<T> filterSet(@Nullable Iterable<T> iterable, Predicate<? super T> predicate) {
+		return stream(iterable).filter(predicate).collect(toSet());
 	}
 
 
