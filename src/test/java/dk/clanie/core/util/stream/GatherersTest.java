@@ -29,7 +29,7 @@ class GatherersTest {
 
 
 	@Test
-	void test() {
+	void testMergeSorting() {
 		Stream<Stream<String>> input = Stream.of(
 				Stream.of("a", "f", "z"),
 				Stream.of("b", "g", "x", "y"),

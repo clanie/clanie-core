@@ -23,6 +23,9 @@ import java.util.stream.Gatherer;
 import java.util.stream.Gatherer.Integrator;
 import java.util.stream.Stream;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 class Gatherers {
 
 
@@ -58,14 +61,14 @@ class Gatherers {
 			}
 
 			void finish(Gatherer.Downstream<? super T> downstream) {
-				while (!heap.isEmpty()) {
+				while (!heap.isEmpty() && !downstream.isRejecting()) {
 					HeapEntry<T> entry = heap.poll();
 					T value = entry.value;
 					Iterator<T> iterator = entry.iterator;
 					if (iterator.hasNext()) {
 						heap.add(new HeapEntry<>(iterator.next(), iterator));
 					}
-					downstream.push(value);
+					if (!downstream.push(value)) break;
 				}
 			}
 
