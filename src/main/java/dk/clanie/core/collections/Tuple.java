@@ -17,6 +17,8 @@
  */
 package dk.clanie.core.collections;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+
 /**
  * Tuple.
  * 
@@ -39,8 +41,10 @@ public abstract class Tuple implements Comparable<Tuple> {
 
 	/** Tuple with one element. */
 	public static class Singleton<T> extends Tuple {
+		
 		private T element;
 
+		@SuppressFBWarnings(value = "SING_SINGLETON_HAS_NONPRIVATE_CONSTRUCTOR", justification = "Not using singleton-pattern.")
 		public Singleton(T element) {
 			this.element = element;
 		}
@@ -78,6 +82,7 @@ public abstract class Tuple implements Comparable<Tuple> {
 
 	/** Tuple with two elements. */
 	public static class Pair<T1, T2> extends Singleton<T1> {
+
 		private T2 e2;
 
 		public Pair(T1 e1, T2 e2) {
@@ -118,6 +123,7 @@ public abstract class Tuple implements Comparable<Tuple> {
 
 	/** Tuple with three elements. */
 	public static class Triple<T1, T2, T3> extends Pair<T1, T2> {
+
 		private T3 e3;
 
 		public Triple(T1 e1, T2 e2, T3 e3) {
@@ -158,6 +164,7 @@ public abstract class Tuple implements Comparable<Tuple> {
 
 	/** Tuple with four elements. */
 	public static class Quadruple<T1, T2, T3, T4> extends Triple<T1, T2, T3> {
+
 		private T4 e4;
 
 		public Quadruple(T1 e1, T2 e2, T3 e3, T4 e4) {
@@ -199,6 +206,7 @@ public abstract class Tuple implements Comparable<Tuple> {
 
 	/** Tuple with five elements. */
 	public static class Quintuple<T1, T2, T3, T4, T5> extends Quadruple<T1, T2, T3, T4> {
+
 		private T5 e5;
 
 		public Quintuple(T1 e1, T2 e2, T3 e3, T4 e4, T5 e5) {
@@ -240,6 +248,7 @@ public abstract class Tuple implements Comparable<Tuple> {
 
 	/** Tuple with six elements. */
 	public static class Sextuple<T1, T2, T3, T4, T5, T6> extends Quintuple<T1, T2, T3, T4, T5> {
+
 		private T6 e6;
 
 		public Sextuple(T1 e1, T2 e2, T3 e3, T4 e4, T5 e5, T6 e6) {

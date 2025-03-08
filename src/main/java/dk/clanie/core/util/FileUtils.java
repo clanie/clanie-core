@@ -149,6 +149,7 @@ public class FileUtils {
 	public static void emptyAndDelete(File fileOrDir) {
 		if (fileOrDir.isDirectory()) {
 			File[] files = fileOrDir.listFiles();
+			if (files == null) return;
 			for (File file : files) {
 				emptyAndDelete(file);
 			}
@@ -182,6 +183,7 @@ public class FileUtils {
 	public static void addFilesRecursively(File dir, Collection<File> fileCollection) {
 		log.debug("Adding files from {}", dir.getPath());
 		File[] files = dir.listFiles();
+		if (files == null) return;
 		for (File file : files) {
 			if (file.isDirectory())
 				addFilesRecursively(file, fileCollection);
