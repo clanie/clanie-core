@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2007-2024, Claus Nielsen, clausn999@gmail.com
+ * Copyright (C) 2007-2025, Claus Nielsen, clausn999@gmail.com
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -355,7 +355,7 @@ public abstract class Tuple implements Comparable<Tuple> {
 	 * @return true if both e1 and e2 are null or if e1.equals(e2).
 	 */
 	protected static boolean elementsEquals(Object e1, Object e2) {
-		return (e1 == null && e2 == null) || e1.equals(e2);
+		return (e1 == null && e2 == null) || e1 != null && e1.equals(e2);
 	}
 
 
