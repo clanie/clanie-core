@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2009, Claus Nielsen, clausn999@gmail.com
+ * Copyright (C) 2009-2025, Claus Nielsen, clausn999@gmail.com
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,6 +16,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 package dk.clanie.core.collections;
+
+import static dk.clanie.core.Utils.opt;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -73,11 +75,11 @@ public abstract class NumberMap<K, E extends Number> extends HashMap<K, E> {
 		return new NumberMap<K, BigDecimal>() {
 			@Override
 			public void add(K key, BigDecimal addend) {
-				put(key, containsKey(key) ? get(key).add(addend) : addend);
+				put(key, opt(get(key)).orElse(BigDecimal.ZERO).add(addend));
 			}
 			@Override
 			public void sub(K key, BigDecimal subtrahend) {
-				put(key, (containsKey(key) ? get(key) : BigDecimal.ZERO).subtract(subtrahend));
+				put(key, opt(get(key)).orElse(BigDecimal.ZERO).subtract(subtrahend));
 			}
 		};
 	}
@@ -93,11 +95,11 @@ public abstract class NumberMap<K, E extends Number> extends HashMap<K, E> {
 		return new NumberMap<K, BigInteger>() {
 			@Override
 			public void add(K key, BigInteger addend) {
-				put(key, containsKey(key) ? get(key).add(addend) : addend);
+				put(key, opt(get(key)).orElse(BigInteger.ZERO).add(addend));
 			}
 			@Override
 			public void sub(K key, BigInteger subtrahend) {
-				put(key, (containsKey(key) ? get(key) : BigInteger.ZERO).subtract(subtrahend));
+				put(key, opt(get(key)).orElse(BigInteger.ZERO).subtract(subtrahend));
 			}
 		};
 	}
@@ -113,11 +115,11 @@ public abstract class NumberMap<K, E extends Number> extends HashMap<K, E> {
 		return new NumberMap<K, Byte>() {
 			@Override
 			public void add(K key, Byte addend) {
-				put(key, (byte)(containsKey(key) ? get(key) + addend : addend));
+				put(key, (byte)(opt(get(key)).orElse((byte)0) + addend));
 			}
 			@Override
 			public void sub(K key, Byte subtrahend) {
-				put(key, (byte)((containsKey(key) ? get(key) : 0) - subtrahend));
+				put(key, (byte)(opt(get(key)).orElse((byte)0) - subtrahend));
 			}
 		};
 	}
@@ -133,11 +135,11 @@ public abstract class NumberMap<K, E extends Number> extends HashMap<K, E> {
 		return new NumberMap<K, Double>() {
 			@Override
 			public void add(K key, Double addend) {
-				put(key, containsKey(key) ? (get(key) + addend) : addend);
+				put(key, opt(get(key)).orElse(0d) + addend);
 			}
 			@Override
 			public void sub(K key, Double subtrahend) {
-				put(key, (containsKey(key) ? get(key) : 0d) - subtrahend);
+				put(key, opt(get(key)).orElse(0d) - subtrahend);
 			}
 		};
 	}
@@ -153,11 +155,11 @@ public abstract class NumberMap<K, E extends Number> extends HashMap<K, E> {
 		return new NumberMap<K, Float>() {
 			@Override
 			public void add(K key, Float addend) {
-				put(key, containsKey(key) ? (get(key) + addend) : addend);
+				put(key, opt(get(key)).orElse(0f) + addend);
 			}
 			@Override
 			public void sub(K key, Float subtrahend) {
-				put(key, (containsKey(key) ? get(key) : 0f) - subtrahend);
+				put(key, opt(get(key)).orElse(0f) - subtrahend);
 			}
 		};
 	}
@@ -173,11 +175,11 @@ public abstract class NumberMap<K, E extends Number> extends HashMap<K, E> {
 		return new NumberMap<K, Integer>() {
 			@Override
 			public void add(K key, Integer addend) {
-				put(key, containsKey(key) ? (get(key) + addend) : addend);
+				put(key, opt(get(key)).orElse(0) + addend);
 			}
 			@Override
 			public void sub(K key, Integer subtrahend) {
-				put(key, (containsKey(key) ? get(key) : 0) - subtrahend);
+				put(key, opt(get(key)).orElse(0) - subtrahend);
 			}
 		};
 	}
@@ -193,11 +195,11 @@ public abstract class NumberMap<K, E extends Number> extends HashMap<K, E> {
 		return new NumberMap<K, Long>() {
 			@Override
 			public void add(K key, Long addend) {
-				put(key, containsKey(key) ? (get(key) + addend) : addend);
+				put(key, opt(get(key)).orElse(0L) + addend);
 			}
 			@Override
 			public void sub(K key, Long subtrahend) {
-				put(key, (containsKey(key) ? get(key) : 0l) - subtrahend);
+				put(key, opt(get(key)).orElse(0L) - subtrahend);
 			}
 		};
 	}
@@ -213,11 +215,11 @@ public abstract class NumberMap<K, E extends Number> extends HashMap<K, E> {
 		return new NumberMap<K, Short>() {
 			@Override
 			public void add(K key, Short addend) {
-				put(key, containsKey(key) ? (short) (get(key) + addend) : addend);
+				put(key, (short) (opt(get(key)).orElse((short) 0) + addend));
 			}
 			@Override
 			public void sub(K key, Short subtrahend) {
-				put(key, (short)((containsKey(key) ? get(key) : 0) - subtrahend));
+				put(key, (short) (opt(get(key)).orElse((short) 0) - subtrahend));
 			}
 		};
 	}
