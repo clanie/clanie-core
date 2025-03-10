@@ -26,7 +26,7 @@ import java.util.stream.Stream;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-class Gatherers {
+public class Gatherers {
 
 
 	private Gatherers() {
@@ -44,7 +44,7 @@ class Gatherers {
 	 * @param comparator the comparator to use for sorting
 	 * @return a gatherer that merge-sorts the input streams
 	 */
-	public static <T> Gatherer<Stream<T>, ?, T> mergeSorting(Comparator<T> comparator) {
+	public static <T> Gatherer<Stream<T>, ?, T> mergeSorting(Comparator<? super T> comparator) {
 
 		class MergeSort {
 
