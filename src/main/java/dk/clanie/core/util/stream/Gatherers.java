@@ -16,8 +16,10 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 package dk.clanie.core.util.stream;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Iterator;
+import java.util.List;
 import java.util.PriorityQueue;
 import java.util.stream.Gatherer;
 import java.util.stream.Gatherer.Integrator;
@@ -33,6 +35,7 @@ public class Gatherers {
 		// This class is not intended to be instantiated
 	}
 
+
 	/**
 	 * Returns a gatherer that merge the input streams, ordering outputs using the specified comparator.
 	 * <p>
@@ -40,18 +43,21 @@ public class Gatherers {
 	 * <p>
 	 * The gatherer is sequential and greedy.
 	 *
-	 * @param <T>        the type of the elements
+	 * @param <T> the type of the elements
 	 * @param comparator the comparator to use for sorting
 	 * @return a gatherer that merge-sorts the input streams
 	 */
-	public static <T> Gatherer<Stream<T>, ?, T> mergeSorting(Comparator<? super T> comparator) {
+	public static <T> Gatherer<Stream<T>, ?, T> mergeSorted(Comparator<? super T> comparator) {
 
-		class MergeSort {
+		class MergeState {
 
 			record HeapEntry<T>(T value, Iterator<T> iterator) {}
 
 			private final PriorityQueue<HeapEntry<T>> heap = new PriorityQueue<>(Comparator.comparing(HeapEntry::value, comparator));
 
+			/**
+			 * Pushes 1st element from each stream onto the heap anong with an iterator for that stream.
+			 */
 			boolean integrate(Stream<T> stream, Gatherer.Downstream<? super T> downstream) {
 				Iterator<T> iterator = stream.iterator();
 				if (iterator.hasNext()) {
@@ -60,6 +66,10 @@ public class Gatherers {
 				return true;
 			}
 
+			/**
+			 * Repeatedly takes smallest element from the heap and pushes it downstream, and then
+			 * adds the next element from the same stream to the heap.
+			 */
 			void finish(Gatherer.Downstream<? super T> downstream) {
 				while (!heap.isEmpty() && !downstream.isRejecting()) {
 					HeapEntry<T> entry = heap.poll();
@@ -74,10 +84,53 @@ public class Gatherers {
 
 		}
 
-		return Gatherer.<Stream<T>, MergeSort, T>ofSequential(
-				MergeSort::new, // Initializer
-				Integrator.<MergeSort, Stream<T>, T>ofGreedy(MergeSort::integrate), // Integrator
-				MergeSort::finish); // Finisher
+		return Gatherer.<Stream<T>, MergeState, T>ofSequential(
+				MergeState::new, // Initializer
+				Integrator.<MergeState, Stream<T>, T>ofGreedy(MergeState::integrate), // Integrator
+				MergeState::finish); // Finisher
+
+	}
+
+
+	/**
+	 * Returns a gatherer that groups the input elements according to the specified comparator.
+	 * <p>
+	 * Input streams must be sorted according to the comparator.
+	 * <p>
+	 * The gatherer is sequential and greedy.
+	 * 
+	 * @param <T> the type of the elements
+	 * @param comparator
+	 * @return a gatherer that groups the input elements according to the specified comparator
+	 */
+	public static <T> Gatherer<T, ?, List<T>> grouping(Comparator<? super T> comparator) {
+
+		class Grouping {
+
+			private List<T> group = new ArrayList<>();
+			private boolean accepting = true;
+
+			boolean integrate(T value, Gatherer.Downstream<? super List<T>> downstream) {
+				if (group.isEmpty() || comparator.compare(group.get(0), value) == 0) {
+					group.add(value);
+				} else {
+					accepting = downstream.push(group);
+					group = new ArrayList<>();
+					group.add(value);
+				}
+				return accepting;
+			}
+
+			void finish(Gatherer.Downstream<? super List<T>> downstream) {
+				if (accepting && !group.isEmpty()) downstream.push(group);
+			}
+
+		}
+
+		return Gatherer.<T, Grouping, List<T>>ofSequential(
+				Grouping::new, // Initializer
+				Integrator.<Grouping, T, List<T>>ofGreedy(Grouping::integrate), // Integrator
+				Grouping::finish); // Finisher
 
 	}
 
