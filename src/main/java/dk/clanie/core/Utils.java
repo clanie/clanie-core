@@ -186,7 +186,7 @@ public final class Utils {
 	/**
 	 * Filters elements from given {@code iterable} and collects the result to a List. 
 	 */
-	public static <T> List<T> filterList(@Nullable Iterable<T> iterable, Predicate<? super T> predicate) {
+	public static @NonNull <T> List<T> filterList(@Nullable Iterable<T> iterable, Predicate<? super T> predicate) {
 		return CollectionUtils.filterList(iterable, predicate);
 	}
 
@@ -194,7 +194,7 @@ public final class Utils {
 	/**
 	 * Filters elements from given {@code iterable} and collects the result to a Set. 
 	 */
-	public static <T> Set<T> filterSet(@Nullable Iterable<T> iterable, Predicate<? super T> predicate) {
+	public static @NonNull <T> Set<T> filterSet(@Nullable Iterable<T> iterable, Predicate<? super T> predicate) {
 		return CollectionUtils.filterSet(iterable, predicate);
 	}
 
@@ -202,7 +202,7 @@ public final class Utils {
 	/**
 	 * Copies and transforms all elements from given {@code iterable} to a new List using given {@code mapper}. 
 	 */
-	public static <T, R> List<R> mapList(@Nullable Iterable<T> iterable, Function<? super T, ? extends R> mapper) {
+	public static @NonNull <T, R> List<R> mapList(@Nullable Iterable<T> iterable, Function<? super T, ? extends R> mapper) {
 		return CollectionUtils.mapList(iterable, mapper);
 	}
 
@@ -210,7 +210,7 @@ public final class Utils {
 	/**
 	 * Copies and transforms all elements from given {@code iterable} to a new Set using given {@code mapper}. 
 	 */
-	public static <T, R> Set<R> mapSet(@Nullable Iterable<T> iterable, Function<? super T, ? extends R> mapper) {
+	public static @NonNull <T, R> Set<R> mapSet(@Nullable Iterable<T> iterable, Function<? super T, ? extends R> mapper) {
 		return CollectionUtils.mapSet(iterable, mapper);
 	}
 
