@@ -17,9 +17,12 @@
  */
 package dk.clanie.core.util;
 
+import static java.time.ZoneId.systemDefault;
+
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
+import java.time.ZonedDateTime;
 
 import org.springframework.lang.Nullable;
 
@@ -35,7 +38,7 @@ public class DateTimeUtils {
 	 * Checks if given {code instant} is before the start of current day in the default time-zone.
 	 */
 	public static boolean beforeToday(Instant instant) {
-		return beforeToday(ZoneId.systemDefault(), instant);
+		return beforeToday(systemDefault(), instant);
 	}
 
 
@@ -66,6 +69,47 @@ public class DateTimeUtils {
 	 * Null is considered less than any non-null Instant.
 	 */
 	public static @Nullable Instant max(@Nullable Instant a, @Nullable Instant b) {
+		if (a == null) return b;
+		if (b == null) return a;
+		return a.isBefore(b) ? b : a;
+	}
+
+
+	/**
+	 * Checks if given {code dateTime} is before the start of current day in the default time-zone.
+	 */
+	public static boolean beforeToday(ZonedDateTime dateTime) {
+		return beforeToday(systemDefault(), dateTime);
+	}
+
+
+	/**
+	 * Checks if given {code dateTime} is before the start of current day in the given given time-zone.
+	 * 
+	 * Null is considered less than any non-null Instant.
+	 */
+	public static boolean beforeToday(ZoneId zoneId, @Nullable ZonedDateTime dateTime) {
+		return LocalDate.now(zoneId).atStartOfDay(zoneId).toInstant().isAfter(dateTime.toInstant());
+	}
+
+
+	/**
+	 * Returns the earlier of the two given timestamps.
+	 * 
+	 * Null is considered less than any non-null timestamp.
+	 */
+	public static @Nullable ZonedDateTime min(@Nullable ZonedDateTime a, @Nullable ZonedDateTime b) {
+		if (a == null || b == null) return null;
+		return a.isBefore(b) ? a : b;
+	}
+
+
+	/**
+	 * Returns the later of the two given timestamps.
+	 * 
+	 * Null is considered less than any non-null timestamp.
+	 */
+	public static @Nullable ZonedDateTime max(@Nullable ZonedDateTime a, @Nullable ZonedDateTime b) {
 		if (a == null) return b;
 		if (b == null) return a;
 		return a.isBefore(b) ? b : a;

@@ -22,6 +22,7 @@ import java.nio.channels.spi.AbstractInterruptibleChannel;
 import java.nio.charset.Charset;
 import java.time.Instant;
 import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -296,6 +297,44 @@ public final class Utils {
 	 * Null is considered less than any non-null Instant.
 	 */
 	public static @Nullable Instant max(@Nullable Instant a, @Nullable Instant b) {
+		return DateTimeUtils.max(a, b);
+	}
+
+
+	/**
+	 * Checks if given {code dateTime} is before the start of current day in the default time-zone.
+	 */
+	public static boolean beforeToday(ZonedDateTime dateTime) {
+		return DateTimeUtils.beforeToday(dateTime);
+	}
+
+
+	/**
+	 * Checks if given {code dateTime} is before the start of current day in the given given time-zone.
+	 * 
+	 * Null is considered less than any non-null Instant.
+	 */
+	public static boolean beforeToday(ZoneId zoneId, @Nullable ZonedDateTime dateTime) {
+		return DateTimeUtils.beforeToday(zoneId, dateTime);
+	}
+
+
+	/**
+	 * Returns the earlier of the two given timestamps.
+	 * 
+	 * Null is considered less than any non-null timestamp.
+	 */
+	public static @Nullable ZonedDateTime min(@Nullable ZonedDateTime a, @Nullable ZonedDateTime b) {
+		return DateTimeUtils.min(a, b);
+	}
+
+
+	/**
+	 * Returns the later of the two given timestamps.
+	 * 
+	 * Null is considered less than any non-null timestamp.
+	 */
+	public static @Nullable ZonedDateTime max(@Nullable ZonedDateTime a, @Nullable ZonedDateTime b) {
 		return DateTimeUtils.max(a, b);
 	}
 
