@@ -18,11 +18,12 @@
 package dk.clanie.core;
 
 import java.time.ZoneId;
+import java.time.ZoneOffset;
 
 public interface Constants {
 
 
-	public static final ZoneId UTC = ZoneId.of("UTC");
+	public static final ZoneId UTC = ZoneOffset.UTC;
 
 
 }

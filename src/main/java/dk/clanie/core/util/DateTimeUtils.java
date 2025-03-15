@@ -17,8 +17,6 @@
  */
 package dk.clanie.core.util;
 
-import static dk.clanie.core.Constants.UTC;
-
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
@@ -47,7 +45,7 @@ public class DateTimeUtils {
 	 * Null is considered less than any non-null Instant.
 	 */
 	public static boolean beforeToday(ZoneId zoneId, @Nullable Instant instant) {
-		return LocalDate.now(zoneId).atStartOfDay(UTC).toInstant().isAfter(instant);
+		return LocalDate.now(zoneId).atStartOfDay(zoneId).toInstant().isAfter(instant);
 	}
 
 
