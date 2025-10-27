@@ -32,7 +32,7 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
  * This way you will <b>not</b> have access to individual elements of the Tuple.
  * If you need that you will have to use a more specific subclass like this:
  * </p><p>
- * <code>Triple<String, Integer, String> myTuple = newTuple("one", 2, "three");</code>
+ * <code>Triple&lt;String, Integer, String&gt; myTuple = newTuple("one", 2, "three");</code>
  * </p>
  * @author Claus Nielsen
  */

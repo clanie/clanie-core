@@ -189,7 +189,7 @@ public abstract class NumberMap<K, E extends Number> extends HashMap<K, E> {
 	 * Creates a NumberMap for Longs.
 	 * 
 	 * @param <K>
-	 * @return NumberMap<K>
+	 * @return NumberMap&lt;K&gt;
 	 */
 	public static <K> NumberMap<K, Long> newLongMap() {
 		return new NumberMap<K, Long>() {
@@ -209,7 +209,7 @@ public abstract class NumberMap<K, E extends Number> extends HashMap<K, E> {
 	 * Creates a NumberMap for Shorts.
 	 * 
 	 * @param <K>
-	 * @return NumberMap<K>
+	 * @return NumberMap&lt;K&gt;
 	 */
 	public static <K> NumberMap<K, Short> newShortMap() {
 		return new NumberMap<K, Short>() {
