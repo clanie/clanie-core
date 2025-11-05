@@ -23,9 +23,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 
 import org.apache.commons.lang3.exception.ExceptionUtils;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.core.io.ClassPathResource;
-import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -37,8 +35,6 @@ import com.github.fge.jsonpatch.diff.JsonDiff;
 
 import lombok.RequiredArgsConstructor;
 
-@Service
-@Lazy
 @RequiredArgsConstructor
 public class JsonService {
 
