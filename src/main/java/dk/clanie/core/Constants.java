@@ -24,6 +24,7 @@ public interface Constants {
 
 
 	public static final ZoneId UTC = ZoneOffset.UTC;
+	public static final ZoneId ZONE_ID_DK = ZoneId.of("Europe/Copenhagen");
 
 
 }
