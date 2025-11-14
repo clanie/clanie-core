@@ -18,9 +18,13 @@
 package dk.clanie.core.util;
 
 import static dk.clanie.core.util.StringUtils.csv;
+import static dk.clanie.core.util.StringUtils.truncateToUtf8bytes;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 
 class StringUtilsTest {
 
@@ -28,6 +32,39 @@ class StringUtilsTest {
 	@Test
 	void testCsv_null() {
 		assertThat(csv(null)).isEqualTo("");
+	}
+
+
+	@ParameterizedTest
+	@CsvSource({
+		",                 0,      ",              // null input
+		"test,             0,    ''",
+		"hello,           10,    hello",
+		"hello,            5,    hello",
+		"'hello world',    5,    hello",
+		"café,             4,    caf",             // café = 5 bytes (c=1, a=1, f=1, é=2)
+		"café,             5,    café",            // café = 5 bytes
+		"'test€',          6,    test",            // € = 3 bytes, test€ = 7 bytes
+		"'test€',          7,    'test€'",         // € = 3 bytes, test€ = 7 bytes
+		"'hi😀',           2,    hi",              // 😀 = 4 bytes, hi😀 = 6 bytes
+		"'hi😀',           5,    hi",              // 😀 = 4 bytes
+		"'hi😀',           6,    'hi😀'",          // 😀 = 4 bytes
+		"'hello€world',    7,    hello",            // € = 3 bytes, hello€world = 13 bytes
+		"'hello€world',   13,     'hello€world'",   // € = 3 bytes
+		"'😀😁😂',         4,    😀",              // 😀 = 4 bytes, 😁 = 4 bytes, 😂 = 4 bytes
+		"'😀😁😂',         8,    😀😁",            // total = 12 bytes
+		"'😀😁😂',        12,    '😀😁😂'"         // total = 12 bytes
+	})
+	void testTruncateToUtf8bytes(String input, int maxBytes, String expected) {
+		assertThat(truncateToUtf8bytes(input, maxBytes)).isEqualTo(expected);
+	}
+
+
+	@Test
+	void testTruncateToUtf8bytes_negativeMaxBytes() {
+		assertThatThrownBy(() -> truncateToUtf8bytes("test", -1))
+				.isInstanceOf(IllegalArgumentException.class)
+				.hasMessage("maxBytes must be non-negative");
 	}
 
 
