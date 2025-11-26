@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright (C) 2025, Claus Nielsen, clausn999@gmail.com
  *
  * This program is free software; you can redistribute it and/or modify
@@ -88,84 +88,84 @@ public class CollectionUtils {
 
 
 	/**
-	 * Null-safe conversion to List.
+	 * Null-safe conversion to List (unmodifiable).
 	 * 
-	 * If given Collection is already a List it is just returned (not copied).
+	 * If given Collection is already a List it is copied to ensure immutability.
 	 */
 	public static @NonNull <T> List<T> asList(Iterable<T> iterable) {
 		return switch (iterable) {
 		case null -> emptyList();
-		case List<T> list -> list;
+		case List<T> list -> List.copyOf(list);
 		case Collection<T> collection -> List.copyOf(collection);
-		default -> stream(iterable).collect(toList());
+		default -> stream(iterable).toList();
 		};
 	}
 
 
 	/**
-	 * Null-safe conversion to Set.
+	 * Null-safe conversion to Set (unmodifiable).
 	 * 
-	 * If given Collection is already a Set it is just returned (not copied).
+	 * If given Collection is already a Set it is copied to ensure immutability.
 	 */
 	public static @NonNull <T> Set<T> asSet(Iterable<T> iterable) {
 		return switch (iterable) {
 		case null -> Set.of();
-		case Set<T> set -> set;
+		case Set<T> set -> Set.copyOf(set);
 		case Collection<T> collection -> Set.copyOf(collection);
-		default -> stream(iterable).collect(toSet());
+		default -> Set.copyOf(stream(iterable).collect(toSet()));
 		};
 	}
 
 
 	/**
-	 * Null safe conversion from Iterable to Map.
+	 * Null safe conversion from Iterable to Map (unmodifiable).
 	 * 
-	 * Never returns null. If the input collection is null an empty Map is returned..
+	 * Never returns null. If the input collection is null an empty Map is returned.
 	 */
 	public static @NonNull <K, V> Map<K, V> asMap(@Nullable Iterable<V> iterable, Function<? super V, ? extends K> keyMapper) {
-		return stream(iterable).collect(toMap(keyMapper, v->v));
+		return Map.copyOf(stream(iterable).collect(toMap(keyMapper, v->v)));
 	}
 
 
 	/**
-	 * Null safe conversion from Iterable to Map.
+	 * Null safe conversion from Iterable to Map (unmodifiable).
 	 *
 	 * Never returns null. If the input collection is null an empty Map is returned.
 	 */
 	public static @NonNull <V, K, MV> Map<K, MV> asMap(@Nullable Iterable<V> iterable, Function<? super V, ? extends K> keyMapper, Function<? super V, ? extends MV> valueMapper) {
-		return stream(iterable).collect(toMap(keyMapper, valueMapper));
+		return Map.copyOf(stream(iterable).collect(toMap(keyMapper, valueMapper)));
 	}
 
 
 	/**
-	 * Filters elements from given {@code iterable} and collects the result to a List. 
+	 * Filters elements from given {@code iterable} and collects the result to a List (unmodifiable).
 	 */
 	public static @NonNull <T> List<T> filterList(@Nullable Iterable<T> iterable, Predicate<? super T> predicate) {
-		return stream(iterable).filter(predicate).collect(toList());
+		return stream(iterable).filter(predicate).toList();
 	}
 
 
 	/**
-	 * Filters elements from given {@code iterable} and collects the result to a Set. 
+	 * Filters elements from given {@code iterable} and collects the result to a Set (unmodifiable).
 	 */
 	public static @NonNull <T> Set<T> filterSet(@Nullable Iterable<T> iterable, Predicate<? super T> predicate) {
-		return stream(iterable).filter(predicate).collect(toSet());
+		return Set.copyOf(stream(iterable).filter(predicate).collect(toSet()));
 	}
 
 
 	/**
-	 * Copies and transforms all elements from given {@code iterable} to a new List using given {@code mapper}. 
+	 * Copies and transforms all elements from given {@code iterable} to a new List (unmodifiable) using given {@code mapper}. 
 	 */
 	public static @NonNull <T, R> List<R> mapList(@Nullable Iterable<T> iterable, Function<? super T, ? extends R> mapper) {
-		return stream(iterable).map(mapper).collect(toList());
+		return List.copyOf(stream(iterable).map(mapper).collect(toList()));
 	}
 
 
 	/**
-	 * Copies and transforms all elements from given {@code iterable} to a new Set using given {@code mapper}. 
+	 * Copies and transforms all elements from given {@code iterable} to a new Set (unmodifiable) using given {@code mapper}. 
 	 */
 	public static @NonNull <T, R> Set<R> mapSet(@Nullable Iterable<T> iterable, Function<? super T, ? extends R> mapper) {
-		return stream(iterable).map(mapper).collect(toSet());
+		return Set.copyOf(stream(iterable).map(mapper).collect(toSet()));
 	}
 
 
