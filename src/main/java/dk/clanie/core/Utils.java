@@ -18,6 +18,7 @@
 package dk.clanie.core;
 
 import java.io.File;
+import java.io.InputStream;
 import java.nio.channels.spi.AbstractInterruptibleChannel;
 import java.nio.charset.Charset;
 import java.time.Instant;
@@ -32,6 +33,7 @@ import java.util.UUID;
 import java.util.concurrent.Callable;
 import java.util.function.Function;
 import java.util.function.Predicate;
+import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 import org.slf4j.Logger;
@@ -42,6 +44,8 @@ import dk.clanie.core.util.BooleanUtils;
 import dk.clanie.core.util.CollectionUtils;
 import dk.clanie.core.util.DateTimeUtils;
 import dk.clanie.core.util.FileUtils;
+import dk.clanie.core.util.HashUtils;
+import dk.clanie.core.util.LoggingUtils;
 import dk.clanie.core.util.MiscUtils;
 import dk.clanie.core.util.SortDirection;
 import dk.clanie.core.util.StringUtils;
@@ -447,6 +451,92 @@ public final class Utils {
 		return FileUtils.readTextResource(resource);
 	}
 
+
+
+	// ***** HashUtils methods *****
+
+
+	/**
+	 * Calculates SHA1 for the contents of the supplied File.
+	 * 
+	 * @param file File
+	 * @return String with SHA1 calculated from the contents of <code>file</code>.
+	 * 
+	 * @throws RuntimeIOException
+	 */
+	public static String sha1(File file) {
+		return HashUtils.sha1(file);
+	}
+
+
+	/**
+	 * Calculates SHA1 for the contents referred to by the supplied URL.
+	 * 
+	 * @param url URL
+	 * @return String with SHA1 calculated from the contents referred to by <code>url</code>.
+	 * 
+	 * @throws RuntimeIOException
+	 */
+	public static String sha1(java.net.URL url) {
+		return HashUtils.sha1(url);
+	}
+
+
+	/**
+	 * Calculates SHA1 for the contents of the supplied byte array.
+	 * 
+	 * @param data byte array
+	 * @return String with SHA1 calculated from the contents of <code>data</code>.
+	 */
+	public static String sha1(InputStream inputStream) {
+		return HashUtils.sha1(inputStream);
+	}
+
+
+	// ***** LoggingUtils methods *****
+
+
+	/**
+	 * Logs a trace message with parameters supplied by the given supplier.
+	 * 
+	 * The supplier is only invoked if trace logging is
+	 * enabled.
+	 * 
+	 * @param logger         the logger to use
+	 * @param format         the message format
+	 * @param paramsSupplier the supplier of parameters
+	 */
+	public static void trace(Logger logger, String format, java.util.function.Supplier<Object[]> paramsSupplier) {
+		LoggingUtils.trace(logger, format, paramsSupplier);
+	}
+	
+	
+	/**
+	 * Logs a debug message with parameters supplied by the given supplier.
+	 * 
+	 * The supplier is only invoked if debug logging is enabled.
+	 * 
+	 * @param logger         the logger to use
+	 * @param format         the message format
+	 * @param paramsSupplier the supplier of parameters
+	 */
+	public void debug(Logger logger, String format, Supplier<Object[]> paramsSupplier) {
+		LoggingUtils.debug(logger, format, paramsSupplier);
+	}
+
+
+	/**
+	 * Logs an info message with parameters supplied by the given supplier.
+	 * 
+	 * The supplier is only invoked if info logging is enabled.
+	 * 
+	 * @param logger         the logger to use
+	 * @param format         the message format
+	 * @param paramsSupplier the supplier of parameters
+	 */
+	public void info(Logger logger, String format, Supplier<Object[]> paramsSupplier) {
+		LoggingUtils.info(logger, format, paramsSupplier);
+	}
 
 
 	// ***** MiscUtils methods *****
