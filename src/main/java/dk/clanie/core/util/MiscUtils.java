@@ -27,7 +27,7 @@ import java.util.concurrent.Callable;
 
 import org.slf4j.Logger;
 import org.springframework.beans.BeanUtils;
-import org.springframework.lang.NonNull;
+import org.jspecify.annotations.NonNull;
 
 /**
  * Miscellaneous static utility methods.

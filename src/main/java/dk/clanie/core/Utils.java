@@ -37,8 +37,8 @@ import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 import org.slf4j.Logger;
-import org.springframework.lang.NonNull;
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 import dk.clanie.core.util.BooleanUtils;
 import dk.clanie.core.util.CollectionUtils;
