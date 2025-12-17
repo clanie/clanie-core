@@ -23,8 +23,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import tools.jackson.core.JacksonException;
+import tools.jackson.databind.ObjectMapper;
 
 public class WrappedExceptionTest {
 
@@ -41,7 +41,7 @@ public class WrappedExceptionTest {
 
 
 	@Test
-	public void testJsonDeserializartion() throws JsonProcessingException {
+	public void testJsonDeserializartion() throws JacksonException {
 	    String json = """
 	        {
 	            "wrappedExceptionClassName": "java.lang.RuntimeException",

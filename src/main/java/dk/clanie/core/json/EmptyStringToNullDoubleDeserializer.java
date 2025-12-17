@@ -17,26 +17,43 @@
  */
 package dk.clanie.core.json;
 
-import java.io.IOException;
-
-import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.databind.DeserializationContext;
-import com.fasterxml.jackson.databind.JsonDeserializer;
+import tools.jackson.core.JsonParser;
+import tools.jackson.core.JsonToken;
+import tools.jackson.databind.DeserializationContext;
+import tools.jackson.databind.ValueDeserializer;
 
 /**
  * Deserializer that converts empty strings to null for Double fields.
  *
  * Used for fields which can be either a number or an empty string.
  */
-public class EmptyStringToNullDoubleDeserializer extends JsonDeserializer<Double> {
+public class EmptyStringToNullDoubleDeserializer extends ValueDeserializer<Double> {
 
 	@Override
-	public Double deserialize(JsonParser p, DeserializationContext ctxt) throws IOException {
-		String value = p.getText();
-		if (value == null || value.trim().isEmpty()) {
+	public Double deserialize(JsonParser p, DeserializationContext ctxt) {
+		JsonToken token = p.currentToken();
+		
+		// Handle null token
+		if (token == JsonToken.VALUE_NULL) {
 			return null;
 		}
-		return Double.parseDouble(value);
+		
+		// Handle numeric token
+		if (token == JsonToken.VALUE_NUMBER_FLOAT || token == JsonToken.VALUE_NUMBER_INT) {
+			return p.getDoubleValue();
+		}
+		
+		// Handle string token
+		if (token == JsonToken.VALUE_STRING) {
+			String value = p.getString();
+			if (value == null || value.trim().isEmpty()) {
+				return null;
+			}
+			return Double.parseDouble(value);
+		}
+		
+		// Unexpected token type
+		return (Double) ctxt.handleUnexpectedToken(Double.class, p);
 	}
 
 }

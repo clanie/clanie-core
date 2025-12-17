@@ -25,15 +25,11 @@ import java.io.InputStreamReader;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.core.io.ClassPathResource;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.github.fge.jsonpatch.JsonPatch;
-import com.github.fge.jsonpatch.JsonPatchException;
-import com.github.fge.jsonpatch.diff.JsonDiff;
-
 import lombok.RequiredArgsConstructor;
+import tools.jackson.core.JacksonException;
+import tools.jackson.core.type.TypeReference;
+import tools.jackson.databind.JsonNode;
+import tools.jackson.databind.ObjectMapper;
 
 @RequiredArgsConstructor
 public class JsonService {
@@ -50,7 +46,7 @@ public class JsonService {
 	public String forLog(Object obj) {
 		try {
 			return objectMapper.writeValueAsString(obj);
-		} catch (JsonProcessingException e) {
+		} catch (JacksonException e) {
 			return ExceptionUtils.getStackTrace(e);
 		}
 	}
@@ -64,7 +60,7 @@ public class JsonService {
 	public String string(Object obj) throws RuntimeException {
 		try {
 			return objectMapper.writeValueAsString(obj);
-		} catch (JsonProcessingException e) {
+		} catch (JacksonException e) {
 			throw new RuntimeException(e);
 		}
 	}
@@ -78,7 +74,7 @@ public class JsonService {
 	public <T> T parse(String json, Class<T> type) throws RuntimeException {
 		try {
 			return objectMapper.readValue(json, type);
-		} catch (JsonProcessingException e) {
+		} catch (JacksonException e) {
 			throw new RuntimeException(e);
 		}
 	}
@@ -92,7 +88,7 @@ public class JsonService {
 	public <T> T parse(String json, TypeReference<T> type) throws RuntimeException {
 		try {
 			return objectMapper.readValue(json, type);
-		} catch (JsonProcessingException e) {
+		} catch (JacksonException e) {
 			throw new RuntimeException(e);
 		}
 	}
@@ -105,7 +101,7 @@ public class JsonService {
 		try {
 			JsonNode json = objectMapper.convertValue(source, JsonNode.class);
 			return objectMapper.treeToValue(json, type);
-		} catch (JsonProcessingException e) {
+		} catch (JacksonException e) {
 			throw new RuntimeException("Cloning failed.", e);
 		}
 	}
@@ -118,7 +114,7 @@ public class JsonService {
 		try {
 			byte[] json = objectMapper.writeValueAsBytes(source);
 			return objectMapper.readValue(json, type);
-		} catch (IOException e) {
+		} catch (JacksonException e) {
 			throw new RuntimeException("Cloning failed.", e);
 		}
 	}
@@ -160,23 +156,23 @@ public class JsonService {
 	}
 
 
-	public <T> T applyPatch(T target, JsonPatch patch, Class<T> type) {
-		try {
-			JsonNode json = objectMapper.convertValue(target, JsonNode.class);
-			json = patch.apply(json);
-			return objectMapper.treeToValue(json, type);
-		} catch (JsonProcessingException | JsonPatchException e) {
-			throw new RuntimeException("Applying patch '" + forLog(patch) +
-					"' on " + type.getSimpleName() + ": '" + forLog(target) + "' failed.", e);
-		}
-	}
-
-
-	public <T> JsonPatch diff(T before, T changed) {
-		JsonNode jsonBefore = objectMapper.convertValue(before, JsonNode.class);
-		JsonNode jsonChanged = objectMapper.convertValue(changed, JsonNode.class);
-		return JsonDiff.asJsonPatch(jsonBefore, jsonChanged);
-	}
+//	public <T> T applyPatch(T target, JsonPatch patch, Class<T> type) {
+//		try {
+//			JsonNode json = objectMapper.convertValue(target, JsonNode.class);
+//			json = patch.apply(json);
+//			return objectMapper.treeToValue(json, type);
+//		} catch (JsonProcessingException | JsonPatchException e) {
+//			throw new RuntimeException("Applying patch '" + forLog(patch) +
+//					"' on " + type.getSimpleName() + ": '" + forLog(target) + "' failed.", e);
+//		}
+//	}
+//
+//
+//	public <T> JsonPatch diff(T before, T changed) {
+//		JsonNode jsonBefore = objectMapper.convertValue(before, JsonNode.class);
+//		JsonNode jsonChanged = objectMapper.convertValue(changed, JsonNode.class);
+//		return JsonDiff.asJsonPatch(jsonBefore, jsonChanged);
+//	}
 
 
 }
