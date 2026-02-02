@@ -169,7 +169,7 @@ public final class Utils {
 
 
 	/**
-	 * Null safe conversion from Iterable to Map.
+	 * Null safe conversion from Iterable to immutable Map.
 	 * 
 	 * Never returns null. If the input collection is null an empty Map is returned..
 	 */
@@ -179,12 +179,32 @@ public final class Utils {
 
 
 	/**
-	 * Null safe conversion from Iterable to Map.
+	 * Null safe conversion from Iterable to immutable Map.
 	 *
 	 * Never returns null. If the input collection is null an empty Map is returned.
 	 */
 	public static @NonNull <V, K, MV> Map<K, MV> asMap(@Nullable Iterable<V> iterable, Function<? super V, ? extends K> keyMapper, Function<? super V, ? extends MV> valueMapper) {
 		return CollectionUtils.asMap(iterable, keyMapper, valueMapper);
+	}
+
+
+	/**
+	 * Null safe conversion from Iterable to mutable Map.
+	 * 
+	 * Never returns null. If the input collection is null an empty Map is returned..
+	 */
+	public static @NonNull <K, V> Map<K, V> asMutableMap(@Nullable Iterable<V> iterable, Function<? super V, ? extends K> keyMapper) {
+		return CollectionUtils.asMutableMap(iterable, keyMapper);
+	}
+
+
+	/**
+	 * Null safe conversion from Iterable to mutable Map.
+	 *
+	 * Never returns null. If the input collection is null an empty Map is returned.
+	 */
+	public static @NonNull <V, K, MV> Map<K, MV> asMutableMap(@Nullable Iterable<V> iterable, Function<? super V, ? extends K> keyMapper, Function<? super V, ? extends MV> valueMapper) {
+		return CollectionUtils.asMutableMap(iterable, keyMapper, valueMapper);
 	}
 
 

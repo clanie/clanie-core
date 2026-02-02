@@ -138,6 +138,26 @@ public class CollectionUtils {
 
 
 	/**
+	 * Null safe conversion from Iterable to mutable Map.
+	 * 
+	 * Never returns null. If the input collection is null an empty Map is returned.
+	 */
+	public static @NonNull <K, V> Map<K, V> asMutableMap(@Nullable Iterable<V> iterable, Function<? super V, ? extends K> keyMapper) {
+		return stream(iterable).collect(toMap(keyMapper, v->v));
+	}
+
+
+	/**
+	 * Null safe conversion from Iterable to mutable Map.
+	 *
+	 * Never returns null. If the input collection is null an empty Map is returned.
+	 */
+	public static @NonNull <V, K, MV> Map<K, MV> asMutableMap(@Nullable Iterable<V> iterable, Function<? super V, ? extends K> keyMapper, Function<? super V, ? extends MV> valueMapper) {
+		return stream(iterable).collect(toMap(keyMapper, valueMapper));
+	}
+
+
+	/**
 	 * Filters elements from given {@code iterable} and collects the result to a List (unmodifiable).
 	 */
 	public static @NonNull <T> List<T> filterList(@Nullable Iterable<T> iterable, Predicate<? super T> predicate) {
