@@ -45,6 +45,8 @@ import java.util.stream.StreamSupport;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
+import dk.clanie.core.collections.KeyValuePair;
+
 public class CollectionUtils {
 
 
@@ -246,6 +248,30 @@ public class CollectionUtils {
 						},
 						Spliterator.ORDERED), false);
 		return reversedStream;
+	}
+
+
+	/**
+	 * Converts given Map to a List of KeyValuePair.
+	 * 
+	 * If given Map is null or empty an empty List is returned.
+	 */
+	public static @NonNull <K, V> List<KeyValuePair<K, V>> asKeyValueList(@Nullable Map<K, V> map) {
+		if (map == null || map.isEmpty()) return List.of();
+		return map.entrySet().stream()
+				.map(e -> new KeyValuePair<>(e.getKey(), e.getValue()))
+				.toList();
+	}
+
+
+	/**
+	 * Converts given List of KeyValuePair to a Map.
+	 * 
+	 * If given List is null or empty an empty Map is returned.
+	 */
+	public static @NonNull <K, V> Map<K, V> asMap(@Nullable List<KeyValuePair<K, V>> list) {
+		if (list == null || list.isEmpty()) return Map.of();
+		return list.stream().collect(toMap(KeyValuePair::k, KeyValuePair::v));
 	}
 
 

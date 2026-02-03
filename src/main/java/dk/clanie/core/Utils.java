@@ -36,10 +36,11 @@ import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
-import org.slf4j.Logger;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
+import org.slf4j.Logger;
 
+import dk.clanie.core.collections.KeyValuePair;
 import dk.clanie.core.util.BooleanUtils;
 import dk.clanie.core.util.CollectionUtils;
 import dk.clanie.core.util.DateTimeUtils;
@@ -281,6 +282,26 @@ public final class Utils {
 		return CollectionUtils.reverseStream(list);
 	}
 
+
+
+	/**
+	 * Converts given Map to a List of KeyValuePair.
+	 * 
+	 * If given Map is null or empty an empty List is returned.
+	 */
+	public static @NonNull <K, V> List<KeyValuePair<K, V>> asKeyValueList(@Nullable Map<K, V> map) {
+		return CollectionUtils.asKeyValueList(map);
+	}
+
+
+	/**
+	 * Converts given List of KeyValuePair to a Map.
+	 * 
+	 * If given List is null or empty an empty Map is returned.
+	 */
+	public static @NonNull <K, V> Map<K, V> asMap(@Nullable List<KeyValuePair<K, V>> list) {
+		return CollectionUtils.asMap(list);
+	}
 
 
 	// ***** DateTimeUtils methods *****
