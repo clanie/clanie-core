@@ -17,15 +17,23 @@
  */
 package dk.clanie.core;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Lazy;
 
-import tools.jackson.databind.ObjectMapper;
-
+import dk.clanie.core.concurrent.CompositeContextPropagator;
+import dk.clanie.core.concurrent.ContextPropagatingExecutor;
+import dk.clanie.core.concurrent.ContextPropagator;
+import dk.clanie.core.concurrent.MdcContextPropagator;
+import dk.clanie.core.concurrent.SpringSecurityContextPropagator;
 import dk.clanie.core.util.JsonService;
+import tools.jackson.databind.ObjectMapper;
 
 /**
  * {@link EnableAutoConfiguration Auto-configuration} for clanie-core.
@@ -35,11 +43,86 @@ public class ClanieCoreAutoConfiguration {
 
 
 	@Bean
-    @Lazy
-    @ConditionalOnMissingBean
-    JsonService jsonService(ObjectMapper objectMapper) {
-        return new JsonService(objectMapper);
-    }
+	@Lazy
+	@ConditionalOnMissingBean
+	JsonService jsonService(ObjectMapper objectMapper) {
+		return new JsonService(objectMapper);
+	}
+
+
+	/**
+	 * Creates an MDC context propagator.
+	 * <p>
+	 * This bean is always created to ensure MDC (logging context) is propagated.
+	 */
+	@Bean
+	@ConditionalOnMissingBean(MdcContextPropagator.class)
+	MdcContextPropagator mdcContextPropagator() {
+		return new MdcContextPropagator();
+	}
+
+
+	/**
+	 * Creates a Spring Security context propagator when Spring Security is available.
+	 * <p>
+	 * This bean is only created when Spring Security's SecurityContextHolder class
+	 * is on the classpath.
+	 */
+	@Bean
+	@ConditionalOnClass(name = "org.springframework.security.core.context.SecurityContextHolder")
+	@ConditionalOnMissingBean(SpringSecurityContextPropagator.class)
+	SpringSecurityContextPropagator springSecurityContextPropagator() {
+		return new SpringSecurityContextPropagator();
+	}
+
+
+	/**
+	 * Creates a composite context propagator that combines all available propagators.
+	 * <p>
+	 * This will include:
+	 * <ul>
+	 *   <li>MDC propagation - always included</li>
+	 *   <li>Spring Security propagation - if Spring Security is on the classpath</li>
+	 *   <li>Any custom {@link ContextPropagator} beans registered in the application</li>
+	 * </ul>
+	 */
+	@Bean
+	@ConditionalOnMissingBean(CompositeContextPropagator.class)
+	CompositeContextPropagator compositeContextPropagator(
+			MdcContextPropagator mdcContextPropagator,
+			List<ContextPropagator> additionalPropagators) {
+
+		// Build list with MDC first, then any additional propagators (like Spring Security)
+		List<ContextPropagator> allPropagators = new ArrayList<>();
+		allPropagators.add(mdcContextPropagator);
+
+		// Add other propagators (e.g., SpringSecurityContextPropagator if present)
+		for (ContextPropagator propagator : additionalPropagators) {
+			if (!(propagator instanceof MdcContextPropagator)) {
+				allPropagators.add(propagator);
+			}
+		}
+
+		return new CompositeContextPropagator(allPropagators);
+	}
+
+
+	/**
+	 * Creates a context propagating executor using virtual threads.
+	 * <p>
+	 * This executor propagates all available context types via the composite propagator,
+	 * which may include:
+	 * <ul>
+	 *   <li>SLF4J MDC (Mapped Diagnostic Context) - always available</li>
+	 *   <li>Spring Security Context - if Spring Security is on the classpath</li>
+	 *   <li>Any additional custom context propagators registered as beans</li>
+	 * </ul>
+	 */
+	@Bean
+	@ConditionalOnMissingBean
+	ContextPropagatingExecutor contextPropagatingExecutor(CompositeContextPropagator compositeContextPropagator) {
+		return new ContextPropagatingExecutor(compositeContextPropagator);
+	}
 
 
 }
