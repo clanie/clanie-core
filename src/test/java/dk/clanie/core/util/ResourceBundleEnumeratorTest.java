@@ -17,8 +17,8 @@
  */
 package dk.clanie.core.util;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.fail;
 
 import java.util.Enumeration;
 import java.util.HashSet;
@@ -60,12 +60,7 @@ public class ResourceBundleEnumeratorTest {
 		assertTrue(values.contains("two"));
 		assertTrue(values.contains("three"));
 		assertTrue(values.contains("four"));
-		try {
-			bundleEnumeration.nextElement();
-			fail("Expected " + NoSuchElementException.class.getName());
-		} catch (NoSuchElementException nsee) {
-			// OK
-		}
+		assertThrows(NoSuchElementException.class, () -> bundleEnumeration.nextElement());
 	}
 
 }
