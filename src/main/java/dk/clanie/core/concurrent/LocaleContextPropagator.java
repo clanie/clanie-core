@@ -17,35 +17,52 @@
  */
 package dk.clanie.core.concurrent;
 
-import org.springframework.security.core.context.SecurityContext;
-import org.springframework.security.core.context.SecurityContextHolder;
+import java.util.Locale;
+import java.util.Optional;
+
+import org.jspecify.annotations.NonNull;
+import org.springframework.context.i18n.LocaleContextHolder;
+
+import dk.clanie.core.util.LocaleProvider;
+import lombok.RequiredArgsConstructor;
 
 /**
- * Spring Security context propagating implementation of {@link ContextPropagator}.
+ * Locale propagating implementation of {@link ContextPropagator}.
  * <p>
- * This implementation captures and propagates the Spring Security context
- * to virtual threads, ensuring that authentication and authorization
- * information is available in asynchronous operations.
+ * This implementation captures and propagates the locale context
+ * to virtual threads, ensuring that locale information is available
+ * in asynchronous operations.
  */
-public class SpringSecurityContextPropagator implements ContextPropagator {
+@RequiredArgsConstructor
+public class LocaleContextPropagator implements ContextPropagator {
 
+
+	private final Optional<LocaleProvider> localeProvider;
+
+
+	/**
+	 * 
+	 */
 	@Override
-	public Object capture() {
-		return SecurityContextHolder.getContext();
+	public @NonNull Locale capture() {
+		return localeProvider
+				.flatMap(LocaleProvider::getCurrentLocaleOptional)
+				.orElseGet(() -> LocaleContextHolder.getLocale());
 	}
 
 
 	@Override
 	public void set(Object context) {
-		if (context instanceof SecurityContext securityContext) {
-			SecurityContextHolder.setContext(securityContext);
+		if (context instanceof Locale locale) {
+			LocaleContextHolder.setLocale(locale);
 		}
 	}
 
 
 	@Override
 	public void clear() {
-		SecurityContextHolder.clearContext();
+		LocaleContextHolder.resetLocaleContext();
 	}
+
 
 }

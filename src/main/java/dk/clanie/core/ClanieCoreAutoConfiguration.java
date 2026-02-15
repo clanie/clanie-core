@@ -19,6 +19,7 @@ package dk.clanie.core;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -30,9 +31,11 @@ import org.springframework.context.annotation.Lazy;
 import dk.clanie.core.concurrent.CompositeContextPropagator;
 import dk.clanie.core.concurrent.ContextPropagatingExecutor;
 import dk.clanie.core.concurrent.ContextPropagator;
+import dk.clanie.core.concurrent.LocaleContextPropagator;
 import dk.clanie.core.concurrent.MdcContextPropagator;
 import dk.clanie.core.concurrent.SpringSecurityContextPropagator;
 import dk.clanie.core.util.JsonService;
+import dk.clanie.core.util.LocaleProvider;
 import tools.jackson.databind.ObjectMapper;
 
 /**
@@ -73,6 +76,18 @@ public class ClanieCoreAutoConfiguration {
 	@ConditionalOnMissingBean(SpringSecurityContextPropagator.class)
 	SpringSecurityContextPropagator springSecurityContextPropagator() {
 		return new SpringSecurityContextPropagator();
+	}
+
+
+	/**
+	 * Creates an Locale context propagator.
+	 * <p>
+	 * This bean is always created to ensure Locale information is propagated.
+	 */
+	@Bean
+	@ConditionalOnMissingBean(LocaleContextPropagator.class)
+	LocaleContextPropagator localeContextPropagator(Optional<LocaleProvider> localeProvider) {
+		return new LocaleContextPropagator(localeProvider);
 	}
 
 
